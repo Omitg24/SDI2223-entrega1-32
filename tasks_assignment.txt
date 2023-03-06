@@ -1,0 +1,46 @@
+#######################################################################################
+#                                     SDI-entrega1-32                                 #
+#######################################################################################
+
+	Asignación de tareas:	
+		
+		La elaboración de los CSSs y HTMLs se hará entre todos los miembros del equipo.
+	
+		Requisitos Obligatorios:
+		
+			* Puntos a realizar en común:
+				14. Internacionalización de vistas. (0.5 puntos)
+				15. Vulnerabilidad de recursas y acciones. (1.0 puntos)
+				16. Escribir un informe obligatorio del proyecto. (1.0 puntos)
+			
+			* Álvaro Davila Sampedro, UO284548: 
+				10. Comprar una oferta. (0.5 puntos)
+				11. Consultar el listado de ofertas compradas. (0.5 puntos)				
+			
+			* Israel Solís Iglesias, UO282162:
+				5. Borrar múltiples usuarios del sistema. (0.5 puntos)
+				12. Establecer una conversación por una oferta. (0.75 puntos)
+				13. Ver el listado de conversaciones. (0.5 puntos)
+			
+			* Omar Teixeira González, UO281847:
+				1. Registrarse como usuario del sistema. (0.25 puntos)			
+				2. Iniciar sesión. (0.25 puntos)
+				3. Salir de sesión. (0.25 puntos)
+				4. Consultar el listado de los usuarios del sistema. (0.25 puntos)
+			
+			* David Leszek Warzynski Abril, UO278968:			
+				6. Dar de alta una nueva oferta (0.5 puntos).
+				7. Consultar el listado de ofertas propias (0.25 puntos).
+				8. Dar de baja una oferta propia (0.5 puntos).
+				9. Buscar ofertas por diferentes campos. (0.5 puntos)
+				
+		Requisitos opcionales:
+		
+			* Álvaro Davila Sampedro, UO284548: 
+				18. Marcar una oferta como destacada (1.0 puntos).
+			
+			* Israel Solís Iglesias, UO282162:
+				17. Eliminar una conversación (0.50 puntos).
+			
+			* Omar Teixeira González, UO281847:
+				19. Crear ofertas con imagen adjunta (1.50 puntos).
