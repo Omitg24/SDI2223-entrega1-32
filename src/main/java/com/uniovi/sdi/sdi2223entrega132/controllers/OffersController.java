@@ -24,6 +24,14 @@ public class OffersController {
     @Autowired
     private AddOfferFormValidator addOfferFormValidator;
 
+    @RequestMapping(value = "/offer/ownedList", method = RequestMethod.GET)
+    public String getOwnedList(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("offersList", offersService.getOffersOfUser(user));
+        return "offer/ownedList";
+    }
+
     @RequestMapping(value = "/offer/add", method = RequestMethod.GET)
     public String setOffer(Model model) {
         model.addAttribute("offer", new Offer());
