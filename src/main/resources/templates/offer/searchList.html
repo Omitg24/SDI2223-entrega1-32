@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head"/>
+<body>
+<nav th:replace="fragments/nav"/>
+<div class="container">
+    <h2 th:text="#{msg.nav.search}"></h2>
+    <form class="navbar-form" action="/offer/searchList"
+          id="searchTextForm">
+        <div class="form-group">
+            <input name="searchText" type="text" class="form-control" size="50"
+                   placeholder="Buscar por título de la oferta">
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-hover" th:fragment="tableSearchedOffers"
+               id="tableSearchedOffers">
+            <thead>
+            <tr>
+                <th th:text="#{msg.offer.ownlist.title}"></th>
+                <th th:text="#{msg.offer.ownlist.desc}"></th>
+                <th th:text="#{msg.offer.ownlist.price}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offer : ${offersList}">
+                <td th:text="${offer.title}"></td>
+                <td th:text="${offer.description}"></td>
+                <td th:text="${offer.price}"></td>
+                <td>
+                    <div>
+                        <div th:if="${offer.purchase}">
+                            <button type="button" th:text="#{msg.offer.purchase}" th:id="${'purchaseButton' + offer.id}"
+                                    class="btn btn-success">
+                            </button>
+                        </div>
+                        <div th:unless="${offer.purchase}">
+                            <button type="button" th:text="#{msg.offer.sold}" th:id="${'purchaseButton' + offer.id}"
+                                    class="btn btn-info"><span></span>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <footer th:replace="fragments/pagination"/>
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

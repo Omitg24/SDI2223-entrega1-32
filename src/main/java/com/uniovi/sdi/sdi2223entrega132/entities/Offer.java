@@ -7,17 +7,19 @@ import java.util.Date;
 public class Offer {
     @Id
     @GeneratedValue
-    private Long id;
-    private String title;
-    private String description;
-    private Date uploadDate;
-    private double price;
+    public Long id;
+    public String title;
+    public String description;
+    public Date uploadDate;
+    public double price;
+
+    public boolean purchase;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    public User owner;
     @ManyToOne
     @JoinColumn(name = "buyer_id")
-    private User buyer;
+    public User buyer;
 
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
@@ -77,6 +79,14 @@ public class Offer {
 
     public void setBuyer(User buyer) {
         this.buyer = buyer;
+    }
+
+    public boolean isPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(boolean purchase) {
+        this.purchase = purchase;
     }
 
     @Override

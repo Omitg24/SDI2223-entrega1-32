@@ -16,6 +16,7 @@
         <th th:text="#{msg.offer.ownlist.title}"></th>
         <th th:text="#{msg.offer.ownlist.desc}"></th>
         <th th:text="#{msg.offer.ownlist.price}"></th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -23,6 +24,7 @@
         <td th:text="${offer.title}"></td>
         <td th:text="${offer.description}"></td>
         <td th:text="${offer.price}"></td>
+        <td><a th:href="${'/offer/delete/' + offer.id}" th:text="#{msg.offer.delete}"></a></td>
         </tr>
       </tbody>
     </table>
