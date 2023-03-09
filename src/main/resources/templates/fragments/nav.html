@@ -1,0 +1,78 @@
+<!-- nav.html -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-
+springsecurity4">
+    <a class="navbar-brand" href="#"></a>
+    <img alt="logo" src="/images/Symbol.png.png" width="256"/>
+    <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            data-target="#navbarColor02" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="my-navbarColor02">
+        <ul class="navbar-nav mr-auto" sec:authorize="isAuthenticated()">
+            <li class="nav-item ">
+                <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
+                   href="#"
+                   id="userDropdown" role="button" th:text="#{msg.nav.user.title}">
+                </a>
+                <div aria-labelledby="navbarDropdown" class="dropdown-menu">
+                    <a class="dropdown-item" href="/user/list" th:text="#{msg.nav.user.list}"></a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
+                   href="#"
+                   id="navbarDropdown" role="button" th:text="#{msg.nav.offer.title}">
+                </a>
+                <div aria-labelledby="navbarDropdown" class="dropdown-menu">
+                    <a class="dropdown-item" href="/offer/add"
+                       th:text="#{msg.nav.offer.add}"></a>
+                    <a class="dropdown-item" href="/offer/list" th:text="#{msg.nav.offer.list}"></a>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav justify-content-end">
+            <li class="nav-item dropdown">
+                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
+                   href="#"
+                   id="btnLanguage" role="button">
+                    <span th:text="#{msg.language.change}"></span>
+                </a>
+                <div aria-labelledby="navbarDropdown" class="dropdown-menu" id="languageDropdownMenuButton">
+                    <a class="dropdown-item" id="btnEnglish" value="EN">
+                        <img style="border: 0; float: left; margin-right: 15px" th:src="@{/images/if_uk_flag.png}"/>
+                        <span th:text="#{msg.language.en}"></span>
+                    </a>
+                    <a class="dropdown-item" id="btnSpanish" value="ES">
+                        <img style="border: 0; float: left; margin-right: 15px" th:src="@{/images/if_spain_flag.png}"/>
+                        <span th:text="#{msg.language.es}"></span>
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" href="/registrarse">
+                    <i class='fas fa-user-alt' style='font-size:16px'></i>
+                    <span th:text="#{msg.signup}"></span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" href="/identificarse">
+                    <i class='fas fa-sign-in-alt' style='font-size:16px'></i>
+                    <span th:text="#{msg.login}"></span>
+                </a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" href="/logout">
+                    <i class='fas fa-sign-out-alt' style='font-size:16px'></i>
+                    <span th:text="#{msg.disconnect}"></span>
+                </a>
+            </li>
+        </ul>
+        <!--<form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+    </div>
+</nav>
