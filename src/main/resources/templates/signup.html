@@ -1,8 +1,6 @@
-<!DOCTYPE html "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/head">
-    <title></title>
-</head>
+<head th:replace="fragments/head"/>
 <body>
 <!-- Barra de Navegación superior -->
 <nav th:replace="fragments/nav"></nav>
@@ -12,39 +10,40 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="email" th:text="#{msg.form.email}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="email" name="email" placeholder="uo123456@uniovi.es"
-                       required type="text"/>
+                <input class="form-control" id="email" name="email" required
+                       th:placeholder="#{msg.placeholder.email}" type="text"/>
                 <span class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="name" th:text="#{msg.form.name}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="name" name="name" placeholder="José"
-                       required type="text"/>
+                <input class="form-control" id="name" name="name" required
+                       th:placeholder="#{msg.placeholder.name}" type="text"/>
                 <span class="text-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="lastName" th:text="#{msg.form.lastName}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="lastName" name="lastName" placeholder="Jincho Loko"
-                       required type="text"/>
+                <input class="form-control" id="lastName" name="lastName" required
+                       th:placeholder="#{msg.placeholder.lastName}" type="text"/>
                 <span class="text-danger" th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}"></span>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="password" th:text="#{msg.form.password}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="password" name="password" placeholder="Password"
+                <input class="form-control" id="password" name="password" th:placeholder="#{msg.placeholder.password}"
                        type="password"/>
                 <span class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="passwordConfirm" th:text="#{msg.form.passwordConfirm}"></label>
+            <label class="control-label col-sm-4" for="passwordConfirm" th:text="#{msg.form.passwordConfirm}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Password confirm"
+                <input class="form-control" id="passwordConfirm" name="passwordConfirm"
+                       th:placeholder="#{msg.placeholder.passwordConfirm}"
                        type="password"/>
                 <span class="text-danger" th:errors="*{passwordConfirm}"
                       th:if="${#fields.hasErrors('passwordConfirm')}"></span>

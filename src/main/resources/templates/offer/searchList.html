@@ -5,16 +5,16 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
     <h2 th:text="#{msg.nav.search}"></h2>
-    <form class="navbar-form" action="/offer/searchList"
+    <form action="/offer/searchList" class="navbar-form"
           id="searchTextForm">
         <div class="form-group">
-            <input name="searchText" type="text" class="form-control" size="50"
-                   placeholder="Buscar por título de la oferta">
+            <input class="form-control" name="searchText" placeholder="Buscar por título de la oferta" size="50"
+                   type="text">
         </div>
     </form>
     <div class="table-responsive">
-        <table class="table table-hover" th:fragment="tableSearchedOffers"
-               id="tableSearchedOffers">
+        <table class="table table-hover" id="tableSearchedOffers"
+               th:fragment="tableSearchedOffers">
             <thead>
             <tr>
                 <th th:text="#{msg.offer.ownlist.title}"></th>
@@ -30,13 +30,15 @@
                 <td>
                     <div>
                         <div th:if="${offer.purchase}">
-                            <button type="button" th:text="#{msg.offer.purchase}" th:id="${'purchaseButton' + offer.id}"
-                                    class="btn btn-success">
+                            <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
+                                    th:text="#{msg.offer.purchase}"
+                                    type="button">
                             </button>
                         </div>
                         <div th:unless="${offer.purchase}">
-                            <button type="button" th:text="#{msg.offer.sold}" th:id="${'purchaseButton' + offer.id}"
-                                    class="btn btn-info"><span></span>
+                            <button class="btn btn-info" th:id="${'purchaseButton' + offer.id}"
+                                    th:text="#{msg.offer.sold}"
+                                    type="button"><span></span>
                             </button>
                         </div>
                     </div>

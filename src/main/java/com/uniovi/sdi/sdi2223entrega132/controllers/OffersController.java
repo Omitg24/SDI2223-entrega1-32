@@ -3,6 +3,7 @@ package com.uniovi.sdi.sdi2223entrega132.controllers;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import com.uniovi.sdi.sdi2223entrega132.services.OffersService;
+import com.uniovi.sdi.sdi2223entrega132.services.UsersService;
 import com.uniovi.sdi.sdi2223entrega132.validators.AddOfferFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,9 @@ public class OffersController {
     private OffersService offersService;
 
     @Autowired
+    private UsersService usersService;
+
+    @Autowired
     private AddOfferFormValidator addOfferFormValidator;
 
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
@@ -35,8 +39,7 @@ public class OffersController {
         if (searchText != null && !searchText.isEmpty()) {
             model.addAttribute("searchText", searchText);
             offers = offersService.searchOffersByTitle(pageable, searchText);
-        }
-        else {
+        } else {
             offers = offersService.getAvailableOffers(pageable);
         }
         model.addAttribute("offersList", offers.getContent());
@@ -57,6 +60,7 @@ public class OffersController {
         model.addAttribute("offer", new Offer());
         return "offer/add";
     }
+
     @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
         addOfferFormValidator.validate(offer, result);

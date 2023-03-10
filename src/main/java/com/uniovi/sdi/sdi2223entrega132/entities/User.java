@@ -27,7 +27,8 @@ public class User {
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
     private Set<Offer> purchasedOffers = new HashSet<Offer>();
 
-    public User() {}
+    public User() {
+    }
 
     public User(String email, String name, String lastName) {
         super();
@@ -98,5 +99,13 @@ public class User {
 
     public void setPasswordConfirm(String passwordConfirm) {
         this.passwordConfirm = passwordConfirm;
+    }
+
+    public Set<Offer> getOwnOffers() {
+        return new HashSet<>(ownOffers);
+    }
+
+    public Set<Offer> getPurchasedOffers() {
+        return new HashSet<>(purchasedOffers);
     }
 }

@@ -17,18 +17,18 @@ public class AddOfferFormValidator implements Validator {
     public void validate(Object target, Errors errors) {
 
         Offer offer = (Offer) target;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "Error.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "Error.empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "Error.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "error.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "error.empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "error.empty");
 
         if (offer.getTitle().length() < 3 || offer.getTitle().length() > 30) {
-            errors.rejectValue("title", "Error.title.length");
+            errors.rejectValue("title", "error.offer.title.length");
         }
         if (offer.getDescription().length() < 10 || offer.getDescription().length() > 200) {
-            errors.rejectValue("description", "Error.description.length");
+            errors.rejectValue("description", "error.offer.description.length");
         }
         if (offer.getPrice() < 0) {
-            errors.rejectValue("price", "Error.price.positive");
+            errors.rejectValue("price", "error.offer.price.positive");
         }
 
 
