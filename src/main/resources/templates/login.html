@@ -5,18 +5,22 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
     <h2 th:text="#{msg.login}"></h2>
+    <div class="alert alert-danger" th:if="${error}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p th:text="#{msg.login.error}"></p>
+    </div>
     <form action="/login" class="form-horizontal" method="post">
         <div class="form-group">
             <label class="control-label col-sm-2" for="username" th:text="#{msg.form.email}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="username" name="username" required="true"
+                <input class="form-control" id="username" name="username"
                        th:placeholder="#{msg.placeholder.email}" type="text"/>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="username" th:text="#{msg.form.password}"></label>
+            <label class="control-label col-sm-2" for="password" th:text="#{msg.form.password}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="password" name="password" required="true"
+                <input class="form-control" id="password" name="password"
                        th:placeholder="#{msg.placeholder.password}" type="password"/>
             </div>
         </div>

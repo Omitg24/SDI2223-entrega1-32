@@ -53,20 +53,15 @@ public class UsersController {
         return "signup";
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@Validated User user, BindingResult result) {
-        logInFormValidator.validate(user, result);
-        if (result.hasErrors()) {
-            return "login";
-        }
-        if (user.getRole().equals(rolesService.getRoles()[1])) {
-            return "redirect:user/list";
-        }
-        return "redirect:home";
-    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
+        return "login";
+    }
+
+    @RequestMapping(value = "/login/error", method = RequestMethod.GET)
+    public String loginError(Model model) {
+        model.addAttribute("error", true);
         return "login";
     }
 
@@ -74,9 +69,20 @@ public class UsersController {
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
     public String home(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String dni = auth.getName();
-        User activeUser = usersService.getUserByEmail(dni);
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
         model.addAttribute("ownedList", activeUser.getOwnOffers());
         return "home";
+    }
+
+    @RequestMapping(value = {"/default"}, method = RequestMethod.GET)
+    public String userRedirect() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User user = usersService.getUserByEmail(email);
+        if (user.getRole().equals(rolesService.getRoles()[1])) {
+            return "redirect:user/list";
+        }
+        return "redirect:home";
     }
 }
