@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body>
+<nav th:replace="fragments/nav"/>
+<div class="container">
+    <h2 th:text="#{msg.user.title}"></h2>
+    <form action="/user/list" class="form-inline">
+        <div class="form-group">
+            <input class="form-control" name="searchText"
+                   th:placeholder="#{msg.palceholder.user.search}" size="50" type="text">
+        </div>
+        <button class="btn btn-dark" type="submit" th:text="#{msg.searchbtn}"></button>
+    </form>
+    <p th:text="#{msg.user.list.info}"></p>
+    <button class="btn btn-dark" id="updateButton" type="button" th:text="#{msg.updateBtn}"></button>
+    <script>
+        $("#updateButton").click(function () {
+            $("#tableUsers").load('/user/list/update');
+        });
+    </script>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tableUsers" th:fragment="tableUsers">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{msg.form.email}"></th>
+                <th scope="col" th:text="#{msg.form.name}"></th>
+                <th scope="col" th:text="#{msg.form.lastName}"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col" th:text="#{msg.delete}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${usersList}">
+                <td scope="row" th:text="${user.email}">Email</td>
+                <td scope="row" th:text="${user.name}">Nombre</td>
+                <td scope="row" th:text="${user.lastName}">Apellidos</td>
+                <td scope="row"></td>
+                <td scope="row"></td>
+                <td scope="row"><input type="checkbox" class="cb" th:if="${user.role!='ROLE_ADMIN'}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <form action="/delete" class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-dark" th:text="#{msg.delete}" type="submit"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer th:replace="fragments/pagination"/>
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>
