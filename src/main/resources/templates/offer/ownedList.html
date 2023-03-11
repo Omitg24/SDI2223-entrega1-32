@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head"/>
+<body>
+
+<nav th:replace="fragments/nav"/>
+<div th:replace="fragments/userInformation"/>
+
+<div class="container">
+    <h2 th:text="#{msg.offer.ownlist.headtitle}"></h2>
+    <p th:text="#{msg.offer.ownlist.text}"></p>
+    <div class="table-responsive">
+        <table class="table table-hover" id="offersTable">
+            <thead>
+            <tr>
+                <th th:text="#{msg.offer.ownlist.title}"></th>
+                <th th:text="#{msg.offer.ownlist.desc}"></th>
+                <th th:text="#{msg.offer.ownlist.price}"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offer : ${offersList}">
+                <td th:text="${offer.title}"></td>
+                <td th:text="${offer.description}"></td>
+                <td th:text="${offer.price}"></td>
+                <td><a th:href="${'/offer/delete/' + offer.id}" th:text="#{msg.offer.delete}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>
