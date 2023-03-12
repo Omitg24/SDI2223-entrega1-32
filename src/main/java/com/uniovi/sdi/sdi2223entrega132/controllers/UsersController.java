@@ -4,9 +4,11 @@ import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import com.uniovi.sdi.sdi2223entrega132.services.RolesService;
 import com.uniovi.sdi.sdi2223entrega132.services.SecurityService;
 import com.uniovi.sdi.sdi2223entrega132.services.UsersService;
-import com.uniovi.sdi.sdi2223entrega132.validators.LogInFormValidator;
 import com.uniovi.sdi.sdi2223entrega132.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
+import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 public class UsersController {
@@ -26,12 +33,19 @@ public class UsersController {
     private SecurityService securityService;
     @Autowired
     private SignUpFormValidator signUpFormValidator;
-    @Autowired
-    private LogInFormValidator logInFormValidator;
 
     @RequestMapping("/user/list")
-    public String getList(Model model) {
-        model.addAttribute("usersList", usersService.getUsers());
+    public String getList(Model model, Pageable pageable, Principal principal, @RequestParam(value = "", required = false) String searchText) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        Page<User> users = new PageImpl<User>(new LinkedList<User>());
+        if (searchText != null && !searchText.isEmpty()) {
+            users = usersService.searchByNameAndLastName(pageable, searchText, user);
+        } else {
+            users = usersService.getUsers(pageable);
+        }
+        model.addAttribute("usersList", users.getContent());
+        model.addAttribute("page", users);
         return "user/list";
     }
 
@@ -53,7 +67,6 @@ public class UsersController {
         return "signup";
     }
 
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
         return "login";
@@ -64,7 +77,6 @@ public class UsersController {
         model.addAttribute("error", true);
         return "login";
     }
-
 
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
     public String home(Model model) {
@@ -84,5 +96,11 @@ public class UsersController {
             return "redirect:user/list";
         }
         return "redirect:home";
+    }
+
+    @RequestMapping("/user/list/update")
+    public String updateList(Pageable pageable, Model model) {
+        model.addAttribute("usersList", usersService.getUsers(pageable));
+        return "user/list :: tableUsers";
     }
 }
