@@ -19,37 +19,39 @@
             $("#tableUsers").load('/user/list/update');
         });
     </script>
-    <div class="table-responsive">
-        <table class="table table-hover" id="tableUsers" th:fragment="tableUsers">
-            <thead>
-            <tr>
-                <th scope="col" th:text="#{msg.form.email}"></th>
-                <th scope="col" th:text="#{msg.form.name}"></th>
-                <th scope="col" th:text="#{msg.form.lastName}"></th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-                <th scope="col" th:text="#{msg.delete}"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${usersList}">
-                <td scope="row" th:text="${user.email}">Email</td>
-                <td scope="row" th:text="${user.name}">Nombre</td>
-                <td scope="row" th:text="${user.lastName}">Apellidos</td>
-                <td scope="row"></td>
-                <td scope="row"></td>
-                <td scope="row"><input type="checkbox" class="cb" th:if="${user.role!='ROLE_ADMIN'}"></td>
-            </tr>
-            </tbody>
-        </table>
-        <form action="/delete" class="form-horizontal" method="post">
+    <form action="/user/delete" class="form-horizontal" method="post">
+        <div class="table-responsive">
+            <table class="table table-hover" id="tableUsers" th:fragment="tableUsers">
+                <thead>
+                <tr>
+                    <th scope="col" th:text="#{msg.form.email}"></th>
+                    <th scope="col" th:text="#{msg.form.name}"></th>
+                    <th scope="col" th:text="#{msg.form.lastName}"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col" th:text="#{msg.delete}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${usersList}">
+                    <td scope="row" th:text="${user.email}">Email</td>
+                    <td scope="row" th:text="${user.name}">Nombre</td>
+                    <td scope="row" th:text="${user.lastName}">Apellidos</td>
+                    <td scope="row"></td>
+                    <td scope="row"></td>
+                    <td scope="row"><input type="checkbox" name="users" class="cb" th:value="${user.id}"
+                                           th:if="${user.email != #authentication.principal.username}"></td>
+                </tr>
+                </tbody>
+            </table>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button class="btn btn-dark" th:text="#{msg.delete}" type="submit"></button>
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
     <footer th:replace="fragments/pagination"/>
 </div>
 <footer th:replace="fragments/footer"/>
