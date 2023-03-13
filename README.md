@@ -19,7 +19,7 @@ Este proyecto forma parte de la entrega 1 de la asignatura de Sistemas Distribui
 </p>
 
 ## Asignación de tareas:	
-Los HTMLs se hará entre todos los miembros del equipo.
+Los HTMLs se harán entre todos los miembros del equipo.
 
   ### Requisitos obligatorios:  
   
