@@ -2,6 +2,7 @@ package com.uniovi.sdi.sdi2223entrega132.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class Offer {
@@ -20,6 +21,9 @@ public class Offer {
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     public User buyer;
+
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+    public Set<Conversation> conversations;
 
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
@@ -87,6 +91,14 @@ public class Offer {
 
     public void setPurchase(boolean purchase) {
         this.purchase = purchase;
+    }
+
+    public Set<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(Set<Conversation> conversations) {
+        this.conversations = conversations;
     }
 
     @Override

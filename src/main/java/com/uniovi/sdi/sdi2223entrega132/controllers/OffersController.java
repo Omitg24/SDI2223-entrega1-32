@@ -71,8 +71,8 @@ public class OffersController {
         String email = principal.getName();
         offer.setUploadDate(new Date());
         offer.setPurchase(true);
-        //User owner = usersService.getUserByEmail(email);
-        //offer.setOwner(owner);
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         offersService.addOffer(offer);
         return "redirect:/offer/ownedList";
     }
@@ -81,6 +81,13 @@ public class OffersController {
     public String deleteOffer(@PathVariable Long id) {
         offersService.deleteOffer(id);
         return "redirect:/offer/ownedList";
+    }
+
+    @RequestMapping(value = "/offer/conversation/{id}", method = RequestMethod.GET)
+    public String getConversation(@PathVariable Long id,Model model, Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        return "offer/conversation";
     }
 
 
