@@ -3,6 +3,7 @@ package com.uniovi.sdi.sdi2223entrega132.entities;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,9 @@ public class Message {
     @GeneratedValue
     private Long id;
 
-    private String owner;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private String text;
@@ -24,11 +27,11 @@ public class Message {
     public Message() {
     }
 
-    public Message(String owner, Date date, String text) {
-        super();
+    public Message(User owner, Date date, String text, Conversation conversation) {
         this.owner = owner;
         this.date = date;
         this.text = text;
+        this.conversation = conversation;
     }
 
     public Long getId() {
@@ -39,11 +42,11 @@ public class Message {
         this.id = id;
     }
 
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
@@ -61,5 +64,26 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Conversation getConversation() {
+        return conversation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return id.equals(message.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
     }
 }

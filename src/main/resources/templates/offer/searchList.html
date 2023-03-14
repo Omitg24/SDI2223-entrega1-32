@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
 <nav th:replace="fragments/nav"/>
@@ -42,7 +42,7 @@
                             </button>
                         </div>
 
-                        <a th:href="${'/offer/conversation/' + offer.id}" th:text="#{msg.conversation.start}"></a>
+                        <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/offer/conversation/' + offer.id}" th:text="#{msg.conversation.start}"></a>
                     </div>
                 </td>
             </tr>

@@ -27,6 +27,12 @@ public class User {
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
     private Set<Offer> purchasedOffers = new HashSet<Offer>();
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Message> messages = new HashSet<Message>();
+
+    @OneToMany(mappedBy = "interested", cascade = CascadeType.ALL)
+    private Set<Conversation> conversations = new HashSet<Conversation>();
+
     public User() {
     }
 
