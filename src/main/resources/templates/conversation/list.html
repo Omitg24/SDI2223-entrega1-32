@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body>
+<nav th:replace="fragments/nav"/>
+<div class="container">
+  <h2 th:text="#{msg.user.title}"></h2>
+  <form action="/user/list" class="form-inline">
+    <div class="form-group">
+      <input class="form-control" name="searchText"
+             th:placeholder="#{msg.palceholder.user.search}" size="50" type="text">
+    </div>
+    <button class="btn btn-dark" type="submit" th:text="#{msg.searchbtn}"></button>
+  </form>
+  <p th:text="#{msg.user.list.info}"></p>
+  <button class="btn btn-dark" id="updateButton" type="button" th:text="#{msg.updateBtn}"></button>
+  <script>
+    $("#updateButton").click(function () {
+      $("#tableConversations").load('/conversation/list/update');
+    });
+  </script>
+  <div class="table-responsive">
+    <table class="table table-hover" id="tableConversations"
+           th:fragment="tableConversations">
+      <thead>
+      <tr>
+        <th th:text="#{msg.form.email}"></th>
+        <th th:text="#{msg.offer.title}"></th>
+        <th th:text="#{msg.conversation.list.open}"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="conversation : ${conversationList}">
+        <td th:if="${conversation.offer.owner.email == #authentication.principal.username}" th:text="${conversation.interested.email}"></td>
+        <td th:unless="${conversation.offer.owner.email == #authentication.principal.username}" th:text="${conversation.offer.owner.email}"></td>
+        <td th:text="${conversation.offer.title}"></td>
+        <td><a th:href="${'/conversation/' + conversation.offer.id}" th:text="#{msg.conversation.list.open}"></a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer th:replace="fragments/pagination"/>
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

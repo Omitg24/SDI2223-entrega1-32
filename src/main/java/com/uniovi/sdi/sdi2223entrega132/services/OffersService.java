@@ -23,12 +23,6 @@ public class OffersService {
     @Autowired
     private OffersRepository offersRepository;
 
-    @Autowired
-    private MessageRepository messageRepository;
-
-    @Autowired
-    private ConversationRepository conversationRepository;
-
     public Page<Offer> getAvailableOffers(Pageable pageable) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Page<Offer> offers = offersRepository.findAllAvailableOffers(pageable, email);
@@ -60,21 +54,5 @@ public class OffersService {
         if (getOfferById(id).getOwner().getEmail().equals(email)) {
             offersRepository.deleteById(id);
         }
-    }
-
-    public Optional<Conversation> getConversationOfUserAndOffer(User user, Offer offer){
-        return conversationRepository.findByUserAndOffer(user.getId(),offer.getId());
-    }
-
-    public void addConversationForOffer(Conversation c) {
-        conversationRepository.save(c);
-    }
-
-    public void addMessage(Message m) {
-        messageRepository.save(m);
-    }
-
-    public Optional<Message> getMessage(Long id){
-        return messageRepository.findById(id);
     }
 }

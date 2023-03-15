@@ -1,5 +1,5 @@
 <div class="text-center">
-  <ul class="pagination justify-content-center">
+  <ul th:if="${page != null}" class="pagination justify-content-center">
     <!-- Primera -->
     <li class="page-item">
       <a class="page-link" th:href="@{'?page=0'}">Primera</a>

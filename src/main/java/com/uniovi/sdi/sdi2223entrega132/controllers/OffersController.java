@@ -87,38 +87,5 @@ public class OffersController {
         return "redirect:/offer/ownedList";
     }
 
-    @RequestMapping(value = "/offer/conversation/{id}", method = RequestMethod.GET)
-    public String getConversation(@PathVariable Long id,Model model, Principal principal) {
-        String email = principal.getName();
-        User user = usersService.getUserByEmail(email);
-        Offer offerOfConversation = offersService.getOfferById(id);
-        Optional<Conversation> optionalConversation = offersService.getConversationOfUserAndOffer(user,offerOfConversation);
-        Conversation c = optionalConversation.isEmpty()?null:optionalConversation.get();
-        model.addAttribute("conversation",c);
-        model.addAttribute("offer",offerOfConversation);
-        return "offer/conversation";
-    }
-
-    @RequestMapping(value = "/offer/conversation/{id}", method = RequestMethod.POST)
-    public String updateConversation(@PathVariable Long id, @ModelAttribute Message message, Model model, Principal principal) {
-        String email = principal.getName();
-        User user = usersService.getUserByEmail(email);
-        message.setDate(new Date());
-        message.setOwner(user);
-
-
-        Offer offerOfConversation = offersService.getOfferById(id);
-        Optional<Conversation> optionalConversation = offersService.getConversationOfUserAndOffer(user,offerOfConversation);
-        Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,user,new HashSet<>()):optionalConversation.get();
-        offersService.addConversationForOffer(c);
-        message.setConversation(c);
-        offersService.addMessage(message);
-        c.getMessages().add(message);
-
-        model.addAttribute("conversation",c);
-        model.addAttribute("offer",offerOfConversation);
-        return "redirect:/offer/conversation/" + id;
-    }
-
 
 }

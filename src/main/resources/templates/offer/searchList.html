@@ -42,7 +42,7 @@
                             </button>
                         </div>
 
-                        <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/offer/conversation/' + offer.id}" th:text="#{msg.conversation.start}"></a>
+                        <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/conversation/' + offer.id}" th:text="#{msg.conversation.start}"></a>
                     </div>
                 </td>
             </tr>

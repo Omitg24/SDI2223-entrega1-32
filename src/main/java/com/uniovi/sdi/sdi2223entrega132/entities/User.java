@@ -114,4 +114,20 @@ public class User {
     public Set<Offer> getPurchasedOffers() {
         return new HashSet<>(purchasedOffers);
     }
+
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+
+    public Set<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(Set<Conversation> conversations) {
+        this.conversations = conversations;
+    }
 }

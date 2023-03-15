@@ -22,7 +22,7 @@
                                 <div th:each="message : ${conversation.messages}">
                                     <div th:if="${message.owner.email == #authentication.principal.username}">
                                         <div class="d-flex justify-content-between">
-                                            <p class="small mb-1" th:text="${message.owner.name}"></p>
+                                            <p class="small mb-1 text-muted" th:text="${message.owner.name}"></p>
                                             <p class="small mb-1 text-muted" th:text="${message.date}"></p>
                                         </div>
                                         <div class="d-flex flex-row justify-content-end mb-4 pt-1">
@@ -35,7 +35,7 @@
 
                                     <div th:unless="${message.owner.email == #authentication.principal.username}">
                                         <div class="d-flex justify-content-between">
-                                            <p class="small mb-1" th:text="${message.owner.name}"></p>
+                                            <p class="small mb-1 text-muted" th:text="${message.owner.name}"></p>
                                             <p class="small mb-1 text-muted" th:text="${message.date}"></p>
                                         </div>
                                         <div class="d-flex flex-row justify-content-start">
@@ -51,7 +51,7 @@
 
                         <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                             <div class="input-group mb-0">
-                                <form th:action="${'/offer/conversation/' + offer.id}" class="form-horizontal"
+                                <form th:action="${'/conversation/' + offer.id}" class="form-horizontal"
                                       method="post" th:object="${offer}">
                                     <input type="text" id="text" name="text" class="form-control" placeholder="Type message"
                                            aria-label="Recipient's username" aria-describedby="button-addon2"/>
