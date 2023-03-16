@@ -36,7 +36,8 @@ public class InsertSampleDataService {
         Offer offer = new Offer("Playeros","Estan nuevos",date,15.0,admin);
         offersService.addOffer(offer);
 
-
+        Offer offer1 = new Offer("Mando Play","Estan nuevos",date,40.0,user);
+        offersService.addOffer(offer1);
 
     }
 }

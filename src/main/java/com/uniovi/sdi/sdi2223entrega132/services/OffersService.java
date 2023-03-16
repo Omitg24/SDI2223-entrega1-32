@@ -45,6 +45,10 @@ public class OffersService {
         return offersRepository.findAllByOwner(user);
     }
 
+    public List<Offer> getOffersFeatured() {
+        return offersRepository.findAllFeatured();
+    }
+
     public Offer getOfferById(Long id) {
         return offersRepository.findById(id).get();
     }
@@ -72,6 +76,22 @@ public class OffersService {
                 usersRepository.updateAmount(offer.buyer.getAmount()+ offer.getPrice(),offer.buyer.getId());
                 //Se le resta el dinero al comprador
                 usersRepository.updateAmount(user.getAmount()- offer.getPrice(),user.getId());
+            }
+        }
+    }
+
+    public void setOfferFeature(boolean revised, Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        Offer offer = offersRepository.findById(id).get();
+        User user =usersRepository.findByEmail(email);
+
+        if(revised && !offer.isFeatured() && offer.getOwner().getEmail() == user.getEmail()) {
+            if(user.getAmount() >= 20.0){
+                offer.setFeatured(true);
+                offersRepository.updateFeatured(true,id);
+                //Se le resta el dinero al propietario
+                usersRepository.updateAmount(user.getAmount()- 20.0,user.getId());
             }
         }
     }

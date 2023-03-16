@@ -5,11 +5,32 @@
 
 <nav th:replace="fragments/nav"/>
 
-<div class="container">
+<div class="container" th:fragment="tableOwnedOffers" id="ownedOffers">
     <h2 th:text="#{msg.offer.ownlist.headtitle}"></h2>
+    <p th:text="#{msg.offer.ownlist.featured}"></p>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tableFeaturedOffers">
+            <thead>
+            <tr>
+                <th th:text="#{msg.offer.ownlist.title}"></th>
+                <th th:text="#{msg.offer.ownlist.desc}"></th>
+                <th th:text="#{msg.offer.ownlist.price}"></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offer : ${featuredList}">
+                <td th:text="${offer.title}"></td>
+                <td th:text="${offer.description}"></td>
+                <td th:text="${offer.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <p th:text="#{msg.offer.ownlist.text}"></p>
     <div class="table-responsive">
-        <table class="table table-hover" id="offersTable">
+        <table class="table table-hover" id="tableOwnedOffers">
             <thead>
             <tr>
                 <th th:text="#{msg.offer.ownlist.title}"></th>
@@ -24,9 +45,36 @@
                 <td th:text="${offer.description}"></td>
                 <td th:text="${offer.price}"></td>
                 <td><a th:href="${'/offer/delete/' + offer.id}" th:text="#{msg.offer.delete}"></a></td>
+                <td>
+                    <div>
+                        <div th:unless="${offer.featured}">
+                            <button class="btn btn-success" th:id="${'featureButton' + offer.id}"
+                                    th:text="#{msg.offer.feature}"
+                                    type="button">
+                            </button>
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                $("#featureButton"+ "[[${offer.id}]]").click(function() {
+                                    $.get( "/offer/[[${offer.id}]]/feature", function( data ) {
+                                        let urlUpdate = '/offer/ownedList/update';
+                                        $("#ownedOffers").load(urlUpdate);
+                                    });
+                                });
+                                /*]]>*/
+                            </script>
+                        </div>
+                        <div th:if="${offer.featured}">
+                            <button class="btn btn-info" th:id="${'featureButton' + offer.id}"
+                                    th:text="#{msg.offer.featured}"
+                                    type="button"><span></span>
+                            </button>
+                        </div>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 <footer th:replace="fragments/footer"/>

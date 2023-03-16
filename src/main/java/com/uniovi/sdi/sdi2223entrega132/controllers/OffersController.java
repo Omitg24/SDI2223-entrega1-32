@@ -32,7 +32,7 @@ public class OffersController {
 
 
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getOwnedList(Model model, Pageable pageable,
+    public String getSearchList(Model model, Pageable pageable,
                                @RequestParam(value = "", required = false) String searchText) {
 
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
@@ -50,7 +50,6 @@ public class OffersController {
 
     @RequestMapping(value = "/offer/searchList/update", method = RequestMethod.GET)
     public String getSearchListUpdate(Model model, Pageable pageable) {
-        System.out.println("Actualizado");
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
         model.addAttribute("searchText", "");
         offers = offersService.getAvailableOffers(pageable);
@@ -64,7 +63,17 @@ public class OffersController {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
         model.addAttribute("offersList", offersService.getOffersOfUser(user));
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
         return "offer/ownedList";
+    }
+
+    @RequestMapping(value = "/offer/ownedList/update", method = RequestMethod.GET)
+    public String getOwnedListUpdate(Model model,Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("offersList", offersService.getOffersOfUser(user));
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
+        return "offer/ownedList :: tableOwnedOffers";
     }
 
     @RequestMapping(value = "/offer/add", method = RequestMethod.GET)
@@ -96,10 +105,16 @@ public class OffersController {
     }
 
     @RequestMapping(value = "/offer/{id}/purchase", method = RequestMethod.GET)
-    public String setPurchaseTrue(@PathVariable Long id,BindingResult result) {
+    public String setPurchaseTrue(@PathVariable Long id) {
 
         offersService.setOfferPurchase(true, id);
         return "offer/searchList :: tableSearchedOffers";
+    }
+
+    @RequestMapping(value = "/offer/{id}/feature", method = RequestMethod.GET)
+    public String setFeatureTrue(@PathVariable Long id) {
+        offersService.setOfferFeature(true, id);
+        return "offer/ownedList :: tableOwnedOffers";
     }
 
     @RequestMapping(value = "/offer/purchasedList", method = RequestMethod.GET)

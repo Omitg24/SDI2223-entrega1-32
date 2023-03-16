@@ -30,8 +30,16 @@ public interface OffersRepository extends CrudRepository<Offer, Long> {
     @Query("UPDATE Offer SET purchase = ?1 , buyer = ?2 WHERE id = ?2")
     void updateOffer(Boolean purchase, User buyer, Long id);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Offer SET featured = ?1 WHERE id = ?2")
+    void updateFeatured(Boolean featured, Long id);
+
 
 
     @Query("SELECT o from Offer o WHERE o.buyer = ?1 ORDER BY o.uploadDate DESC")
     List<Offer> findAllByBuyer(User user);
+
+    @Query("SELECT o from Offer o WHERE o.featured = true ORDER BY o.uploadDate DESC")
+    List<Offer> findAllFeatured();
 }
