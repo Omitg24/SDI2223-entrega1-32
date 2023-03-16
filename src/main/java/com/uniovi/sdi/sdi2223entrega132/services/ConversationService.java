@@ -7,6 +7,7 @@ import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import com.uniovi.sdi.sdi2223entrega132.repositories.ConversationRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,11 @@ public class ConversationService {
         return messageRepository.findById(id);
     }
 
-    public List<Conversation> getConversationOfUser(Pageable pageable,User user) {
+    public Page<Conversation> getConversationOfUser(Pageable pageable, User user) {
         return conversationRepository.findByUser(pageable,user);
+    }
+
+    public void deleteConversation(Long id) {
+        conversationRepository.deleteById(id);
     }
 }

@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="d-flex flex-row justify-content-end mb-4 pt-1">
                                             <div>
-                                                <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-warning"
+                                                <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-dark"
                                                    th:text="${message.text}" style="background-color: #f5f6f7;"></p>
                                             </div>
                                         </div>
@@ -51,14 +51,18 @@
 
                         <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                             <div class="input-group mb-0">
-                                <form th:action="${'/conversation/' + offer.id}" class="form-horizontal"
-                                      method="post" th:object="${offer}">
+                                <form th:action="@{/conversation/{offerId}(offerId=${offer.id})}" class="form-horizontal"
+                                      method="post" th:object="${message}">
                                     <input type="text" id="text" name="text" class="form-control" placeholder="Type message"
                                            aria-label="Recipient's username" aria-describedby="button-addon2"/>
-                                    <button class="btn btn-warning" type="submit" id="button-addon2"
+                                    <span
+                                            class="text-danger" th:errors="*{text}"
+                                            th:if="${#fields.hasErrors('text')}"></span>
+                                    <button class="btn bg-dark text-white" type="submit" id="button-addon2"
                                             style="padding-top: .55rem;">
                                         Button
                                     </button>
+
                                 </form>
                             </div>
                         </div>
