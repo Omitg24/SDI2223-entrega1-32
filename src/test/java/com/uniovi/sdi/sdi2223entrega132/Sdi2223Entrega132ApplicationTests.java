@@ -2,7 +2,9 @@ package com.uniovi.sdi.sdi2223entrega132;
 
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
+import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -59,6 +61,7 @@ class Sdi2223Entrega132ApplicationTests {
         driver.quit();
     }
 
+    // 1. Público: Registrarse como usuario
     /**
      * PR01. Registro de Usuario con datos válidos.
      * Realizada por: Omar
@@ -87,6 +90,7 @@ class Sdi2223Entrega132ApplicationTests {
         PO_HomeView.clickOption(driver, "signup", "class", "btn btn-dark");
         //Rellenamos el formulario.
         PO_SignUpView.fillForm(driver, "", "", "", "123456", "123456");
+        //Comprobamos los errores
         List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "error.empty",
                 PO_Properties.getSPANISH());
         String checkText = PO_HomeView.getP().getString("error.empty",
@@ -94,6 +98,167 @@ class Sdi2223Entrega132ApplicationTests {
                 PO_Properties.getSPANISH()) + "\n" + PO_HomeView.getP().getString("error.user.email.format",
                 PO_Properties.getSPANISH());
         Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR03. Registro de Usuario con datos inválidos (repetición de contraseña inválida).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(3)
+    public void PR03() {
+        //Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_SignUpView.fillForm(driver, "uo123456@uniovi.es", "Adrián", "García Fernández", "123456", "654321");
+        //Comprobamos los errores
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "error.user.passwordConfirm.coincidence",
+                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("error.user.passwordConfirm.coincidence",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR04. Registro de Usuario con datos inválidos (email existente).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(4)
+    public void PR04() {
+        //Vamos al formulario de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_SignUpView.fillForm(driver, "user@email.com", "Adrián", "García Fernández", "123456", "123456");
+        //Comprobamos los errores
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "error.user.email.duplicate",
+                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("error.user.email.duplicate",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    // 2. Usuario Registrado: Iniciar sesión
+    /**
+     * PR05. Inicio de sesión con datos válidos (administrador).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(5)
+    public void PR05() {
+        //Vamos al formulario de logueo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //Comprobamos que entramos en la sección de listar usuarios
+        String checkText = "Usuarios";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR06. Inicio de sesión con datos válidos (usuario estándar).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(6)
+    public void PR06() {
+        //Vamos al formulario de logueo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "user@email.com", "123456");
+        //Comprobamos que entramos en la sección de listado de ofertas propias
+        String checkText = "Listado de ofertas propias";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR07. Inicio de sesión con datos inválidos (usuario estándar, campo email y contraseña vacíos).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(7)
+    public void PR07() {
+        //Vamos al formulario de logueo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "", "");
+        //Comprobamos los errores
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "msg.login.error",
+                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("msg.login.error",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR08. Inicio de sesión con datos válidos (usuario estándar, email existente, pero contraseña
+     * incorrecta).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(8)
+    public void PR08() {
+        //Vamos al formulario de logueo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "user@email.com", "user");
+        //Comprobamos los errores
+        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "msg.login.error",
+                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("msg.login.error",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR09. Hacer clic en la opción de salir de sesión y comprobar que se redirige a la página de inicio de
+     * sesión (Login).
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(9)
+    public void PR09() {
+        //Vamos al formulario de logueo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //Nos desconectamos
+        PO_HomeView.clickOption(driver, "logout", "class", "btn btn-dark");
+        //Comprobamos que hemos cerrado la sesión
+        String checkText = "Identificarse";
+        List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
+        Assertions.assertEquals(checkText, result.get(0).getText());
+    }
+
+    /**
+     * PR10. Comprobar que el botón cerrar sesión no está visible si el usuario no está autenticado.
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(10)
+    public void PR10() {
+        //Comprobamos que el elemento no está
+        List<WebElement> result = driver.findElements(By.xpath("//a[contains(@href, '/logout')]"));
+        Assertions.assertTrue(result.isEmpty());
+    }
+
+    /**
+     * PR11. Mostrar el listado de usuarios y comprobar que se muestran todos los que existen en el
+     * sistema.
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(11)
+    public void PR11() {
+        //Vamos al formulario de logueo
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
+        //Comprobamos que entramos en la sección privada y nos nuestra el texto a buscar
+        List<WebElement> result = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
+        Assertions.assertEquals(2, result.size());
     }
 
 //    @Test
