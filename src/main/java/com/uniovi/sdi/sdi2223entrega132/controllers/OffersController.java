@@ -84,16 +84,14 @@ public class OffersController {
 
     @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
+        String email = principal.getName();
+        offer.setUploadDate(new Date());
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         addOfferFormValidator.validate(offer, result);
-        System.out.println(offer.getDescription());
         if (result.hasErrors()) {
             return "offer/add";
         }
-        String email = principal.getName();
-        offer.setUploadDate(new Date());
-        offer.setPurchase(true);
-        //User owner = usersService.getUserByEmail(email);
-        //offer.setOwner(owner);
         offersService.addOffer(offer);
         return "redirect:/offer/ownedList";
     }
