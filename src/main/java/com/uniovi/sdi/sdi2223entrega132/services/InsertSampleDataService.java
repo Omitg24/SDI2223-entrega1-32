@@ -13,12 +13,16 @@ public class InsertSampleDataService {
     @Autowired
     private RolesService rolesService;
 
-//    @PostConstruct
-//    public void init() {
-//        User admin = new User("admin@email.com", "", "");
-//        admin.setPassword("admin");
-//        admin.setRole(rolesService.getRoles()[1]);
-//
-//        usersService.addUser(admin);
-//    }
+    @PostConstruct
+    public void init() {
+        User admin = new User("admin@email.com", "", "");
+        admin.setPassword("admin");
+        admin.setRole(rolesService.getRoles()[1]);
+
+        User user = new User("user@email.com", "", "");
+        user.setPassword("123456");
+        user.setRole(rolesService.getRoles()[0]);
+
+        usersService.addUser(user);
+    }
 }

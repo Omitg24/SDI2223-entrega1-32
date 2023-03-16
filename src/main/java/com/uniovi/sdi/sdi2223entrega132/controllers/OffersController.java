@@ -31,7 +31,7 @@ public class OffersController {
     private AddOfferFormValidator addOfferFormValidator;
 
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getOwnedList(Model model, Pageable pageable,
+    public String getSearchList(Model model, Pageable pageable,
                                @RequestParam(value = "", required = false) String searchText) {
 
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
@@ -44,7 +44,7 @@ public class OffersController {
         }
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
-        return "offer/searchList";
+        return "offer/searchListCard";
     }
 
     @RequestMapping(value = "/offer/ownedList", method = RequestMethod.GET)
@@ -52,7 +52,7 @@ public class OffersController {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
         model.addAttribute("offersList", offersService.getOffersOfUser(user));
-        return "offer/ownedList";
+        return "offer/ownedListCard";
     }
 
     @RequestMapping(value = "/offer/add", method = RequestMethod.GET)
@@ -71,8 +71,8 @@ public class OffersController {
         String email = principal.getName();
         offer.setUploadDate(new Date());
         offer.setPurchase(true);
-        //User owner = usersService.getUserByEmail(email);
-        //offer.setOwner(owner);
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         offersService.addOffer(offer);
         return "redirect:/offer/ownedList";
     }

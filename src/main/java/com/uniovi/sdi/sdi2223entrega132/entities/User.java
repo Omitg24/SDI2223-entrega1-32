@@ -108,4 +108,14 @@ public class User {
     public Set<Offer> getPurchasedOffers() {
         return new HashSet<>(purchasedOffers);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

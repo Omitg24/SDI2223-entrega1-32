@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-
-springsecurity4" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
 <nav th:replace="fragments/nav"/>
@@ -8,8 +8,8 @@ springsecurity4" xmlns:th="http://thymeleaf.org">
     <h2 th:text="#{msg.home.welcome}"></h2>
     <h3 th:text="#{msg.home.info}"></h3>
     <p th:text="#{msg.home.user.info}">
-        <b sec:authentication="principal.username" th:inline="text"></b>
     </p>
+    <b th:inline="text" sec:authentication="principal.username"></b>
     <div th:replace="fragments/ownedOffers">
     </div>
 </div>
