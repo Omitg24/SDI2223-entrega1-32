@@ -4,7 +4,7 @@
 <body>
 <nav th:replace="fragments/nav"/>
 <div class="container">
-    <h2 th:text="#{msg.nav.search}"></h2>
+    <h2 class="text-center" th:text="#{msg.conversation.header}"></h2>
     <section>
         <div class="container py-5">
 
@@ -14,7 +14,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center p-3"
                              style="border-top: 4px solid #ffa900;">
-                            <h5 class="mb-0">Chat messages</h5>
+                            <h5 class="mb-0" th:text="${offer.title}"></h5>
                         </div>
 
                         <div class="card-body" style="position: relative; height: 400px; overflow-y: scroll;">
@@ -59,7 +59,7 @@
                                             class="text-danger" th:errors="*{text}"
                                             th:if="${#fields.hasErrors('text')}"></span>
                                     <button class="btn bg-dark text-white" type="submit" id="button-addon2"
-                                            style="padding-top: .55rem;">
+                                            style="padding-top: .55rem;" th:text="#{msg.conversation.send}">
                                         Button
                                     </button>
 

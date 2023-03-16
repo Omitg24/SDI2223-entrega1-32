@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,10 +31,6 @@ public class ConversationService {
 
     public void addMessage(Message m) {
         messageRepository.save(m);
-    }
-
-    public Optional<Message> getMessage(Long id){
-        return messageRepository.findById(id);
     }
 
     public Page<Conversation> getConversationOfUser(Pageable pageable, User user) {

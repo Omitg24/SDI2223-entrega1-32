@@ -1,8 +1,6 @@
 package com.uniovi.sdi.sdi2223entrega132.validators;
 
 import com.uniovi.sdi.sdi2223entrega132.entities.Message;
-import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
-import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

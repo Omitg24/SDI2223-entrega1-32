@@ -5,6 +5,7 @@
         <th th:text="#{msg.form.email}"></th>
         <th th:text="#{msg.offer.title}"></th>
         <th th:text="#{msg.conversation.list.open}"></th>
+        <th th:text="#{msg.conversation.list.delete}"></th>
     </tr>
     </thead>
     <tbody>
@@ -13,6 +14,7 @@
         <td th:unless="${conversation.offer.owner.email == #authentication.principal.username}" th:text="${conversation.offer.owner.email}"></td>
         <td th:text="${conversation.offer.title}"></td>
         <td><a th:href="${'/conversation/' + conversation.offer.id}" th:text="#{msg.conversation.list.open}"></a></td>
+        <td><a th:href="${'/conversation/delete/'+conversation.id}" th:text="#{msg.conversation.list.delete}"></a></td>
     </tr>
     </tbody>
 </table>

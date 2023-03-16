@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Optional;
 
 @Controller

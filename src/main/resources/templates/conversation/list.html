@@ -4,15 +4,8 @@
 <body>
 <nav th:replace="fragments/nav"/>
 <div class="container">
-  <h2 th:text="#{msg.user.title}"></h2>
-  <form action="/user/list" class="form-inline">
-    <div class="form-group">
-      <input class="form-control" name="searchText"
-             th:placeholder="#{msg.palceholder.user.search}" size="50" type="text">
-    </div>
-    <button class="btn btn-dark" type="submit" th:text="#{msg.searchbtn}"></button>
-  </form>
-  <p th:text="#{msg.user.list.info}"></p>
+  <h2 th:text="#{msg.nav.conversation.title}"></h2>
+  <p th:text="#{msg.conversation.list.info}"></p>
   <button class="btn btn-dark" id="updateButton" type="button" th:text="#{msg.updateBtn}"></button>
   <script>
     $("#updateButton").click(function () {
@@ -26,8 +19,8 @@
       <tr>
         <th th:text="#{msg.form.email}"></th>
         <th th:text="#{msg.offer.title}"></th>
-        <th></th>
-        <th></th>
+        <th th:text="#{msg.conversation.list.open}"></th>
+        <th th:text="#{msg.conversation.list.delete}"></th>
       </tr>
       </thead>
       <tbody>
