@@ -13,7 +13,6 @@ public class Offer {
     public String description;
     public Date uploadDate;
     public double price;
-
     public boolean purchase;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
