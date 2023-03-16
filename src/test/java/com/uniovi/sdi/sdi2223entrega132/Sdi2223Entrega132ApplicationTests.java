@@ -3,6 +3,7 @@ package com.uniovi.sdi.sdi2223entrega132;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
+import jdk.jfr.Timespan;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest
@@ -129,7 +132,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Vamos al formulario de registro
         PO_HomeView.clickOption(driver, "signup", "class", "btn btn-dark");
         //Rellenamos el formulario.
-        PO_SignUpView.fillForm(driver, "user@email.com", "Adrián", "García Fernández", "123456", "123456");
+        PO_SignUpView.fillForm(driver, "user01@email.com", "Adrián", "García Fernández", "123456", "123456");
         //Comprobamos los errores
         List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "error.user.email.duplicate",
                 PO_Properties.getSPANISH());
@@ -166,7 +169,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Vamos al formulario de logueo
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
         //Rellenamos el formulario.
-        PO_LoginView.fillLoginForm(driver, "user@email.com", "123456");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
         //Comprobamos que entramos en la sección de listado de ofertas propias
         String checkText = "Listado de ofertas propias";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
@@ -203,7 +206,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Vamos al formulario de logueo
         PO_HomeView.clickOption(driver, "login", "class", "btn btn-dark");
         //Rellenamos el formulario.
-        PO_LoginView.fillLoginForm(driver, "user@email.com", "user");
+        PO_LoginView.fillLoginForm(driver, "user01@email.com", "user");
         //Comprobamos los errores
         List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "msg.login.error",
                 PO_Properties.getSPANISH());
@@ -257,8 +260,28 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         //Comprobamos que entramos en la sección privada y nos nuestra el texto a buscar
-        List<WebElement> result = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
-        Assertions.assertEquals(2, result.size());
+        List<WebElement> result = new ArrayList<>();
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+
+        //Añadimos los elementos en la primera página
+        result.addAll(SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout()));
+
+        //Vamos a la segunda pagina y añadimos los elementos
+        elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+        elements.get(2).click();
+        result.addAll(SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout()));
+
+        //Vamos a la tercera pagina y añadimos los elementos
+        elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+        elements.get(3).click();
+        result.addAll(SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout()));
+
+        //Vamos a la cuarta pagina y añadimos los elementos
+        elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+        elements.get(4).click();
+        result.addAll(SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout()));
+
+        Assertions.assertEquals(16, result.size());
     }
 
 //    @Test
