@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "offer")
 public class Offer {
     @Id
     @GeneratedValue
@@ -13,7 +14,7 @@ public class Offer {
     public Date uploadDate;
     public double price;
 
-    public boolean purchase;
+    public boolean purchase=false;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     public User owner;

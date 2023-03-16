@@ -29,13 +29,27 @@
                 <td th:text="${offer.price}"></td>
                 <td>
                     <div>
-                        <div th:if="${offer.purchase}">
+                        <div th:unless="${offer.purchase}">
                             <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
                                     th:text="#{msg.offer.purchase}"
                                     type="button">
                             </button>
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                $("#purchaseButton"+ "[[${offer.id}]]").click(function() {
+                                    $.get( "/offer/[[${offer.id}]]/purchase", function( data ) {
+                                        let numberPage = [[${param.page}]];
+                                        let urlUpdate = '/offer/searchList/update';
+                                        if ( numberPage != null ){
+                                            urlUpdate += "?page="+numberPage[0];
+                                        }
+                                        $("#tableSearchedOffers").load(urlUpdate);
+                                    });
+                                });
+                                /*]]>*/
+                            </script>
                         </div>
-                        <div th:unless="${offer.purchase}">
+                        <div th:if="${offer.purchase}">
                             <button class="btn btn-info" th:id="${'purchaseButton' + offer.id}"
                                     th:text="#{msg.offer.sold}"
                                     type="button"><span></span>

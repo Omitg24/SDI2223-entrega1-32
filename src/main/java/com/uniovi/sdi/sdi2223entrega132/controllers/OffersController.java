@@ -30,6 +30,7 @@ public class OffersController {
     @Autowired
     private AddOfferFormValidator addOfferFormValidator;
 
+
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
     public String getOwnedList(Model model, Pageable pageable,
                                @RequestParam(value = "", required = false) String searchText) {
@@ -45,6 +46,17 @@ public class OffersController {
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
         return "offer/searchList";
+    }
+
+    @RequestMapping(value = "/offer/searchList/update", method = RequestMethod.GET)
+    public String getSearchListUpdate(Model model, Pageable pageable) {
+        System.out.println("Actualizado");
+        Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
+        model.addAttribute("searchText", "");
+        offers = offersService.getAvailableOffers(pageable);
+        model.addAttribute("offersList", offers.getContent());
+        model.addAttribute("page", offers);
+        return "offer/searchList :: tableSearchedOffers";
     }
 
     @RequestMapping(value = "/offer/ownedList", method = RequestMethod.GET)
@@ -83,5 +95,19 @@ public class OffersController {
         return "redirect:/offer/ownedList";
     }
 
+    @RequestMapping(value = "/offer/{id}/purchase", method = RequestMethod.GET)
+    public String setPurchaseTrue(@PathVariable Long id,BindingResult result) {
+
+        offersService.setOfferPurchase(true, id);
+        return "offer/searchList :: tableSearchedOffers";
+    }
+
+    @RequestMapping(value = "/offer/purchasedList", method = RequestMethod.GET)
+    public String getPurchasedList(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("offersList", offersService.getOffersOfBuyer(user));
+        return "offer/purchasedList";
+    }
 
 }
