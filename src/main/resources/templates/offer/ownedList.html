@@ -27,10 +27,12 @@
             </tbody>
         </table>
     </div>
+    <div th:if="${#lists.isEmpty(featuredList)}"> No hay ofertas destacadas</div>
 
     <p th:text="#{msg.offer.ownlist.text}"></p>
     <div class="table-responsive">
         <table class="table table-hover" id="tableOwnedOffers">
+            <span class="text-danger" th:if="${featureError}" th:text="#{error.amount}"></span>
             <thead>
             <tr>
                 <th th:text="#{msg.offer.ownlist.title}"></th>

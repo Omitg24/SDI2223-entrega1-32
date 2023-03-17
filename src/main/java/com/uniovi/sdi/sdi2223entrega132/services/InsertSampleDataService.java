@@ -33,10 +33,10 @@ public class InsertSampleDataService {
         usersService.addUser(user);
 
         Date date= new Date(2023,3,15);
-        Offer offer = new Offer("Playeros","Estan nuevos",date,15.0,admin);
+        Offer offer = new Offer("Playeros","Están nuevos",date,15.0,admin);
         offersService.addOffer(offer);
 
-        Offer offer1 = new Offer("Mando Play","Estan nuevos",date,40.0,user);
+        Offer offer1 = new Offer("Mando Play","Están nuevos",date,40.0,user);
         offersService.addOffer(offer1);
 
     }

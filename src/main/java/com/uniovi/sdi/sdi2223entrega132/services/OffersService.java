@@ -60,6 +60,29 @@ public class OffersService {
         }
     }
 
+
+    public boolean validatePurchase(Long id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        Offer offer = offersRepository.findById(id).get();
+        User user =usersRepository.findByEmail(email);
+        if(user.getAmount() >= offer.getPrice()){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validateFeature(Long id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        Offer offer = offersRepository.findById(id).get();
+        User user =usersRepository.findByEmail(email);
+        if(user.getAmount() >= 20){
+            return false;
+        }
+        return true;
+    }
+
     public void setOfferPurchase(boolean revised, Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();

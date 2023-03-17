@@ -15,6 +15,7 @@
     <div class="table-responsive">
         <table class="table table-hover" id="tableSearchedOffers"
                th:fragment="tableSearchedOffers">
+            <span class="text-danger" th:if="${buyError}" th:text="#{error.amount}"></span>
             <thead>
             <tr>
                 <th th:text="#{msg.offer.ownlist.title}"></th>
@@ -26,7 +27,7 @@
             <tr th:each="offer : ${offersList}">
                 <td th:text="${offer.title}"></td>
                 <td th:text="${offer.description}"></td>
-                <td th:text="${offer.price}"></td>
+                <td th:text="${error}"></td>
                 <td>
                     <div>
                         <div th:unless="${offer.purchase}">
@@ -60,6 +61,7 @@
             </tr>
             </tbody>
         </table>
+
     </div>
     <footer th:replace="fragments/pagination"/>
 </div>
