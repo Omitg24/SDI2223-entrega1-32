@@ -38,7 +38,7 @@ public class PO_PrivateView extends PO_NavView {
         PO_View.checkElementBy(driver, "text", dni);
     }
     static public void logout(WebDriver driver) {
-        String loginText = PO_HomeView.getP().getString("msg.login", PO_Properties.getSPANISH());
+        String loginText = PO_HomeView.getP().getString("msg.signup", PO_Properties.getSPANISH());
         PO_PrivateView.clickOption(driver, "logout", "text", loginText);
     }
 
