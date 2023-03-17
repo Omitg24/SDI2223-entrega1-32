@@ -4,6 +4,7 @@ import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import jdk.jfr.Timespan;
+import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -286,6 +287,25 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(16, result.size());
     }
 
+    @Test
+    @Order(12)
+    public void PR12(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "admin@email.com", "admin");
+        //Contamos el número de filas de usuarios
+        List<WebElement> userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
+        Assertions.assertEquals(4, userList.size());
+        WebElement firstCheckbox = driver.findElement(By.xpath("//input[@type='checkbox'][1]"));
+        firstCheckbox.click();
+        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
+        Assertions.assertEquals(4, userList.size());
+        List<WebElement> submitButtons = driver.findElements(By.xpath("//button[@type='submit']"));
+        submitButtons.get(1).click();
+        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
+        Assertions.assertEquals(3, userList.size());
+        PO_PrivateView.logout(driver);
+    }
+
     /**
      * PR15. Añadir una nueva oferta y comprobar que se muestra en la vista.
      * Realizada por: David
@@ -476,5 +496,6 @@ class Sdi2223Entrega132ApplicationTests {
         // Hacemos logout
         PO_PrivateView.logout(driver);
     }
+
 }
 

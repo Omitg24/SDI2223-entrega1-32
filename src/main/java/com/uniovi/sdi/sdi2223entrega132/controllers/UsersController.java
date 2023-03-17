@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.LinkedList;
 import java.util.List;
@@ -108,5 +109,13 @@ public class UsersController {
     public String updateList(Pageable pageable, Model model) {
         model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
+    }
+
+    @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
+    public String deleteUsers(@RequestParam("users") Long[] users, HttpServletRequest request) {
+        for(Long id : users){
+            usersService.deleteUser(id);
+        }
+        return "redirect:/user/list";
     }
 }

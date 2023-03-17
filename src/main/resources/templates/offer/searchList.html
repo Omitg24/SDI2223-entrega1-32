@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
 <nav th:replace="fragments/nav"/>
@@ -30,8 +30,11 @@
                 <h6 class="card-subtitle" th:text="${offer.title}"></h6>
                 <p class="card-text" th:text="${offer.description}"></p>
                 <div class="d-flex flex-row">
+                    <button class="btn btn-info" type="button" th:text="#{msg.conversation.start}">
+                        <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/conversation/' + offer.id}" ></a>
+                    </button>
                     <div th:if="${offer.purchase}">
-                        <button class="btn btn-info" th:id="${'purchaseButton' + offer.id}"
+                        <button class="btn btn-dark" th:id="${'purchaseButton' + offer.id}"
                                 th:text="#{msg.offer.sold}"
                                 type="button">
                         </button>

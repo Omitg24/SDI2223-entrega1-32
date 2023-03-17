@@ -9,7 +9,7 @@ import java.util.List;
 public class PO_HomeView extends PO_NavView {
     static public void checkWelcomeToPage(WebDriver driver, int language) {
         //Esperamos a que se cargue el saludo de bienvenida en Español
-        SeleniumUtils.waitLoadElementsBy(driver, "text", p.getString("welcome.message", language),
+        SeleniumUtils.waitLoadElementsBy(driver, "text", p.getString("msg.signup", language),
                 getTimeout());
     }
 
