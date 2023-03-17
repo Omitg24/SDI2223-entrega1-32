@@ -30,8 +30,12 @@ public class OffersController {
     @Autowired
     private AddOfferFormValidator addOfferFormValidator;
 
+    private boolean invalidBuy = false;
+    private boolean invalidFeature = false;
+
+
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getOwnedList(Model model, Pageable pageable,
+    public String getSearchList(Model model, Pageable pageable,
                                @RequestParam(value = "", required = false) String searchText) {
 
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
@@ -44,7 +48,21 @@ public class OffersController {
         }
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
+        model.addAttribute("buyError",invalidBuy);
+        invalidBuy=false;
         return "offer/searchList";
+    }
+
+    @RequestMapping(value = "/offer/searchList/update", method = RequestMethod.GET)
+    public String getSearchListUpdate(Model model, Pageable pageable) {
+        Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
+        model.addAttribute("searchText", "");
+        offers = offersService.getAvailableOffers(pageable);
+        model.addAttribute("offersList", offers.getContent());
+        model.addAttribute("page", offers);
+        model.addAttribute("buyError",invalidBuy);
+        invalidBuy=false;
+        return "offer/searchList :: tableSearchedOffers";
     }
 
     @RequestMapping(value = "/offer/ownedList", method = RequestMethod.GET)
@@ -52,7 +70,21 @@ public class OffersController {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
         model.addAttribute("offersList", offersService.getOffersOfUser(user));
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
+        model.addAttribute("featureError",invalidFeature);
+        invalidFeature=false;
         return "offer/ownedList";
+    }
+
+    @RequestMapping(value = "/offer/ownedList/update", method = RequestMethod.GET)
+    public String getOwnedListUpdate(Model model,Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("offersList", offersService.getOffersOfUser(user));
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
+        model.addAttribute("featureError",invalidFeature);
+        invalidFeature=false;
+        return "offer/ownedList :: tableOwnedOffers";
     }
 
     @RequestMapping(value = "/offer/add", method = RequestMethod.GET)
@@ -63,16 +95,14 @@ public class OffersController {
 
     @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
+        String email = principal.getName();
+        offer.setUploadDate(new Date());
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         addOfferFormValidator.validate(offer, result);
-        System.out.println(offer.getDescription());
         if (result.hasErrors()) {
             return "offer/add";
         }
-        String email = principal.getName();
-        offer.setUploadDate(new Date());
-        offer.setPurchase(true);
-        //User owner = usersService.getUserByEmail(email);
-        //offer.setOwner(owner);
         offersService.addOffer(offer);
         return "redirect:/offer/ownedList";
     }
@@ -83,5 +113,30 @@ public class OffersController {
         return "redirect:/offer/ownedList";
     }
 
+    @RequestMapping(value = "/offer/{id}/purchase", method = RequestMethod.GET)
+    public String setPurchaseTrue(@PathVariable Long id,Model model) {
+        invalidBuy=offersService.validatePurchase(id);
+        if(!invalidBuy){
+            offersService.setOfferPurchase(true, id);
+        }
+        return "offer/searchList :: tableSearchedOffers";
+    }
+
+    @RequestMapping(value = "/offer/{id}/feature", method = RequestMethod.GET)
+    public String setFeatureTrue(@PathVariable Long id) {
+        invalidFeature=offersService.validateFeature(id);
+        if(!invalidFeature){
+            offersService.setOfferFeature(true, id);
+        }
+        return "offer/ownedList :: tableOwnedOffers";
+    }
+
+    @RequestMapping(value = "/offer/purchasedList", method = RequestMethod.GET)
+    public String getPurchasedList(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("offersList", offersService.getOffersOfBuyer(user));
+        return "offer/purchasedList";
+    }
 
 }
