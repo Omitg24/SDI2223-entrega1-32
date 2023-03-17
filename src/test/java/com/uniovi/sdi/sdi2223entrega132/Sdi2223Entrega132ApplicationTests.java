@@ -94,12 +94,17 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_SignUpView.fillForm(driver, "", "", "", "123456", "123456");
         //Comprobamos los errores
-        List<WebElement> result = PO_SignUpView.checkElementByKey(driver, "error.empty",
-                PO_Properties.getSPANISH());
+        List<WebElement> result = driver.findElements(By.xpath("//*[@id=\"emailSpan\"]"));
         String checkText = PO_HomeView.getP().getString("error.empty",
                 PO_Properties.getSPANISH()) + "\n" + PO_HomeView.getP().getString("error.user.email.length",
                 PO_Properties.getSPANISH()) + "\n" + PO_HomeView.getP().getString("error.user.email.format",
                 PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        checkText = PO_HomeView.getP().getString("error.empty",
+                PO_Properties.getSPANISH());
+        result = driver.findElements(By.xpath("//*[@id=\"nameSpan\"]"));
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        result = driver.findElements(By.xpath("//*[@id=\"lastNameSpan\"]"));
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
