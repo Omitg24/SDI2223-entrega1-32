@@ -18,7 +18,7 @@
         </div>
     </form>
     <h4>Saldo:
-        <span class="badge badge-secondary" th:text="${user.amount}"></span>
+        <span class="badge badge-secondary" th:text="${interestedUser.amount}"></span>
     </h4>
     <div class="alert alert-danger" role="alert" th:if="${buyError}" th:text="#{error.amount}"></div>
     <div class="card-deck" id="tableSearchedOffers" th:fragment="tableSearchedOffers">
@@ -30,9 +30,6 @@
                 <h6 class="card-subtitle" th:text="${offer.title}"></h6>
                 <p class="card-text" th:text="${offer.description}"></p>
                 <div class="d-flex flex-row">
-                    <button class="btn btn-info" type="button" th:text="#{msg.conversation.start}">
-                        <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/conversation/' + offer.id}" ></a>
-                    </button>
                     <div th:if="${offer.purchase}">
                         <button class="btn btn-dark" th:id="${'purchaseButton' + offer.id}"
                                 th:text="#{msg.offer.sold}"
@@ -46,12 +43,12 @@
                         </button>
                         <script th:inline="javascript">
                             /*<![CDATA[*/
-                            $("#purchaseButton"+ "[[${offer.id}]]").click(function() {
-                                $.get( "/offer/[[${offer.id}]]/purchase", function( data ) {
+                            $("#purchaseButton" + "[[${offer.id}]]").click(function () {
+                                $.get("/offer/[[${offer.id}]]/purchase", function (data) {
                                     let numberPage = [[${param.page}]];
                                     let urlUpdate = '/offer/searchList/update';
-                                    if ( numberPage != null ){
-                                        urlUpdate += "?page="+numberPage[0];
+                                    if (numberPage != null) {
+                                        urlUpdate += "?page=" + numberPage[0];
                                     }
                                     $("#tableSearchedOffers").load(urlUpdate);
                                 });
@@ -59,6 +56,10 @@
                             /*]]>*/
                         </script>
                     </div>
+                    <a th:if="${offer.owner.email!=#authentication.principal.username}"
+                       th:href="${'/conversation/' + offer.id+'/'+ interestedUser.id}">
+                        <button class="btn btn-info" type="button" th:text="#{msg.conversation.start}"></button>
+                    </a>
                 </div>
             </div>
         </div>
