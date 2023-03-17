@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:th="http://thymeleaf.org">
 <head th:replace="fragments/head"/>
 <body>
 <nav th:replace="fragments/nav"/>
-<div class="container" style="text-align: center">
-    <h2 th:text="#{msg.home.welcome}"></h2>
-    <h3 th:text="#{msg.home.info}"></h3>
-    <p th:text="#{msg.home.user.info}">
-    </p>
-    <b th:inline="text" sec:authentication="principal.username"></b>
-    <div th:replace="fragments/ownedOffers">
+<div class="container">
+    <div class="text-body" style="text-align: center">
+        <h2 th:text="#{msg.home.welcome}"></h2>
+        <h3 th:text="#{msg.home.info}"></h3>
+        <p th:text="#{msg.home.user.info}"></p>
+        <b th:inline="text" sec:authentication="principal.username"></b>
+    </div>
+    <div sec:authorize="hasRole('ROLE_USER')">
+        <div id="tableOwnedOffers" th:fragment="tableOwnedOffers" th:replace="fragments/ownedOffers"
+             style="text-align: left"></div>
     </div>
 </div>
+<div th:replace="fragments/pagination"/>
 <footer th:replace="fragments/footer"/>
 </body>
 </html>

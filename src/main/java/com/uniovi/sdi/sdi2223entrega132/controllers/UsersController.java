@@ -1,6 +1,8 @@
 package com.uniovi.sdi.sdi2223entrega132.controllers;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
+import com.uniovi.sdi.sdi2223entrega132.services.OffersService;
 import com.uniovi.sdi.sdi2223entrega132.services.RolesService;
 import com.uniovi.sdi.sdi2223entrega132.services.SecurityService;
 import com.uniovi.sdi.sdi2223entrega132.services.UsersService;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +32,8 @@ public class UsersController {
     private RolesService rolesService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private OffersService offersService;
     @Autowired
     private SecurityService securityService;
     @Autowired
@@ -79,11 +84,13 @@ public class UsersController {
     }
 
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model) {
+    public String home(Model model,Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        model.addAttribute("ownedList", activeUser.getOwnOffers());
+        Page<Offer> offers = offersService.getOffersOfUser(pageable,activeUser);
+        model.addAttribute("offersList", offers.getContent());
+        model.addAttribute("page",offers);
         return "home";
     }
 
@@ -102,5 +109,13 @@ public class UsersController {
     public String updateList(Pageable pageable, Model model) {
         model.addAttribute("usersList", usersService.getUsers(pageable));
         return "user/list :: tableUsers";
+    }
+
+    @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
+    public String deleteUsers(@RequestParam("users") Long[] users, HttpServletRequest request) {
+        for(Long id : users){
+            usersService.deleteUser(id);
+        }
+        return "redirect:/user/list";
     }
 }

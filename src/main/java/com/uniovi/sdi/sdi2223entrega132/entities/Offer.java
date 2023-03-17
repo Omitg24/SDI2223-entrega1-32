@@ -2,8 +2,10 @@ package com.uniovi.sdi.sdi2223entrega132.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
+@Table(name = "offer")
 public class Offer {
     @Id
     @GeneratedValue
@@ -13,12 +15,16 @@ public class Offer {
     public Date uploadDate;
     public double price;
     public boolean purchase;
+    public boolean featured=false;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     public User owner;
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     public User buyer;
+
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+    public Set<Conversation> conversations;
 
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
@@ -86,6 +92,30 @@ public class Offer {
 
     public void setPurchase(boolean purchase) {
         this.purchase = purchase;
+    }
+
+    public Set<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(Set<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 
     @Override

@@ -27,6 +27,9 @@ public class User {
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
     private Set<Offer> purchasedOffers = new HashSet<Offer>();
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private Set<Message> messages = new HashSet<Message>();
+
     public User() {
     }
 
@@ -118,4 +121,13 @@ public class User {
                 ", amount=" + amount +
                 '}';
     }
+
+    public Set<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Set<Message> messages) {
+        this.messages = messages;
+    }
+
 }
