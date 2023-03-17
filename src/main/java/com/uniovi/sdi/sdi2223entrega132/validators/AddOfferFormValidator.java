@@ -30,6 +30,9 @@ public class AddOfferFormValidator implements Validator {
         if (offer.getPrice() < 0) {
             errors.rejectValue("price", "error.offer.price.positive");
         }
+        if (offer.isFeatured() && offer.getOwner().getAmount() <= 20) {
+            errors.rejectValue("featured", "error.offer.featured");
+        }
 
 
     }
