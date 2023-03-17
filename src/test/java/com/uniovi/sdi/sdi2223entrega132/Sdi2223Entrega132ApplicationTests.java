@@ -186,5 +186,25 @@ class Sdi2223Entrega132ApplicationTests {
 
         PO_PrivateView.logout(driver);
     }
+
+    @Test
+    @Order(28)
+    public void PR28(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "pepe@email.com", "pepe");
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+
+        List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
+
+        conversationLinks.get(0).click();
+
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+
+        PO_PrivateView.checkElement(driver,"Cartera");
+
+        List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
+
+        Assertions.assertEquals(1,tableRows.size());
+    }
 }
 
