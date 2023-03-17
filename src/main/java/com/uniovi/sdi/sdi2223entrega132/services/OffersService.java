@@ -36,8 +36,8 @@ public class OffersService {
         offersRepository.save(offer);
     }
 
-    public List<Offer> getOffersOfUser(User user) {
-        return offersRepository.findAllByOwner(user);
+    public Page<Offer> getOffersOfUser(Pageable pageable,User user) {
+        return offersRepository.findAllByOwner(pageable, user);
     }
 
     public Offer getOfferById(Long id) {

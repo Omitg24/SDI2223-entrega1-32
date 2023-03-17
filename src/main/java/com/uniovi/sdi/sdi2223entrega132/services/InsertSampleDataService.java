@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class InsertSampleDataService {
@@ -82,21 +85,45 @@ public class InsertSampleDataService {
         user15.setPassword("user15");
         user15.setRole(rolesService.getRoles()[0]);
 
+        List<User> users = new LinkedList<>();
+
         usersService.addUser(admin);
         usersService.addUser(user01);
+        users.add(user01);
         usersService.addUser(user02);
+        users.add(user02);
         usersService.addUser(user03);
+        users.add(user03);
         usersService.addUser(user04);
+        users.add(user04);
         usersService.addUser(user05);
+        users.add(user05);
         usersService.addUser(user06);
+        users.add(user06);
         usersService.addUser(user07);
+        users.add(user07);
         usersService.addUser(user08);
+        users.add(user08);
         usersService.addUser(user09);
+        users.add(user09);
         usersService.addUser(user10);
+        users.add(user10);
         usersService.addUser(user11);
+        users.add(user11);
         usersService.addUser(user12);
+        users.add(user12);
         usersService.addUser(user13);
+        users.add(user13);
         usersService.addUser(user14);
+        users.add(user14);
         usersService.addUser(user15);
+        users.add(user15);
+
+        for(int i =0;i<140;i++) {
+            int userIndex = i % 5;
+            User user = users.get(userIndex);
+            offersService.addOffer(new Offer("Producto "+i,
+                    "Descripción del producto "+i,new Date(),69.69,user));
+        }
     }
 }

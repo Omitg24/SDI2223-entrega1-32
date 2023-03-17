@@ -13,12 +13,12 @@ import java.util.List;
 @Repository
 public interface OffersRepository extends CrudRepository<Offer, Long> {
 
-    @Query("SELECT o from Offer o WHERE o.owner = ?1 ORDER BY o.uploadDate DESC")
-    List<Offer> findAllByOwner(User user);
+    @Query("SELECT o from Offer o WHERE o.owner = ?1 ORDER BY o.uploadDate ASC")
+    Page<Offer> findAllByOwner(Pageable pageable, User user);
 
-    @Query("SELECT o from Offer o WHERE o.owner.email <> ?1 AND LOWER(o.title) like LOWER(?2) ORDER BY o.uploadDate DESC")
+    @Query("SELECT o from Offer o WHERE o.owner.email <> ?1 AND LOWER(o.title) like LOWER(?2) ORDER BY o.uploadDate ASC")
     Page<Offer> searchByTitle(Pageable pageable, String email, String title);
 
-    @Query("SELECT o from Offer o WHERE o.owner.email <> ?1 ORDER BY o.uploadDate DESC")
+    @Query("SELECT o from Offer o WHERE o.owner.email <> ?1 ORDER BY o.uploadDate ASC")
     Page<Offer> findAllAvailableOffers(Pageable pageable, String email);
 }

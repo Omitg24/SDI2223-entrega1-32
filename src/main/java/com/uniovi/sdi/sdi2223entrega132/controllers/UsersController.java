@@ -1,6 +1,8 @@
 package com.uniovi.sdi.sdi2223entrega132.controllers;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
+import com.uniovi.sdi.sdi2223entrega132.services.OffersService;
 import com.uniovi.sdi.sdi2223entrega132.services.RolesService;
 import com.uniovi.sdi.sdi2223entrega132.services.SecurityService;
 import com.uniovi.sdi.sdi2223entrega132.services.UsersService;
@@ -29,6 +31,8 @@ public class UsersController {
     private RolesService rolesService;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private OffersService offersService;
     @Autowired
     private SecurityService securityService;
     @Autowired
@@ -79,11 +83,13 @@ public class UsersController {
     }
 
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model) {
+    public String home(Model model,Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        model.addAttribute("ownedList", activeUser.getOwnOffers());
+        Page<Offer> offers = offersService.getOffersOfUser(pageable,activeUser);
+        model.addAttribute("offersList", offers.getContent());
+        model.addAttribute("page",offers);
         return "home";
     }
 
