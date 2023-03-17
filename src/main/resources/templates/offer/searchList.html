@@ -38,6 +38,20 @@
                                 th:text="#{msg.offer.sold}"
                                 type="button"><span></span>
                         </button>
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            $("#purchaseButton"+ "[[${offer.id}]]").click(function() {
+                                $.get( "/offer/[[${offer.id}]]/purchase", function( data ) {
+                                    let numberPage = [[${param.page}]];
+                                    let urlUpdate = '/offer/searchList/update';
+                                    if ( numberPage != null ){
+                                        urlUpdate += "?page="+numberPage[0];
+                                    }
+                                    $("#tableSearchedOffers").load(urlUpdate);
+                                });
+                            });
+                            /*]]>*/
+                        </script>
                     </div>
                 </div>
             </div>

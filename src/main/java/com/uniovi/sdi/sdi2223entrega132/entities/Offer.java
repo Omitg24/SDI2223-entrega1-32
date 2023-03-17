@@ -13,6 +13,7 @@ public class Offer {
     public Date uploadDate;
     public double price;
     public boolean purchase;
+    public boolean featured=false;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     public User owner;
@@ -86,6 +87,14 @@ public class Offer {
 
     public void setPurchase(boolean purchase) {
         this.purchase = purchase;
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
 
     @Override

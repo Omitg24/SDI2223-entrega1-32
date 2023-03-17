@@ -30,6 +30,10 @@ public class OffersController {
     @Autowired
     private AddOfferFormValidator addOfferFormValidator;
 
+    private boolean invalidBuy = false;
+    private boolean invalidFeature = false;
+
+
     /**
      * Método para obtener la vista de las ofertas que pueden ser compradas
      * @param model modelo
@@ -51,7 +55,21 @@ public class OffersController {
         }
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
+        model.addAttribute("buyError",invalidBuy);
+        invalidBuy=false;
         return "offer/searchList";
+    }
+
+    @RequestMapping(value = "/offer/searchList/update", method = RequestMethod.GET)
+    public String getSearchListUpdate(Model model, Pageable pageable) {
+        Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
+        model.addAttribute("searchText", "");
+        offers = offersService.getAvailableOffers(pageable);
+        model.addAttribute("offersList", offers.getContent());
+        model.addAttribute("page", offers);
+        model.addAttribute("buyError",invalidBuy);
+        invalidBuy=false;
+        return "offer/searchList :: tableSearchedOffers";
     }
 
     /**
@@ -67,6 +85,9 @@ public class OffersController {
         User user = usersService.getUserByEmail(email);
         Page<Offer> offers = offersService.getOffersOfUser(pageable,user);
         model.addAttribute("offersList",offers.getContent());
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
+        model.addAttribute("featureError",invalidFeature);
+        invalidFeature=false;
         model.addAttribute("page", offers);
         return "offer/ownedList";
     }
@@ -79,12 +100,15 @@ public class OffersController {
      * @return fragmento de las ofertas propias actualizado
      */
     @RequestMapping("/offer/ownedList/update")
-    public String updateList(Model model, Pageable pageable, Principal principal) {
+    public String updateOwnedList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
         Page<Offer> offers = offersService.getOffersOfUser(pageable,user);
         model.addAttribute("offersList", offers.getContent());
-        return "fragments/ownedOffers";
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
+        model.addAttribute("featureError",invalidFeature);
+        invalidFeature=false;
+        return "offer/ownedList :: tableOwnedOffers";
 
     }
 
@@ -109,7 +133,6 @@ public class OffersController {
     @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
         addOfferFormValidator.validate(offer, result);
-        System.out.println(offer.getDescription());
         if (result.hasErrors()) {
             return "offer/add";
         }
@@ -128,5 +151,30 @@ public class OffersController {
         return "redirect:/offer/ownedList";
     }
 
+    @RequestMapping(value = "/offer/{id}/purchase", method = RequestMethod.GET)
+    public String setPurchaseTrue(@PathVariable Long id,Model model) {
+        invalidBuy=offersService.validatePurchase(id);
+        if(!invalidBuy){
+            offersService.setOfferPurchase(true, id);
+        }
+        return "offer/searchList :: tableSearchedOffers";
+    }
+
+    @RequestMapping(value = "/offer/{id}/feature", method = RequestMethod.GET)
+    public String setFeatureTrue(@PathVariable Long id) {
+        invalidFeature=offersService.validateFeature(id);
+        if(!invalidFeature){
+            offersService.setOfferFeature(true, id);
+        }
+        return "offer/ownedList :: tableOwnedOffers";
+    }
+
+    @RequestMapping(value = "/offer/purchasedList", method = RequestMethod.GET)
+    public String getPurchasedList(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
+        model.addAttribute("offersList", offersService.getOffersOfBuyer(user));
+        return "offer/purchasedList";
+    }
 
 }
