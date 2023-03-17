@@ -14,9 +14,7 @@ public class Offer {
     public String description;
     public Date uploadDate;
     public double price;
-
-    public boolean purchase=false;
-
+    public boolean purchase;
     public boolean featured=false;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

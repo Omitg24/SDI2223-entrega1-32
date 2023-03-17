@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class InsertSampleDataService {
@@ -24,46 +25,110 @@ public class InsertSampleDataService {
     private ConversationService conversationService;
 
     @PostConstruct
-   public void init() {
+    public void init() {
         User admin = new User("admin@email.com", "", "");
-       admin.setPassword("admin");
-       admin.setRole(rolesService.getRoles()[1]);
+        admin.setPassword("admin");
+        admin.setRole(rolesService.getRoles()[1]);
 
-       usersService.addUser(admin);
+        User user01 = new User("user01@email.com", "", "");
+        user01.setPassword("user01");
+        user01.setRole(rolesService.getRoles()[0]);
 
-        User user = new User("user@email.com", "", "");
-        user.setPassword("123456");
-        user.setRole(rolesService.getRoles()[0]);
-        user.setAmount(1000.0);
-        usersService.addUser(user);
+        User user02 = new User("user02@email.com", "", "");
+        user02.setPassword("user02");
+        user02.setRole(rolesService.getRoles()[0]);
 
-        User pepe = new User("pepe@email.com", "", "");
-        pepe.setPassword("pepe");
-        pepe.setRole(rolesService.getRoles()[0]);
-        usersService.addUser(pepe);
-        User pepe1 = new User("pepe1@email.com", "", "");
-        pepe1.setPassword("pepe1");
-        pepe1.setRole(rolesService.getRoles()[0]);
-        usersService.addUser(pepe1);
+        User user03 = new User("user03@email.com", "", "");
+        user03.setPassword("user03");
+        user03.setRole(rolesService.getRoles()[0]);
 
-        User jincho = new User("jincho@email.com", "kinkiyeroski", "");
-        jincho.setPassword("jincho");
-        jincho.setRole(rolesService.getRoles()[0]);
-        usersService.addUser(jincho);
+        User user04 = new User("user04@email.com", "", "");
+        user04.setPassword("user04");
+        user04.setRole(rolesService.getRoles()[0]);
 
-        Date date= new Date(2023,3,15);
-        Offer offer = new Offer("Playeros","Están nuevos",date,15.0,admin);
-        offersService.addOffer(offer);
+        User user05 = new User("user05@email.com", "", "");
+        user05.setPassword("user05");
+        user05.setRole(rolesService.getRoles()[0]);
 
-        Offer offer2 = new Offer("Cartera","No robada",date,5.0,jincho);
-        offersService.addOffer(offer2);
+        User user06 = new User("user06@email.com", "", "");
+        user06.setPassword("user06");
+        user06.setRole(rolesService.getRoles()[0]);
 
-        Conversation c = new Conversation(offer2,pepe,new HashSet<>());
+        User user07 = new User("user07@email.com", "", "");
+        user07.setPassword("user07");
+        user07.setRole(rolesService.getRoles()[0]);
 
-        conversationService.addConversationForOffer(c);
+        User user08 = new User("user08@email.com", "", "");
+        user08.setPassword("user08");
+        user08.setRole(rolesService.getRoles()[0]);
 
-        Offer offer1 = new Offer("Mando Play","Están nuevos",date,40.0,user);
-        offersService.addOffer(offer1);
+        User user09 = new User("user09@email.com", "", "");
+        user09.setPassword("user09");
+        user09.setRole(rolesService.getRoles()[0]);
 
+        User user10 = new User("user10@email.com", "", "");
+        user10.setPassword("user10");
+        user10.setRole(rolesService.getRoles()[0]);
+
+        User user11 = new User("user11@email.com", "", "");
+        user11.setPassword("user11");
+        user11.setRole(rolesService.getRoles()[0]);
+
+        User user12 = new User("user12@email.com", "", "");
+        user12.setPassword("user12");
+        user12.setRole(rolesService.getRoles()[0]);
+
+        User user13 = new User("user13@email.com", "", "");
+        user13.setPassword("user13");
+        user13.setRole(rolesService.getRoles()[0]);
+
+        User user14 = new User("user14@email.com", "", "");
+        user14.setPassword("user14");
+        user14.setRole(rolesService.getRoles()[0]);
+
+        User user15 = new User("user15@email.com", "", "");
+        user15.setPassword("user15");
+        user15.setRole(rolesService.getRoles()[0]);
+
+        List<User> users = new LinkedList<>();
+
+        usersService.addUser(admin);
+        usersService.addUser(user01);
+        users.add(user01);
+        usersService.addUser(user02);
+        users.add(user02);
+        usersService.addUser(user03);
+        users.add(user03);
+        usersService.addUser(user04);
+        users.add(user04);
+        usersService.addUser(user05);
+        users.add(user05);
+        usersService.addUser(user06);
+        users.add(user06);
+        usersService.addUser(user07);
+        users.add(user07);
+        usersService.addUser(user08);
+        users.add(user08);
+        usersService.addUser(user09);
+        users.add(user09);
+        usersService.addUser(user10);
+        users.add(user10);
+        usersService.addUser(user11);
+        users.add(user11);
+        usersService.addUser(user12);
+        users.add(user12);
+        usersService.addUser(user13);
+        users.add(user13);
+        usersService.addUser(user14);
+        users.add(user14);
+        usersService.addUser(user15);
+        users.add(user15);
+
+        for(int i =0;i<140;i++) {
+            int userIndex = i % 5;
+            User user = users.get(userIndex);
+            offersService.addOffer(new Offer("Producto "+i,
+                    "Descripción del producto "+i,new Date(),69.69,user));
+        }
     }
 }

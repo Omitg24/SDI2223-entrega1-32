@@ -5,65 +5,64 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
     <h2 th:text="#{msg.nav.search}"></h2>
-    <form action="/offer/searchList" class="navbar-form"
+    <form action="/offer/searchList"
           id="searchTextForm">
-        <div class="form-group">
-            <input class="form-control" name="searchText" placeholder="Buscar por título de la oferta" size="50"
-                   type="text">
+        <div class="input-group">
+            <div class="form-outline">
+                <input class="form-control" name="searchText" placeholder="Buscar por título de la oferta"
+                       type="text" size="20">
+            </div>
+            <button class="btn btn-secondary" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
         </div>
     </form>
-    <div class="table-responsive">
-        <table class="table table-hover" id="tableSearchedOffers"
-               th:fragment="tableSearchedOffers">
-            <span class="text-danger" th:if="${buyError}" th:text="#{error.amount}"></span>
-            <thead>
-            <tr>
-                <th th:text="#{msg.offer.ownlist.title}"></th>
-                <th th:text="#{msg.offer.ownlist.desc}"></th>
-                <th th:text="#{msg.offer.ownlist.price}"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="offer : ${offersList}">
-                <td th:text="${offer.title}"></td>
-                <td th:text="${offer.description}"></td>
-                <td th:text="${error}"></td>
-                <td>
-                    <div>
-                        <div th:unless="${offer.purchase}">
-                            <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
-                                    th:text="#{msg.offer.purchase}"
-                                    type="button">
-                            </button>
-                            <script th:inline="javascript">
-                                /*<![CDATA[*/
-                                $("#purchaseButton"+ "[[${offer.id}]]").click(function() {
-                                    $.get( "/offer/[[${offer.id}]]/purchase", function( data ) {
-                                        let numberPage = [[${param.page}]];
-                                        let urlUpdate = '/offer/searchList/update';
-                                        if ( numberPage != null ){
-                                            urlUpdate += "?page="+numberPage[0];
-                                        }
-                                        $("#tableSearchedOffers").load(urlUpdate);
-                                    });
-                                });
-                                /*]]>*/
-                            </script>
-                        </div>
-                        <div th:if="${offer.purchase}">
-                            <button class="btn btn-info" th:id="${'purchaseButton' + offer.id}"
-                                    th:text="#{msg.offer.sold}"
-                                    type="button"><span></span>
-                            </button>
-                        </div>
-
-                        <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/conversation/' + offer.id}" th:text="#{msg.conversation.start}"></a>
+    <h4>Saldo:
+        <span class="badge badge-secondary" th:text="${interestedUser.amount}"></span>
+    </h4>
+    <div class="alert alert-danger" role="alert" th:if="${buyError}" th:text="#{error.amount}"></div>
+    <div class="card-deck" id="tableSearchedOffers" th:fragment="tableSearchedOffers">
+        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
+             th:each="offer : ${offersList}">
+            <img th:src="@{/images/offer_image.png}" class="card-img-top"/>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
+                <h6 class="card-subtitle" th:text="${offer.title}"></h6>
+                <p class="card-text" th:text="${offer.description}"></p>
+                <div class="d-flex flex-row">
+                    <div th:if="${offer.purchase}">
+                        <button class="btn btn-dark" th:id="${'purchaseButton' + offer.id}"
+                                th:text="#{msg.offer.sold}"
+                                type="button">
+                        </button>
                     </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
+                    <div th:unless="${offer.purchase}">
+                        <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
+                                th:text="#{msg.offer.purchase}"
+                                type="button"><span></span>
+                        </button>
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            $("#purchaseButton" + "[[${offer.id}]]").click(function () {
+                                $.get("/offer/[[${offer.id}]]/purchase", function (data) {
+                                    let numberPage = [[${param.page}]];
+                                    let urlUpdate = '/offer/searchList/update';
+                                    if (numberPage != null) {
+                                        urlUpdate += "?page=" + numberPage[0];
+                                    }
+                                    $("#tableSearchedOffers").load(urlUpdate);
+                                });
+                            });
+                            /*]]>*/
+                        </script>
+                    </div>
+                    <a th:if="${offer.owner.email!=#authentication.principal.username}"
+                       th:href="${'/conversation/' + offer.id+'/'+ interestedUser.id}">
+                        <button class="btn btn-info" type="button" th:text="#{msg.conversation.start}"></button>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     <footer th:replace="fragments/pagination"/>
 </div>
