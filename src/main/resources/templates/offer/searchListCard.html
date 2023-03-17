@@ -33,6 +33,7 @@
                                 type="button"><span></span>
                         </button>
                     </div>
+                    <a th:if="${offer.owner.email!=#authentication.principal.username}" th:href="${'/conversation/' + offer.id + '/' + interestedUser.id}" th:text="#{msg.conversation.start}"></a>
                 </div>
             </div>
         </div>

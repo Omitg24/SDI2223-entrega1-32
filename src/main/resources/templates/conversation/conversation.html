@@ -51,9 +51,11 @@
 
                         <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                             <div class="input-group mb-0">
-                                <form th:action="@{/conversation/{offerId}(offerId=${offer.id})}" class="form-horizontal"
+                                <form th:action="@{/conversation/{offerId}/{interestedUserId}(offerId=${offer.id}, interestedUserId=${interestedUser.id})}"
+                                      class="form-horizontal"
                                       method="post" th:object="${message}">
-                                    <input type="text" id="text" name="text" class="form-control" placeholder="Type message"
+                                    <input type="text" id="text" name="text" class="form-control"
+                                           placeholder="Type message"
                                            aria-label="Recipient's username" aria-describedby="button-addon2"/>
                                     <span
                                             class="text-danger" th:errors="*{text}"
@@ -64,6 +66,7 @@
                                     </button>
 
                                 </form>
+
                             </div>
                         </div>
                     </div>

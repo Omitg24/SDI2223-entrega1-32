@@ -28,8 +28,8 @@
         <td th:if="${conversation.offer.owner.email == #authentication.principal.username}" th:text="${conversation.interested.email}"></td>
         <td th:unless="${conversation.offer.owner.email == #authentication.principal.username}" th:text="${conversation.offer.owner.email}"></td>
         <td th:text="${conversation.offer.title}"></td>
-        <td><a th:href="${'/conversation/' + conversation.offer.id}" th:text="#{msg.conversation.list.open}"></a></td>
-        <td><a th:href="${'/conversation/delete/'+conversation.id}" th:text="#{msg.conversation.list.delete}"></a></td>
+        <td ><a th:href="${'/conversation/' + conversation.offer.id + '/' + conversation.interested.id}" th:text="#{msg.conversation.list.open}"></a></td>
+        <td><a th:href="${'/conversation/delete/'+conversation.id}" ><button th:text="#{msg.conversation.list.delete}"></button></a></td>
       </tr>
       </tbody>
     </table>

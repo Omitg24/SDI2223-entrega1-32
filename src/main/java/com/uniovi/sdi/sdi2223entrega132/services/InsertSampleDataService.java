@@ -29,6 +29,10 @@ public class InsertSampleDataService {
         pepe.setPassword("pepe");
         pepe.setRole(rolesService.getRoles()[0]);
         usersService.addUser(pepe);
+        User pepe1 = new User("pepe1@email.com", "", "");
+        pepe1.setPassword("pepe1");
+        pepe1.setRole(rolesService.getRoles()[0]);
+        usersService.addUser(pepe1);
 
         User jincho = new User("jincho@email.com", "kinkiyeroski", "");
         jincho.setPassword("jincho");

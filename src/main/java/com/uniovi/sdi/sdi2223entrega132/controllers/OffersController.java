@@ -35,9 +35,10 @@ public class OffersController {
     private AddOfferFormValidator addOfferFormValidator;
 
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getSearchList(Model model, Pageable pageable,
+    public String getSearchList(Model model, Pageable pageable, Principal principal,
                                @RequestParam(value = "", required = false) String searchText) {
-
+        String email = principal.getName();
+        User interestedUser = usersService.getUserByEmail(email);
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
         model.addAttribute("searchText", "");
         if (searchText != null && !searchText.isEmpty()) {
@@ -46,6 +47,7 @@ public class OffersController {
         } else {
             offers = offersService.getAvailableOffers(pageable);
         }
+        model.addAttribute("interestedUser",interestedUser);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
         return "offer/searchListCard";

@@ -37,30 +37,31 @@ public class ConversationController {
     @Autowired
     private SendMessageValidator sendMessageValidator;
 
-    @RequestMapping(value = "/conversation/{id}", method = RequestMethod.GET)
-    public String getConversation(@PathVariable Long id, Model model, Principal principal) {
-        prepareConversation(id, model, principal);
+    @RequestMapping(value = "/conversation/{offerId}/{interestedId}", method = RequestMethod.GET)
+    public String getConversation(@PathVariable Long offerId,@PathVariable Long interestedId, Model model) {
+        prepareConversation(offerId,interestedId,model);
         model.addAttribute("message", new Message());
         return "conversation/conversation";
     }
 
-    @RequestMapping(value = "/conversation/{id}", method = RequestMethod.POST)
-    public String updateConversation(@PathVariable Long id, @ModelAttribute @Validated Message message, Model model, Principal principal, BindingResult result) {
+    @RequestMapping(value = "/conversation/{offerId}/{interestedId}", method = RequestMethod.POST)
+    public String updateConversation(@PathVariable Long offerId,@PathVariable Long interestedId,@ModelAttribute @Validated Message message, Model model, Principal principal, BindingResult result) {
         sendMessageValidator.validate(message,result);
         if (result.hasErrors()) {
-            prepareConversation(id, model, principal);
+            prepareConversation(offerId,interestedId, model);
             return "conversation/conversation";
         }
         // Obtenemos el usuario a partir del correo
         String email = principal.getName();
-        User user = usersService.getUserByEmail(email);
+        User messageOwner = usersService.getUserByEmail(email);
         //Añadimos los campos fecha y dueño manualmente al mensaje
         message.setDate(new Date());
-        message.setOwner(user);
+        message.setOwner(messageOwner);
         //Obtenemos o creamos la conversación en función de si existe o no
-        Offer offerOfConversation = offersService.getOfferById(id);
-        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(user,offerOfConversation);
-        Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,user,new HashSet<>()):optionalConversation.get();
+        Offer offerOfConversation = offersService.getOfferById(offerId);
+        User interestedUser = usersService.getUser(interestedId);
+        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser,offerOfConversation);
+        Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,interestedUser,new HashSet<>()):optionalConversation.get();
         conversationService.addConversationForOffer(c);
         message.setConversation(c);
         conversationService.addMessage(message);
@@ -69,7 +70,7 @@ public class ConversationController {
 
         model.addAttribute("conversation",c);
         model.addAttribute("offer",offerOfConversation);
-        return "redirect:/conversation/" + id;
+        return "redirect:/conversation/"+offerId+"/"+interestedId;
     }
 
     /*
@@ -108,13 +109,13 @@ public class ConversationController {
         al modelo dicha conversación y la oferta
      */
 
-    private void prepareConversation(Long id, Model model, Principal principal) {
-        String email = principal.getName();
-        User user = usersService.getUserByEmail(email);
-        Offer offerOfConversation = offersService.getOfferById(id);
-        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(user,offerOfConversation);
+    private void prepareConversation(Long offerId,Long interestedId, Model model) {
+        User interestedUser = usersService.getUser(interestedId);
+        Offer offerOfConversation = offersService.getOfferById(offerId);
+        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser,offerOfConversation);
         Conversation c = optionalConversation.isEmpty()?null:optionalConversation.get();
         model.addAttribute("conversation",c);
         model.addAttribute("offer",offerOfConversation);
+        model.addAttribute("interestedUser",interestedUser);
     }
 }
