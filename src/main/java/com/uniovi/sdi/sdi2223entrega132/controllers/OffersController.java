@@ -1,5 +1,7 @@
 package com.uniovi.sdi.sdi2223entrega132.controllers;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
+import com.uniovi.sdi.sdi2223entrega132.entities.Message;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import com.uniovi.sdi.sdi2223entrega132.services.OffersService;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Optional;
 
 @Controller
 public class OffersController {
@@ -35,9 +39,10 @@ public class OffersController {
 
 
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getSearchList(Model model, Pageable pageable,
+    public String getSearchList(Model model, Pageable pageable, Principal principal,
                                @RequestParam(value = "", required = false) String searchText) {
-
+        String email = principal.getName();
+        User interestedUser = usersService.getUserByEmail(email);
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
         model.addAttribute("searchText", "");
         if (searchText != null && !searchText.isEmpty()) {
@@ -46,11 +51,12 @@ public class OffersController {
         } else {
             offers = offersService.getAvailableOffers(pageable);
         }
+        model.addAttribute("interestedUser",interestedUser);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
         model.addAttribute("buyError",invalidBuy);
         invalidBuy=false;
-        return "offer/searchList";
+        return "offer/searchListCard";
     }
 
     @RequestMapping(value = "/offer/searchList/update", method = RequestMethod.GET)
@@ -73,7 +79,7 @@ public class OffersController {
         model.addAttribute("featuredList", offersService.getOffersFeatured());
         model.addAttribute("featureError",invalidFeature);
         invalidFeature=false;
-        return "offer/ownedList";
+        return "offer/ownedListCard";
     }
 
     @RequestMapping(value = "/offer/ownedList/update", method = RequestMethod.GET)
