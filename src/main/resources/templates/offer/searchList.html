@@ -17,9 +17,12 @@
             </button>
         </div>
     </form>
-    <div class="card-deck">
-        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; " id="tableSearchedOffers"
-             th:fragment="tableSearchedOffers"
+    <h4>Saldo:
+        <span class="badge badge-secondary" th:text="${user.amount}"></span>
+    </h4>
+    <div class="alert alert-danger" role="alert" th:if="${buyError}" th:text="#{error.amount}"></div>
+    <div class="card-deck" id="tableSearchedOffers" th:fragment="tableSearchedOffers">
+        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
              th:each="offer : ${offersList}">
             <img th:src="@{/images/offer_image.png}" class="card-img-top"/>
             <div class="card-body">
@@ -28,14 +31,14 @@
                 <p class="card-text" th:text="${offer.description}"></p>
                 <div class="d-flex flex-row">
                     <div th:if="${offer.purchase}">
-                        <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
-                                th:text="#{msg.offer.purchase}"
+                        <button class="btn btn-info" th:id="${'purchaseButton' + offer.id}"
+                                th:text="#{msg.offer.sold}"
                                 type="button">
                         </button>
                     </div>
                     <div th:unless="${offer.purchase}">
-                        <button class="btn btn-info" th:id="${'purchaseButton' + offer.id}"
-                                th:text="#{msg.offer.sold}"
+                        <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
+                                th:text="#{msg.offer.purchase}"
                                 type="button"><span></span>
                         </button>
                         <script th:inline="javascript">

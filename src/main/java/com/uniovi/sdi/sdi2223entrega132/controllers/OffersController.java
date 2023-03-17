@@ -42,9 +42,10 @@ public class OffersController {
      * @return vista de las ofertas
      */
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getSearchList(Model model, Pageable pageable,
+    public String getSearchList(Model model, Pageable pageable,Principal principal,
                                @RequestParam(value = "", required = false) String searchText) {
-
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
         model.addAttribute("searchText", "");
         if (searchText != null && !searchText.isEmpty()) {
@@ -55,18 +56,22 @@ public class OffersController {
         }
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
+        model.addAttribute("user",user);
         model.addAttribute("buyError",invalidBuy);
         invalidBuy=false;
         return "offer/searchList";
     }
 
     @RequestMapping(value = "/offer/searchList/update", method = RequestMethod.GET)
-    public String getSearchListUpdate(Model model, Pageable pageable) {
+    public String getSearchListUpdate(Model model, Pageable pageable, Principal principal) {
+        String email = principal.getName();
+        User user = usersService.getUserByEmail(email);
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
         model.addAttribute("searchText", "");
         offers = offersService.getAvailableOffers(pageable);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
+        model.addAttribute("user",user);
         model.addAttribute("buyError",invalidBuy);
         invalidBuy=false;
         return "offer/searchList :: tableSearchedOffers";
