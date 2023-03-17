@@ -1,7 +1,11 @@
 package com.uniovi.sdi.sdi2223entrega132.services;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
+import com.uniovi.sdi.sdi2223entrega132.entities.Message;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
+import com.uniovi.sdi.sdi2223entrega132.repositories.ConversationRepository;
+import com.uniovi.sdi.sdi2223entrega132.repositories.MessageRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.OffersRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OffersService {

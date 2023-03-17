@@ -32,6 +32,20 @@ public class InsertSampleDataService {
         user.setAmount(1000.0);
         usersService.addUser(user);
 
+        User pepe = new User("pepe@email.com", "", "");
+        pepe.setPassword("pepe");
+        pepe.setRole(rolesService.getRoles()[0]);
+        usersService.addUser(pepe);
+        User pepe1 = new User("pepe1@email.com", "", "");
+        pepe1.setPassword("pepe1");
+        pepe1.setRole(rolesService.getRoles()[0]);
+        usersService.addUser(pepe1);
+
+        User jincho = new User("jincho@email.com", "kinkiyeroski", "");
+        jincho.setPassword("jincho");
+        jincho.setRole(rolesService.getRoles()[0]);
+        usersService.addUser(jincho);
+
         Date date= new Date(2023,3,15);
         Offer offer = new Offer("Playeros","Están nuevos",date,15.0,admin);
         offersService.addOffer(offer);
