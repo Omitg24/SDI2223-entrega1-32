@@ -13,6 +13,11 @@ public class SendMessageValidator implements Validator {
         return Message.class.equals(clazz);
     }
 
+    /**
+     * Comprueba que el mensaje no esta vacio
+     * @param target
+     * @param errors
+     */
     @Override
     public void validate(Object target, Errors errors) {
         Message message = (Message) target;

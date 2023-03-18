@@ -10,9 +10,11 @@ import java.util.List;
 @Repository
 public interface LoggerRepository extends CrudRepository<LogMessage, Long> {
 
+    //Obtiene todos los logs ordenados por fecha
     @Query("SELECT m from LogMessage m ORDER BY m.date DESC")
     List<LogMessage> findAllOrdered();
 
+    //Obtiene todos los logs en funcion del parametro de busqueda
     @Query("SELECT m from LogMessage m WHERE LOWER(m.action) like LOWER(?1) ORDER BY m.date DESC")
     List<LogMessage> findAllByType(String searchText);
 

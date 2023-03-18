@@ -18,6 +18,7 @@ public class Message {
     private Date date;
     private String text;
 
+    //Un mensaje pertenece a una conversacion
     @ManyToOne
     @JoinColumn(name = "conversation_id")
     private Conversation conversation;
