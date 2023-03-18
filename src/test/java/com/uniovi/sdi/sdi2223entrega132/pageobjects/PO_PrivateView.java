@@ -41,6 +41,39 @@ public class PO_PrivateView extends PO_NavView {
     }
 
     /**
+     * Método para rellenar el formulario de añadir ofertas
+     *
+     * @param driver       driver
+     * @param titlep       titulo de la oferta
+     * @param picturep     imagen de la oferta
+     * @param descriptionp descripcion de la oferta
+     * @param pricep       precio de la oferta
+     */
+    static public void fillFormAddOffer(WebDriver driver, String titlep, String picturep, String descriptionp, String pricep) {
+        //Esperamos 5 segundo a que carge el DOM porque en algunos equipos falla
+        SeleniumUtils.waitSeconds(driver, 5);
+        // Rellenamos el formulario con los datos recibidos como paramteros.
+        WebElement title = driver.findElement(By.name("title"));
+        title.click();
+        title.clear();
+        title.sendKeys(titlep);
+        WebElement picture = driver.findElement(By.name("picture"));
+        picture.sendKeys(picturep);
+        WebElement description = driver.findElement(By.name("description"));
+        description.click();
+        description.clear();
+        description.sendKeys(descriptionp);
+        WebElement price = driver.findElement(By.name("price"));
+        price.click();
+        price.clear();
+        price.sendKeys(pricep);
+
+        // Pulsamos el botón para enviar el formulario.
+        By boton = By.className("btn");
+        driver.findElement(boton).click();
+    }
+
+    /**
      * Método para realizar el login de un usuario
      *
      * @param driver   driver
