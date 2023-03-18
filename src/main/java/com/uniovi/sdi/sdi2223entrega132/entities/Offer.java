@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,7 +27,7 @@ public class Offer {
     public User buyer;
 
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
-    public Set<Conversation> conversations;
+    public List<Conversation> conversations;
 
     public boolean hasPicture;
 
@@ -101,11 +102,11 @@ public class Offer {
         this.purchase = purchase;
     }
 
-    public Set<Conversation> getConversations() {
+    public List<Conversation> getConversations() {
         return conversations;
     }
 
-    public void setConversations(Set<Conversation> conversations) {
+    public void setConversations(List<Conversation> conversations) {
         this.conversations = conversations;
     }
 
