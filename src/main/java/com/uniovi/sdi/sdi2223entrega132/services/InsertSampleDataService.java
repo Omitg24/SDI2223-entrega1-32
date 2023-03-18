@@ -10,20 +10,27 @@ import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
+/**
+ * Servicio que añade datos de ejemplo a la base de datos
+ *
+ * @author Omar Teixeira González, David Leszek Warzynski Abril e Israel Solís Iglesias
+ */
 @Service
 public class InsertSampleDataService {
     @Autowired
     private UsersService usersService;
-
     @Autowired
     private OffersService offersService;
     @Autowired
     private RolesService rolesService;
-
     @Autowired
     private ConversationService conversationService;
 
+    /**
+     * Método que al iniciar la base de datos añade todos los datos
+     */
     @PostConstruct
     public void init() {
         User admin = new User("admin@email.com", "", "");
@@ -124,11 +131,12 @@ public class InsertSampleDataService {
         usersService.addUser(user15);
         users.add(user15);
 
+        Random r = new Random();
         for (int i = 0; i < 140; i++) {
             int userIndex = i % 5;
             User user = users.get(userIndex);
             offersService.addOffer(new Offer("Producto " + i,
-                    "Descripción del producto " + i, new Date(), 69.69, user));
+                    "Descripción del producto " + i, new Date(), Math.round(1 + (200 - 1) * r.nextDouble()* 100.0) / 100.0, user));
         }
     }
 }

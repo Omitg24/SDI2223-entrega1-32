@@ -10,6 +10,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+/**
+ * Servicio que contiene la capa de seguridad de la aplicación
+ *
+ * @author Omar Teixeira González
+ * @version 10/03/2023
+ */
 @Service
 public class SecurityService {
     private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);

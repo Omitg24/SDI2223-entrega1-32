@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Servicio que contiene los detalles acerca de un usuario
+ *
+ * @author Omar Teixeira Gonzalez y David Leszek Warzynski Abril
+ * @version 17/02/2023
+ */
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired

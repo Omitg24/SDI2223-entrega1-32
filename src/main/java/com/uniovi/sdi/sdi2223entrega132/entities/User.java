@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entidad del Usuario
+ *
+ * @author Omar Teixeira González y David Leszek Warzynski Abril
+ * @version 12/03/2023
+ */
 @Entity
 @Table(name = "user")
 public class User {

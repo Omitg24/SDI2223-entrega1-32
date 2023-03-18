@@ -7,6 +7,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Entidad de la oferta
+ *
+ * @author David Leszek Warzynski Abril, Israel Solís Iglesias, Álvaro Davila Sampedro y Omar Teixeira
+ * @version 17/03/2023
+ */
 @Entity
 @Table(name = "offer")
 public class Offer {
@@ -34,16 +40,14 @@ public class Offer {
     @Transient
     public MultipartFile picture;
 
+    public Offer() { }
+
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
         this.description = description;
         this.uploadDate = uploadDate;
         this.price = price;
         this.owner = owner;
-    }
-
-    public Offer() {
-
     }
 
     public String getTitle() {

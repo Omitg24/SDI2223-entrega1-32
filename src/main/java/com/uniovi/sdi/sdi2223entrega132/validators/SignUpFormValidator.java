@@ -8,6 +8,12 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Validador del registro de un nuevo usuario
+ *
+ * @author Omar Teixeira González
+ * @version 11/03/2023
+ */
 @Component
 public class SignUpFormValidator implements Validator {
     @Autowired
@@ -18,6 +24,12 @@ public class SignUpFormValidator implements Validator {
         return User.class.equals(aClass);
     }
 
+    /**
+     * Valida que el usuario no tenga los errores que se contemplen
+     *
+     * @param target usuario a comprobar
+     * @param errors errores a generar
+     */
     @Override
     public void validate(Object target, Errors errors) {
         User user = (User) target;

@@ -13,17 +13,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
+/**
+ * Configuración de la seguridad de la aplicación
+ *
+ * @author David Leszek Warzynski Abril, Israel Solís Iglesias y Omar Teixeira González
+ * @version 18/03/2023
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-
     @Autowired
     private SuccessLoginHandler successHandler;
-
     @Autowired
     private SuccessLogoutHandler successLogoutHandler;
-
     @Autowired
     private FailureLoginHandler failureLoginHandler;
 
@@ -43,6 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new SpringSecurityDialect();
     }
 
+    /**
+     * Configuración de los accesos a las urls de la aplicación
+     * @param http seguridad HTTP
+     * @throws Exception Excepción a lanzar
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http

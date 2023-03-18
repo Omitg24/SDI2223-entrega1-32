@@ -26,6 +26,12 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.LinkedList;
 
+/**
+ * Controlador de las peticiones relacionadas con la gestión de ofertas
+ *
+ * @author David Leszek Warzynski Abril, Israel Solís Iglesias, Álvaro Davila Sampedro y Omar Teixeira
+ * @version 17/03/2023
+ */
 @Controller
 public class OffersController {
     @Autowired
@@ -138,7 +144,7 @@ public class OffersController {
     }
 
     /**
-     * Méetodo encargado de validar los datos de la oferta y crearla
+     * Método encargado de validar los datos de la oferta y crearla
      *
      * @param offer     datos oferta
      * @param principal principal
