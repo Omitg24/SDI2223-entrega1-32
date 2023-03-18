@@ -269,11 +269,10 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "admin@email.com", "admin");
         //Comprobamos que entramos en la sección privada y nos nuestra el texto a buscar
-        List<WebElement> result = new ArrayList<>();
-        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
-
+        PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
+        List<WebElement> elements;
         //Añadimos los elementos en la primera página
-        result.addAll(SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout()));
+        List<WebElement> result = new ArrayList<>(SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout()));
 
         //Vamos a la segunda pagina y añadimos los elementos
         elements = PO_View.checkElementBy(driver, "free", "//a[contains(@class, 'page-link')]");
@@ -1078,7 +1077,7 @@ class Sdi2223Entrega132ApplicationTests {
 
         // Rellenamos el formulario de alta de oferta con datos validos, en este adjuntamos una imagen
         String absolutePath = FileSystems.getDefault().getPath("src\\test\\java\\rtx4080.png").normalize().toAbsolutePath().toString();
-        ;
+
         PO_PrivateView.fillFormAddOffer(driver, "PruebaTitulo", absolutePath, "PruebaDescripcion", "0.21");
 
         // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
