@@ -1,5 +1,6 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
+import com.uniovi.sdi.sdi2223entrega132.handlers.AccessDeniedHandlerImpl;
 import com.uniovi.sdi.sdi2223entrega132.handlers.FailureLoginHandler;
 import com.uniovi.sdi.sdi2223entrega132.handlers.SuccessLoginHandler;
 import com.uniovi.sdi.sdi2223entrega132.handlers.SuccessLogoutHandler;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 /**
@@ -33,6 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new AccessDeniedHandlerImpl(); // Crea una instancia personalizada del AccessDeniedHandler
     }
 
     @Bean
@@ -73,6 +80,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutSuccessHandler(successLogoutHandler)
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler());
     }
 }
