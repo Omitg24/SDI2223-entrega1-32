@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body>
+<nav th:replace="fragments/nav"/>
+<div class="container">
+    <h2 th:text="#{msg.log.title}"></h2>
+    <form action="/log/list" class="form-inline">
+        <div class="form-group">
+            <input class="form-control" name="searchText"
+                   th:placeholder="#{msg.palceholder.log.search}" size="50" type="text">
+        </div>
+        <button class="btn btn-dark" type="submit" th:text="#{msg.searchbtn}"></button>
+    </form>
+    <button class="btn btn-dark" id="updateButton" type="button" th:text="#{msg.updateBtn}"></button>
+    <script>
+        $("#updateButton").click(function () {
+            $("#tableLogs").load('/log/update');
+        });
+    </script>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tableLogs" th:fragment="tableLogs">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{msg.log.date}"></th>
+                <th scope="col" th:text="#{msg.log.action}"></th>
+                <th scope="col" th:text="#{msg.conversation.start}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="log : ${logMessages}">
+                <td scope="row" th:text="${log.date}"></td>
+                <td scope="row" th:text="${log.action}"></td>
+                <td scope="row" th:text="${log.message}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

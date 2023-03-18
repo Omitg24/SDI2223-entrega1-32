@@ -1,5 +1,6 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,9 @@ public class CustomConfiguration implements WebMvcConfigurer {
     private int page;
     @Value("${spring.data.web.pageable.default-page-size}")
     private int size;
+
+    @Autowired
+    private LogInterceptor logInterceptor;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
@@ -47,5 +51,6 @@ public class CustomConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(logInterceptor);
     }
 }
