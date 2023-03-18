@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"/>
+<body>
+<nav th:replace="fragments/nav"/>
+<div class="container">
+    <div class="text-body" style="text-align: center">
+        <h2 th:text="#{msg.home.welcome}"></h2>
+        <h3 th:text="#{msg.home.info}"></h3>
+        <p th:text="#{msg.home.user.info}"></p>
+        <b th:inline="text" sec:authentication="principal.username"></b>
+    </div>
+</div>
+<div class="container" th:fragment="tableOwnedOffers" id="ownedOffers" th:replace="fragments/ownedOffers">
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

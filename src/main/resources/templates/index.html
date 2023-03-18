@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<nav th:replace="fragments/nav"></nav>
+<div class="container" style="text-align: center">
+    <h2>
+        <img src="/images/Titulo.png" height="128">
+    </h2>
+    <p th:text="#{msg.index.project.description}"></p>
+    <img src="/images/Symbol.png" width="512">
+</div>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>
