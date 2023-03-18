@@ -835,7 +835,67 @@ class Sdi2223Entrega132ApplicationTests {
         //Obtenemos el numero de conversaciones del usuario
         List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
         //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(1,tableRows.size());
+        Assertions.assertEquals(2,tableRows.size());
+    }
+
+    /**
+     * PR35. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la primera y
+     * comprobar que el listado se actualiza correctamente
+     * Realizada por: Israel
+     */
+    @Test
+    @Order(35)
+    public void PR35(){
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        //Accedemos a la pestaña de conversaciones
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+        //Comprobamos que hemos accedido correctamente
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+        //Obtenemos el numero de conversaciones del usuario
+        List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
+        //Comprobamos que el numero es el correcto
+        Assertions.assertEquals(2,rows.size());
+        //Obtenemos la primera fila
+        WebElement firstRow = rows.get(0);
+        //Obtenemos el boton de eliminar de la primera fila
+        WebElement deleteButton = firstRow.findElement(By.xpath(".//a[contains(@href, 'delete/')]"));
+        //Eliminamos la conversacion
+        deleteButton.click();
+        rows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
+        //Comprobamos que el numero es el correcto
+        Assertions.assertEquals(1,rows.size());
+        reiniciarDatos();
+    }
+
+    /**
+     * PR36. Sobre el listado de conversaciones ya abiertas, pulsar el enlace Eliminar de la última y
+     * comprobar que el listado se actualiza correctamente.
+     * Realizada por: Israel
+     */
+    @Test
+    @Order(36)
+    public void PR36(){
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        //Accedemos a la pestaña de conversaciones
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+        //Comprobamos que hemos accedido correctamente
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+        //Obtenemos el numero de conversaciones del usuario
+        List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
+        //Comprobamos que el numero es el correcto
+        Assertions.assertEquals(2,rows.size());
+        //Obtenemos la ultima fila
+        WebElement firstRow = rows.get(1);
+        //Obtenemos el boton de eliminar de la ultima fila
+        WebElement deleteButton = firstRow.findElement(By.xpath(".//a[contains(@href, 'delete/')]"));
+        //Eliminamos la conversacion
+        deleteButton.click();
+        rows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
+        //Comprobamos que el numero es el correcto
+        Assertions.assertEquals(1,rows.size());
+        reiniciarDatos();
     }
 
     /**
