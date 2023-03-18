@@ -10,9 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Servicio que contiene capa de negocio de las ofertas
+ *
+ * @author David Leszek Warzynski Abril y Álvaro Davila Sampedro
+ * @version 18/03/2023
+ */
 @Service
 public class OffersService {
     @Autowired
@@ -142,9 +149,9 @@ public class OffersService {
                 offer.setPurchase(true);
                 offersRepository.updateOffer(true, offer.getBuyer(), id);
                 //Se le suma el dinero al vendedor
-                usersRepository.updateAmount(Math.round((offer.buyer.getAmount()+ offer.getPrice()) * 100.0) / 100.0,offer.buyer.getId());
+                usersRepository.updateAmount(Math.round((offer.owner.getAmount() + offer.getPrice()) * 100.0) / 100.0, offer.owner.getId());
                 //Se le resta el dinero al comprador
-                usersRepository.updateAmount(Math.round((user.getAmount()- offer.getPrice())* 100.0) / 100.0,user.getId());
+                usersRepository.updateAmount(Math.round((user.getAmount() - offer.getPrice()) * 100.0) / 100.0, user.getId());
             }
         }
     }
@@ -166,7 +173,7 @@ public class OffersService {
                 offer.setFeatured(true);
                 offersRepository.updateFeatured(true, id);
                 //Se le resta el dinero al propietario
-                usersRepository.updateAmount(Math.round((user.getAmount()- 20.0) * 100.0) / 100.0,user.getId());
+                usersRepository.updateAmount(Math.round((user.getAmount() - 20.0) * 100.0) / 100.0, user.getId());
             }
         }
     }

@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Configuración de los accesos a las urls de la aplicación
+     *
      * @param http seguridad HTTP
      * @throws Exception Excepción a lanzar
      */

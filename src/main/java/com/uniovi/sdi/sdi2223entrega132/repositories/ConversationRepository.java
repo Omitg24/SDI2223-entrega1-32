@@ -10,6 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repositorio de conversaciones
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Repository
 public interface ConversationRepository extends CrudRepository<Conversation, Long> {
     //Obtiene la conversacion asociada a una oferta y al interesado en la oferta

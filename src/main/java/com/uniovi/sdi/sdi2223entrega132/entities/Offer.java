@@ -39,7 +39,8 @@ public class Offer {
     @Transient
     public MultipartFile picture;
 
-    public Offer() { }
+    public Offer() {
+    }
 
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;

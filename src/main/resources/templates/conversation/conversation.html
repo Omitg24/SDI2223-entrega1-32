@@ -40,7 +40,8 @@
                                         </div>
                                         <div class="d-flex flex-row justify-content-start">
                                             <div>
-                                                <p class="small p-2 ms-3 mb-3 rounded-3" style="background-color: #f5f6f7;"
+                                                <p class="small p-2 ms-3 mb-3 rounded-3"
+                                                   style="background-color: #f5f6f7;"
                                                    th:text="${message.text}"></p>
                                             </div>
                                         </div>
@@ -53,14 +54,17 @@
                             <div class="input-group mb-0">
                                 <form class="form-horizontal"
                                       method="post"
-                                      th:action="@{/conversation/{offerId}/{interestedUserId}(offerId=${offer.id}, interestedUserId=${interestedUser.id})}" th:object="${message}">
-                                    <input aria-describedby="button-addon2" aria-label="Recipient's username" class="form-control" id="text"
+                                      th:action="@{/conversation/{offerId}/{interestedUserId}(offerId=${offer.id}, interestedUserId=${interestedUser.id})}"
+                                      th:object="${message}">
+                                    <input aria-describedby="button-addon2" aria-label="Recipient's username"
+                                           class="form-control" id="text"
                                            name="text"
                                            placeholder="Type message" type="text"/>
                                     <span
                                             class="text-danger" th:errors="*{text}"
                                             th:if="${#fields.hasErrors('text')}"></span>
-                                    <button class="btn bg-dark text-white" id="button-addon2" style="padding-top: .55rem;"
+                                    <button class="btn bg-dark text-white" id="button-addon2"
+                                            style="padding-top: .55rem;"
                                             th:text="#{msg.conversation.send}" type="submit">
                                         Button
                                     </button>

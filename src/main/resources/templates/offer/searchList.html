@@ -3,7 +3,7 @@
 <head th:replace="fragments/head"/>
 <body>
 <nav th:replace="fragments/nav"/>
-<div class="container" >
+<div class="container">
     <h2 th:text="#{msg.nav.search}"></h2>
     <form action="/offer/searchList"
           id="searchTextForm">
@@ -21,54 +21,54 @@
         <h4>Saldo:
             <span class="badge badge-secondary" th:text="${amount}"></span>
         </h4>
-    <div class="alert alert-danger" role="alert" th:if="${buyError}" th:text="#{error.amount}"></div>
-    <div class="card-deck">
+        <div class="alert alert-danger" role="alert" th:if="${buyError}" th:text="#{error.amount}"></div>
+        <div class="card-deck">
 
-        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
-             th:each="offer : ${offersList}">
-            <div class="card-img-top" th:if="${offer.hasPicture}">
-                <img class="card-img-top" width="256" height="256" th:src="${'/pictures/' + offer.id + '.png'}"/>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
-                <h6 class="card-subtitle" th:text="${offer.title}"></h6>
-                <p class="card-text" th:text="${offer.description}"></p>
-                <div class="d-flex flex-row">
-                    <div th:if="${offer.purchase}">
-                        <button class="btn btn-dark" th:id="${'purchaseButton' + offer.id}"
-                                th:text="#{msg.offer.sold}"
-                                type="button">
-                        </button>
-                    </div>
-                    <div th:unless="${offer.purchase}">
-                        <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
-                                th:text="#{msg.offer.purchase}"
-                                type="button"><span></span>
-                        </button>
-                        <script th:inline="javascript">
-                            /*<![CDATA[*/
-                            $("#purchaseButton" + "[[${offer.id}]]").click(function () {
-                                $.get("/offer/[[${offer.id}]]/purchase", function (data) {
-                                    let numberPage = [[${param.page}]];
-                                    let urlUpdate = '/offer/searchList/update';
-                                    if (numberPage != null) {
-                                        urlUpdate += "?page=" + numberPage[0];
-                                    }
-                                    $("#tableSearchedOffers").load(urlUpdate);
+            <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
+                 th:each="offer : ${offersList}">
+                <div class="card-img-top" th:if="${offer.hasPicture}">
+                    <img class="card-img-top" height="256" th:src="${'/pictures/' + offer.id + '.png'}" width="256"/>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
+                    <h6 class="card-subtitle" th:text="${offer.title}"></h6>
+                    <p class="card-text" th:text="${offer.description}"></p>
+                    <div class="d-flex flex-row">
+                        <div th:if="${offer.purchase}">
+                            <button class="btn btn-dark" th:id="${'purchaseButton' + offer.id}"
+                                    th:text="#{msg.offer.sold}"
+                                    type="button">
+                            </button>
+                        </div>
+                        <div th:unless="${offer.purchase}">
+                            <button class="btn btn-success" th:id="${'purchaseButton' + offer.id}"
+                                    th:text="#{msg.offer.purchase}"
+                                    type="button"><span></span>
+                            </button>
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                $("#purchaseButton" + "[[${offer.id}]]").click(function () {
+                                    $.get("/offer/[[${offer.id}]]/purchase", function (data) {
+                                        let numberPage = [[${param.page}]];
+                                        let urlUpdate = '/offer/searchList/update';
+                                        if (numberPage != null) {
+                                            urlUpdate += "?page=" + numberPage[0];
+                                        }
+                                        $("#tableSearchedOffers").load(urlUpdate);
+                                    });
                                 });
-                            });
-                            /*]]>*/
-                        </script>
+                                /*]]>*/
+                            </script>
+                        </div>
+                        <a th:href="${'/conversation/' + offer.id+'/'+ interestedUser.id}"
+                           th:if="${offer.owner.email!=#authentication.principal.username}">
+                            <button class="btn btn-info" th:text="#{msg.conversation.start}" type="button"></button>
+                        </a>
                     </div>
-                    <a th:href="${'/conversation/' + offer.id+'/'+ interestedUser.id}"
-                       th:if="${offer.owner.email!=#authentication.principal.username}">
-                        <button class="btn btn-info" th:text="#{msg.conversation.start}" type="button"></button>
-                    </a>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     </div>
     <footer th:replace="fragments/pagination"/>
 </div>

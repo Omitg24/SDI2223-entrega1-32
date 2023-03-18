@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * Entidad de los mensajes
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Entity
 public class Message {
 
@@ -18,7 +24,7 @@ public class Message {
     private Date date;
     private String text;
 
-    //Un mensaje pertenece a una conversacion
+    //Un mensaje pertenece a una conversación
     @ManyToOne
     @JoinColumn(name = "conversation_id")
     private Conversation conversation;

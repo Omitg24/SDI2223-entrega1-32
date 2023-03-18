@@ -15,8 +15,9 @@ public class SendMessageValidator implements Validator {
 
     /**
      * Comprueba que el mensaje no esta vacio
-     * @param target
-     * @param errors
+     *
+     * @param target mensaje
+     * @param errors comprobación de errores
      */
     @Override
     public void validate(Object target, Errors errors) {

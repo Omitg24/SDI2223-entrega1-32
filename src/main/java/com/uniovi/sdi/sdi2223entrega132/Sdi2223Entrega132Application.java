@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Sdi2223Entrega132Application {
     /**
      * Lanza la aplicación
+     *
      * @param args argumentos pasados por consola
      */
     public static void main(String[] args) {

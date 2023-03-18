@@ -12,7 +12,7 @@
         <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
              th:each="offer : ${offersList}">
             <div class="card-img-top" th:if="${offer.hasPicture}">
-                <img class="card-img-top" width="256" height="256" th:src="${'/pictures/' + offer.id + '.png'}"/>
+                <img class="card-img-top" height="256" th:src="${'/pictures/' + offer.id + '.png'}" width="256"/>
             </div>
             <div class="card-body">
                 <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>

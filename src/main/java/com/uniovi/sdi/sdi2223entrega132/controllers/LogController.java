@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * Controlador de las peticiones relacionadas con el log
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Controller
 public class LogController {
 
@@ -19,8 +25,9 @@ public class LogController {
     /**
      * Metodo que obtiene los logs de la base de datos y si hay una busqueda obtiene los logs en funcion del texto
      * y devuelve una vista que se encargara de mostrarlos
-     * @param model
-     * @param searchText
+     *
+     * @param model modelo
+     * @param searchText texto a buscar
      * @return log/list
      */
     @RequestMapping("/log")
@@ -39,7 +46,8 @@ public class LogController {
 
     /**
      * Metodo que elimina todos los logs de la base de datos
-     * @param model
+     *
+     * @param model modelo
      * @return log/list
      */
     @RequestMapping("/log/delete")
@@ -50,6 +58,7 @@ public class LogController {
 
     /**
      * Metodo que actualiza la lista de logs
+     *
      * @param model
      * @param searchText
      * @return fragments/tableLogs

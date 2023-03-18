@@ -12,6 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Repositorio de ofertas
+ *
+ * @author David Leszek Warzynski Abril y Álvaro Davila Sampedro
+ * @version 18/03/2023
+ */
 @Repository
 public interface OffersRepository extends CrudRepository<Offer, Long> {
 

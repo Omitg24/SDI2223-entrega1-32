@@ -39,7 +39,9 @@
                     <td scope="row" th:text="${user.lastName}">Apellidos</td>
                     <td scope="row"></td>
                     <td scope="row"></td>
-                    <td scope="row"><input class="cb" name="users" th:if="${user.email != #authentication.principal.username}" th:value="${user.id}"
+                    <td scope="row"><input class="cb" name="users"
+                                           th:if="${user.email != #authentication.principal.username}"
+                                           th:value="${user.id}"
                                            type="checkbox"></td>
                 </tr>
                 </tbody>

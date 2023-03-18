@@ -22,40 +22,21 @@ import java.util.List;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Sdi2223Entrega132ApplicationTests {
+    static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+    static String Geckodriver = "geckodriver-v0.30.0-win64.exe";
+    static String URL = "http://localhost:8090";
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
     private OffersRepository offersRepository;
     @Autowired
-    private InsertSampleDataService insertSampleDataService;
-    static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    static String Geckodriver = "geckodriver-v0.30.0-win64.exe";
-    static WebDriver driver = getDriver(PathFirefox, Geckodriver);
-    static String URL = "http://localhost:8090";
+    private InsertSampleDataService insertSampleDataService;    static WebDriver driver = getDriver(PathFirefox, Geckodriver);
 
     public static WebDriver getDriver(String PathFirefox, String Geckodriver) {
         System.setProperty("webdriver.firefox.bin", PathFirefox);
         System.setProperty("webdriver.gecko.driver", Geckodriver);
         driver = new FirefoxDriver();
         return driver;
-    }
-
-    @BeforeEach
-    public void setUp() {
-        driver.navigate().to(URL);
-    }
-
-    private void reiniciarDatos(){
-        usersRepository.deleteAll();
-        offersRepository.deleteAll();
-        // Metemos otra vez los datos iniciales de prueba
-        insertSampleDataService.init();
-    }
-
-    //Después de cada prueba se borran las cookies del navegador
-    @AfterEach
-    public void tearDown() {
-        driver.manage().deleteAllCookies();
     }
 
     //Antes de la primera prueba
@@ -70,7 +51,23 @@ class Sdi2223Entrega132ApplicationTests {
         driver.quit();
     }
 
-    // 1. Público: Registrarse como usuario
+    @BeforeEach
+    public void setUp() {
+        driver.navigate().to(URL);
+    }
+
+    private void reiniciarDatos() {
+        usersRepository.deleteAll();
+        offersRepository.deleteAll();
+        // Metemos otra vez los datos iniciales de prueba
+        insertSampleDataService.init();
+    }
+
+    //Después de cada prueba se borran las cookies del navegador
+    @AfterEach
+    public void tearDown() {
+        driver.manage().deleteAllCookies();
+    }
 
     /**
      * PR01. Registro de Usuario con datos válidos.
@@ -89,6 +86,8 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
         reiniciarDatos();
     }
+
+    // 1. Público: Registrarse como usuario
 
     /**
      * PR02. Registro de Usuario con datos inválidos (email vacío, nombre vacío, apellidos vacíos).
@@ -149,8 +148,6 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
-    // 2. Usuario Registrado: Iniciar sesión
-
     /**
      * PR05. Inicio de sesión con datos válidos (administrador).
      * Realizada por: Omar
@@ -167,6 +164,8 @@ class Sdi2223Entrega132ApplicationTests {
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
+
+    // 2. Usuario Registrado: Iniciar sesión
 
     /**
      * PR06. Inicio de sesión con datos válidos (usuario estándar).
@@ -300,7 +299,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(12)
-    public void PR12(){
+    public void PR12() {
         // Iniciamos sesión como administrador
         PO_PrivateView.login(driver, "admin@email.com", "admin");
         //Seleccionamos el dropdown de gestion de usuarios
@@ -308,7 +307,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Seleccionamos el enlace de gestión de usuarios
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 0);
         //Obtenemos el texto que debería aparecer en la vista de gestión de usuarios
-        String checkText = PO_HomeView.getP().getString("msg.user.list.info",PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("msg.user.list.info", PO_Properties.getSPANISH());
         //Comprobamos que el texto aparece
         PO_PrivateView.checkElement(driver, checkText);
         //Obtenemos la primera fila que contenga un checkBox (ya que el admin no se puede eliminar)
@@ -331,7 +330,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Guardamos el texto para confirmar que se ha eliminado correctamente
         String actualText = emailOfFirstRow.getText();
         //Comprobamos que los textos son diferentes
-        Assertions.assertNotEquals(checkTextAfterDelete,actualText);
+        Assertions.assertNotEquals(checkTextAfterDelete, actualText);
         PO_PrivateView.logout(driver);
         reiniciarDatos();
     }
@@ -343,7 +342,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(13)
-    public void PR13(){
+    public void PR13() {
         // Iniciamos sesión como administrador
         PO_PrivateView.login(driver, "admin@email.com", "admin");
         //Seleccionamos el dropdown de gestion de usuarios
@@ -373,7 +372,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Guardamos el texto para confirmar que se ha eliminado correctamente
         String checkTextAfterDelete = email.getText();
 
-        Assertions.assertNotEquals(checkTextBeforeDelete,checkTextAfterDelete);
+        Assertions.assertNotEquals(checkTextBeforeDelete, checkTextAfterDelete);
         PO_PrivateView.logout(driver);
         reiniciarDatos();
     }
@@ -385,7 +384,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(14)
-    public void PR14(){
+    public void PR14() {
         // Iniciamos sesión como administrador
         PO_PrivateView.login(driver, "admin@email.com", "admin");
         //Seleccionamos el dropdown de gestion de usuarios
@@ -394,7 +393,7 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 0);
 
         //Obtenemos las 3 primeras filas de la tabla que contengan checkbox (menos la del admin)
-        List<String> textsBeforeDelete = PO_PrivateView.clickAndGetFirstCellsOfTable(driver,3);
+        List<String> textsBeforeDelete = PO_PrivateView.clickAndGetFirstCellsOfTable(driver, 3);
 
         //Obtenemos el botón que elimina los usuarios seleccionados
         WebElement deleteSubmitButton = driver.findElement(By.id("delete-users"));
@@ -402,10 +401,10 @@ class Sdi2223Entrega132ApplicationTests {
         deleteSubmitButton.click();
 
         //Obtenemos las 3 primeras filas de la tabla que contengan checkbox (menos la del admin)
-        List<String> textsAfterDelete = PO_PrivateView.clickAndGetFirstCellsOfTable(driver,3);
+        List<String> textsAfterDelete = PO_PrivateView.clickAndGetFirstCellsOfTable(driver, 3);
         //Comprobamos que se han eliminado correctamente
-        for(int i=0;i<3;i++){
-            Assertions.assertNotEquals(textsBeforeDelete.get(i),textsAfterDelete.get(i));
+        for (int i = 0; i < 3; i++) {
+            Assertions.assertNotEquals(textsBeforeDelete.get(i), textsAfterDelete.get(i));
         }
         PO_PrivateView.logout(driver);
         reiniciarDatos();
@@ -515,7 +514,7 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/ownedList')]", 0);
         //Borramos la primera oferta de la pagina
         PO_PrivateView.checkViewAndClick(driver, "free",
-                "//h6[contains(text(), 'Producto 3')]/following-sibling::*/a[contains(@href, 'offer/delete')]",0);
+                "//h6[contains(text(), 'Producto 3')]/following-sibling::*/a[contains(@href, 'offer/delete')]", 0);
         //Comprobamos que ha desaparecido la oferta 'Producto 3'
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 3", PO_View.getTimeout());
         // Hacemos logout
@@ -540,7 +539,7 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'page-link')]", 3);
         //Borramos la primera oferta de la pagina
         PO_PrivateView.checkViewAndClick(driver, "free",
-                "//h6[contains(text(), 'Producto 138')]/following-sibling::*/a[contains(@href, 'offer/delete')]",0);
+                "//h6[contains(text(), 'Producto 138')]/following-sibling::*/a[contains(@href, 'offer/delete')]", 0);
         //Comprobamos que ha desaparecido la oferta 'Producto 138'
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 138", PO_View.getTimeout());
         // Hacemos logout
@@ -562,7 +561,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Dejamos el campo de busqueda vacio y buscamos
-        PO_PrivateView.makeSearch(driver,"");
+        PO_PrivateView.makeSearch(driver, "");
         //Guardamos los elemento de la primera pagina
         List<WebElement> offerList = SeleniumUtils.waitLoadElementsBy(driver, "free",
                 "//div[contains(@class, 'card border-dark mb-3')]", PO_View.getTimeout());
@@ -596,7 +595,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Dejamos el campo de busqueda vacio y buscamos
-        PO_PrivateView.makeSearch(driver,"SistemasDistribuidos");
+        PO_PrivateView.makeSearch(driver, "SistemasDistribuidos");
         //Guardamos los elemento de la primera pagina
         List<WebElement> offerList = driver.findElements(By.xpath("//div[contains(@class, 'card border-dark mb-3')]"));
         // Comprobamos que se encuentren todas las ofertas
@@ -621,14 +620,14 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Hacemos una busqueda
-        PO_PrivateView.makeSearch(driver,"117");
+        PO_PrivateView.makeSearch(driver, "117");
         //Compramos la oferta
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
         elements.get(0).click();
         //Lo comparamos con el precio restado
         elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
-        double result= Double.parseDouble(elements.get(0).getText());
-        Assertions.assertEquals(result,30.31);
+        double result = Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result, 30.31);
 
         //Cierro sesion
         PO_PrivateView.logout(driver);
@@ -650,14 +649,14 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Hacemos una busqueda
-        PO_PrivateView.makeSearch(driver,"130");
+        PO_PrivateView.makeSearch(driver, "130");
         //Compramos la oferta
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
         elements.get(0).click();
         //Lo comparamos con el precio restado
         elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
-        double result= Double.parseDouble(elements.get(0).getText());
-        Assertions.assertEquals(result,0.00);
+        double result = Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result, 0.00);
 
         //Cierro sesion
         PO_PrivateView.logout(driver);
@@ -679,7 +678,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Hacemos una busqueda
-        PO_PrivateView.makeSearch(driver,"25");
+        PO_PrivateView.makeSearch(driver, "25");
         //Compramos la oferta
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
         elements.get(0).click();
@@ -692,6 +691,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Cierro sesion
         PO_PrivateView.logout(driver);
     }
+
     /**
      * PR25. Ir a la opción de ofertas compradas del usuario y mostrar la lista.
      * Comprobar que aparecen las ofertas que deben aparecer
@@ -707,7 +707,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Hacemos una busqueda
-        PO_PrivateView.makeSearch(driver,"20");
+        PO_PrivateView.makeSearch(driver, "20");
         //Compramos la oferta
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
         elements.get(0).click();
@@ -721,6 +721,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Cierro sesion
         PO_PrivateView.logout(driver);
     }
+
     /**
      * PR26. Sobre una búsqueda determinada de ofertas (a elección de desarrollador), enviar un mensaje
      * a una oferta concreta. Se abriría dicha conversación por primera vez. Comprobar que el mensaje aparece
@@ -729,7 +730,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(26)
-    public void PR26(){
+    public void PR26() {
         // Iniciamos sesión como un usuario estandar
         PO_PrivateView.login(driver, "user05@email.com", "user05");
         //Seleccionamos el dropdown de ofertas
@@ -737,7 +738,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Seleccionamos el enlace de ver todas las ofertas
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 3);
         //Comprobamos que esta el mensaje de buscar ofertas
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getSPANISH()));
         //Obtenemos el input de busqueda
         WebElement searchText = driver.findElement(By.xpath("//input[@class='form-control']"));
         //Lo seleccionamos
@@ -749,13 +750,13 @@ class Sdi2223Entrega132ApplicationTests {
         //Confirmamos la busqueda
         searchText.sendKeys(Keys.ENTER);
         //Obtenemos los resultados de la busqueda (esperamos ya que a veces puede continuar la ejecucion antes de que se actualice)
-        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "class", "card-body",10);
+        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "class", "card-body", 10);
         //Comprobamos que solo hay un producto
         Assertions.assertEquals(1, cards.size());
         //Seleccionamos la opcion para establecer una conversacion
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",1);
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]", 1);
         //Comprobamos que estamos en el chat
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
         //Obtenemos el input para escribir un mensaje
         WebElement messageInput = driver.findElement(By.xpath("//input[@class='form-control']"));
         //Escribimos el mensaje
@@ -769,12 +770,13 @@ class Sdi2223Entrega132ApplicationTests {
         //Obtenemos los mensajes de la conversacion
         List<WebElement> messages = driver.findElements(By.xpath("//p[@class='small p-2 me-3 mb-3 text-white rounded-3 bg-dark']"));
         //Comprobamos que el mensaje se ha enviado
-        Assertions.assertEquals(1,messages.size());
+        Assertions.assertEquals(1, messages.size());
 
         PO_PrivateView.logout(driver);
 
         reiniciarDatos();
     }
+
     /**
      * PR27. Enviar un mensaje a una conversación ya existente accediendo desde el botón/enlace
      * “Conversación”. Comprobar que el mensaje aparece en la conversación
@@ -782,21 +784,21 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(27)
-    public void PR27(){
+    public void PR27() {
         // Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user05@email.com", "user05");
         //Accedemos a la pestaña de conversaciones
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]", 0);
         //Comprobamos que hemos accedido correctamente
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
         //Comprobamos que el titulo de la oferta es el correcto
-        PO_PrivateView.checkElement(driver,"Producto 139");
+        PO_PrivateView.checkElement(driver, "Producto 139");
         //Obtenemos los enlaces a las conversaciones
         List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
         //Seleccionamos la primera que aparece en la tabla
         conversationLinks.get(1).click();
         //Comprobamos que hemos accedido a la conversacion
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
         //Obtenemos el input para enviar un mensaje
         WebElement messageInput = driver.findElement(By.xpath("//input[@class='form-control']"));
         //Lo seleccionamos y escribimos un mensaje
@@ -810,9 +812,9 @@ class Sdi2223Entrega132ApplicationTests {
         //Obtenemos los mensajes actuales
         List<WebElement> messages = driver.findElements(By.xpath("//p[@class='small p-2 me-3 mb-3 text-white rounded-3 bg-dark']"));
         //Comprobamos que el texto del mensaje es el correcto
-        Assertions.assertEquals(messages.get(0).getText(),"Hola");
+        Assertions.assertEquals(messages.get(0).getText(), "Hola");
         //Comprobamos que el numero de mensajes es el correcto
-        Assertions.assertEquals(1,messages.size());
+        Assertions.assertEquals(1, messages.size());
 
         PO_PrivateView.logout(driver);
         reiniciarDatos();
@@ -825,17 +827,17 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(28)
-    public void PR28(){
+    public void PR28() {
         // Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user05@email.com", "user05");
         //Accedemos a la pestaña de conversaciones
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]", 0);
         //Comprobamos que hemos accedido correctamente
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
         //Obtenemos el numero de conversaciones del usuario
         List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
         //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(2,tableRows.size());
+        Assertions.assertEquals(2, tableRows.size());
     }
 
     /**
@@ -845,17 +847,17 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(35)
-    public void PR35(){
+    public void PR35() {
         // Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user05@email.com", "user05");
         //Accedemos a la pestaña de conversaciones
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]", 0);
         //Comprobamos que hemos accedido correctamente
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
         //Obtenemos el numero de conversaciones del usuario
         List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
         //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(2,rows.size());
+        Assertions.assertEquals(2, rows.size());
         //Obtenemos la primera fila
         WebElement firstRow = rows.get(0);
         //Obtenemos el boton de eliminar de la primera fila
@@ -864,7 +866,7 @@ class Sdi2223Entrega132ApplicationTests {
         deleteButton.click();
         rows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
         //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(1,rows.size());
+        Assertions.assertEquals(1, rows.size());
         reiniciarDatos();
     }
 
@@ -875,17 +877,17 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(36)
-    public void PR36(){
+    public void PR36() {
         // Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user05@email.com", "user05");
         //Accedemos a la pestaña de conversaciones
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]", 0);
         //Comprobamos que hemos accedido correctamente
-        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+        PO_PrivateView.checkElement(driver, PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
         //Obtenemos el numero de conversaciones del usuario
         List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
         //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(2,rows.size());
+        Assertions.assertEquals(2, rows.size());
         //Obtenemos la ultima fila
         WebElement firstRow = rows.get(1);
         //Obtenemos el boton de eliminar de la ultima fila
@@ -894,7 +896,7 @@ class Sdi2223Entrega132ApplicationTests {
         deleteButton.click();
         rows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
         //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(1,rows.size());
+        Assertions.assertEquals(1, rows.size());
         reiniciarDatos();
     }
 
@@ -926,8 +928,8 @@ class Sdi2223Entrega132ApplicationTests {
         //PO_PrivateView.checkElement(driver, "0.37 EUR");
 
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
-        double result= Double.parseDouble(elements.get(0).getText());
-        Assertions.assertEquals(result,80.00);
+        double result = Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result, 80.00);
         // Hacemos logout
         PO_PrivateView.logout(driver);
         reiniciarDatos();
@@ -961,8 +963,8 @@ class Sdi2223Entrega132ApplicationTests {
 
         //Comprobamos si se actualizo el saldo
         elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
-        double result= Double.parseDouble(elements.get(0).getText());
-        Assertions.assertEquals(result,80.00);
+        double result = Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result, 80.00);
         // Hacemos logout
         PO_PrivateView.logout(driver);
     }
@@ -1005,7 +1007,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(40)
-    public void PR40(){
+    public void PR40() {
         // Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user15@email.com", "user15");
 
@@ -1015,7 +1017,8 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/add')]", 0);
 
         // Rellenamos el formulario de alta de oferta con datos validos, en este adjuntamos una imagen
-        String absolutePath = FileSystems.getDefault().getPath("src\\test\\java\\rtx4080.png").normalize().toAbsolutePath().toString();;
+        String absolutePath = FileSystems.getDefault().getPath("src\\test\\java\\rtx4080.png").normalize().toAbsolutePath().toString();
+        ;
         PO_PrivateView.fillFormAddOffer(driver, "PruebaTitulo", absolutePath, "PruebaDescripcion", "0.21");
 
         // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
@@ -1040,7 +1043,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(41)
-    public void PR41(){
+    public void PR41() {
         // Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user15@email.com", "user15");
 
@@ -1067,6 +1070,8 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.logout(driver);
         reiniciarDatos();
     }
+
+
 
 }
 

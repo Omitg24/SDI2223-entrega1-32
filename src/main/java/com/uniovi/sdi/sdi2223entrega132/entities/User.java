@@ -14,6 +14,10 @@ import java.util.Set;
 @Table(name = "user")
 public class User {
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private final Set<Offer> ownOffers = new HashSet<Offer>();
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private final Set<Offer> purchasedOffers = new HashSet<Offer>();
     @Id
     @GeneratedValue
     private Long id;
@@ -26,13 +30,6 @@ public class User {
     private String role;
     @Transient
     private String passwordConfirm;
-
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private final Set<Offer> ownOffers = new HashSet<Offer>();
-
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
-    private final Set<Offer> purchasedOffers = new HashSet<Offer>();
-
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Message> messages = new HashSet<Message>();
 

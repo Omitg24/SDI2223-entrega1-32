@@ -11,6 +11,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Interceptor del log
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Component
 public class LogInterceptor implements HandlerInterceptor {
 
@@ -24,6 +30,7 @@ public class LogInterceptor implements HandlerInterceptor {
 
     /**
      * Metodo que se ejecuta antes de procesar la solicitud HTTP
+     *
      * @param request
      * @param response
      * @param handler
@@ -32,13 +39,14 @@ public class LogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         //Logeamos cada peticion
-        loggerService.log(LogMessage.Action.PET, messageSource.getMessage("msg.log.petition",null,request.getLocale()) +" "+ request.getMethod()+" "+ messageSource.getMessage("msg.log.forUrl",null,request.getLocale()) +" "+ request.getRequestURI());
+        loggerService.log(LogMessage.Action.PET, messageSource.getMessage("msg.log.petition", null, request.getLocale()) + " " + request.getMethod() + " " + messageSource.getMessage("msg.log.forUrl", null, request.getLocale()) + " " + request.getRequestURI());
         return true;
     }
 
     /**
      * Metodo que se ejecuta después de que se haya procesado la solicitud
      * y se haya generado la vista, pero antes de enviar la respuesta al cliente.
+     *
      * @param request
      * @param response
      * @param handler
@@ -46,11 +54,11 @@ public class LogInterceptor implements HandlerInterceptor {
      * @throws Exception
      */
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,ModelAndView modelAndView) throws Exception{
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         String requestUrl = request.getRequestURI();
         //Comprobamos si la petición es darse de alta
-        if(requestUrl.contains("signup")){
-            loggerService.log(LogMessage.Action.ALTA, messageSource.getMessage("msg.log.petition",null,request.getLocale()) +" "+ request.getMethod()+" "+ messageSource.getMessage("msg.log.forUrl",null,request.getLocale()) +" "+ request.getRequestURI());
+        if (requestUrl.contains("signup")) {
+            loggerService.log(LogMessage.Action.ALTA, messageSource.getMessage("msg.log.petition", null, request.getLocale()) + " " + request.getMethod() + " " + messageSource.getMessage("msg.log.forUrl", null, request.getLocale()) + " " + request.getRequestURI());
         }
     }
 

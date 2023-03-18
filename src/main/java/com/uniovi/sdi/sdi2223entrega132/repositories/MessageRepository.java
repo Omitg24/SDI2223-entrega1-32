@@ -8,6 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repositorio de mensajes
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Repository
 public interface MessageRepository extends CrudRepository<Message, Long> {
 

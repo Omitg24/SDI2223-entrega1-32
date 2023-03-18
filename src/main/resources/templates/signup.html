@@ -11,24 +11,26 @@
             <label class="control-label col-sm-2" for="email" th:text="#{msg.form.email}"></label>
             <div class="col-sm-10">
                 <input class="form-control" id="email" name="email"
-                       th:placeholder="#{msg.placeholder.email}" type="text"/>
-                <span id="emailSpan" class="text-danger" th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></span>
+                       th:placeholder="#{msg.placeholder.email}" th:value="${user.email}" type="text"/>
+                <span class="text-danger" id="emailSpan" th:errors="*{email}"
+                      th:if="${#fields.hasErrors('email')}"></span>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="name" th:text="#{msg.form.name}"></label>
             <div class="col-sm-10">
                 <input class="form-control" id="name" name="name"
-                       th:placeholder="#{msg.placeholder.name}" type="text"/>
-                <span id="nameSpan" class="text-danger" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
+                       th:placeholder="#{msg.placeholder.name}" th:value="${user.name}" type="text"/>
+                <span class="text-danger" id="nameSpan" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></span>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="lastName" th:text="#{msg.form.lastName}"></label>
             <div class="col-sm-10">
                 <input class="form-control" id="lastName" name="lastName"
-                       th:placeholder="#{msg.placeholder.lastName}" type="text"/>
-                <span id="lastNameSpan" class="text-danger" th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}"></span>
+                       th:placeholder="#{msg.placeholder.lastName}" th:value="${user.lastName}" type="text"/>
+                <span class="text-danger" id="lastNameSpan" th:errors="*{lastName}"
+                      th:if="${#fields.hasErrors('lastName')}"></span>
             </div>
         </div>
         <div class="form-group">
@@ -36,7 +38,8 @@
             <div class="col-sm-10">
                 <input class="form-control" id="password" name="password"
                        th:placeholder="#{msg.placeholder.password}" type="password"/>
-                <span id="passwordSpan" class="text-danger" th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></span>
+                <span class="text-danger" id="passwordSpan" th:errors="*{password}"
+                      th:if="${#fields.hasErrors('password')}"></span>
             </div>
         </div>
         <div class="form-group">
@@ -45,7 +48,8 @@
             <div class="col-sm-10">
                 <input class="form-control" id="passwordConfirm" name="passwordConfirm"
                        th:placeholder="#{msg.placeholder.passwordConfirm}" type="password"/>
-                <span id="passwordConfirmSpan" class="text-danger" th:errors="*{passwordConfirm}" th:if="${#fields.hasErrors('passwordConfirm')}"></span>
+                <span class="text-danger" id="passwordConfirmSpan" th:errors="*{passwordConfirm}"
+                      th:if="${#fields.hasErrors('passwordConfirm')}"></span>
             </div>
         </div>
         <div class="form-group">

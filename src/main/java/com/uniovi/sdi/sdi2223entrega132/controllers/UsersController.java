@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Controlador de las peticiones relacionadas con la gestión de usuarios
@@ -73,12 +72,14 @@ public class UsersController {
      *
      * @param user   datos del usuario
      * @param result resultado de la validación
+     * @param model modelo
      * @return panel principal si los datos son correctos o del formulario sin son incorrectos
      */
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String signup(@Validated User user, BindingResult result) {
+    public String signup(@Validated User user, BindingResult result, Model model) {
         signUpFormValidator.validate(user, result);
         if (result.hasErrors()) {
+            model.addAttribute("user", user);
             return "signup";
         }
         user.setRole(rolesService.getRoles()[0]);
@@ -129,14 +130,14 @@ public class UsersController {
      * @return vista de home
      */
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model,Pageable pageable) {
+    public String home(Model model, Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Offer> offers = offersService.getOffersOfUser(pageable,user);
-        model.addAttribute("offersList",offers.getContent());
+        Page<Offer> offers = offersService.getOffersOfUser(pageable, user);
+        model.addAttribute("offersList", offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
-        model.addAttribute("amount",user.getAmount());
+        model.addAttribute("amount", user.getAmount());
         model.addAttribute("page", offers);
         return "home";
     }

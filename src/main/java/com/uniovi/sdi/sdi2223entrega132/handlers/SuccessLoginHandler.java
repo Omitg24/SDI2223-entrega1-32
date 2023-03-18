@@ -8,12 +8,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Manenjador de logeo correcto
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Component
 public class SuccessLoginHandler implements AuthenticationSuccessHandler {
 
@@ -27,6 +32,7 @@ public class SuccessLoginHandler implements AuthenticationSuccessHandler {
 
     /**
      * Metodo que se ejecutara cuando un usuario inicie sesion existosamente, quedando registrado en la base de datos
+     *
      * @param request
      * @param response
      * @param authentication
@@ -35,7 +41,7 @@ public class SuccessLoginHandler implements AuthenticationSuccessHandler {
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        loggerService.log(LogMessage.Action.LOGIN_EX,messageSource.getMessage("msg.log.login.user.success",null,request.getLocale()) + authentication.getName());
+        loggerService.log(LogMessage.Action.LOGIN_EX, messageSource.getMessage("msg.log.login.user.success", null, request.getLocale()) + authentication.getName());
         response.sendRedirect("/default");
     }
 }

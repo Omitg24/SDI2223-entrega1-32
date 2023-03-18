@@ -28,6 +28,7 @@ public class UsersService {
 
     /**
      * Método que devuelve todos los usuarios pertenecientes a una página de la base de datos
+     *
      * @param pageable pagina
      * @return paginación de usuarios
      */
@@ -37,6 +38,7 @@ public class UsersService {
 
     /**
      * Método que devuelve un usuario concreto
+     *
      * @param id id del usuario
      * @return usuario
      */
@@ -46,6 +48,7 @@ public class UsersService {
 
     /**
      * Método que añade un usuario a la base de datos
+     *
      * @param user usuario a añadir
      */
     public void addUser(User user) {
@@ -55,6 +58,7 @@ public class UsersService {
 
     /**
      * Método que devuelve un usuario buscandolo por su email
+     *
      * @param email email del usuario
      * @return usuario
      */
@@ -62,12 +66,13 @@ public class UsersService {
         return usersRepository.findByEmail(email);
     }
 
-    public void updateAmount(Long id,Double amount) {
+    public void updateAmount(Long id, Double amount) {
         usersRepository.updateAmount(amount, id);
     }
 
     /**
      * Método que borra un usuario de la base de datos
+     *
      * @param id
      */
     public void deleteUser(Long id) {
@@ -76,9 +81,10 @@ public class UsersService {
 
     /**
      * Método que busca usuarios que tengan la cadena buscada
-     * @param pageable pagina actual
+     *
+     * @param pageable   pagina actual
      * @param searchText cadena buscada
-     * @param user usuario
+     * @param user       usuario
      * @return usuarios que tengan dicha cadena
      */
     public Page<User> searchByNameAndLastName(Pageable pageable, String searchText, User user) {

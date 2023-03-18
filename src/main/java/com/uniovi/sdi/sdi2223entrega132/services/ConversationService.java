@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Servicio que contiene capa de negocio de las conversaciones
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Service
 public class ConversationService {
 
@@ -24,16 +30,18 @@ public class ConversationService {
 
     /**
      * Metodo que accede al repositorio para obtener las conversaciones de una oferta y un usuario
+     *
      * @param user
      * @param offer
      * @return
      */
-    public Optional<Conversation> getConversationOfUserAndOffer(User user, Offer offer){
-        return conversationRepository.findByUserAndOffer(user.getId(),offer.getId());
+    public Optional<Conversation> getConversationOfUserAndOffer(User user, Offer offer) {
+        return conversationRepository.findByUserAndOffer(user.getId(), offer.getId());
     }
 
     /**
      * Metodo que accede al repositorio para añadir una oferta
+     *
      * @param c
      */
     public void addConversationForOffer(Conversation c) {
@@ -42,6 +50,7 @@ public class ConversationService {
 
     /**
      * Metodo que accede al repositorio para añadir un mensaje
+     *
      * @param m
      */
     public void addMessage(Message m) {
@@ -50,16 +59,18 @@ public class ConversationService {
 
     /**
      * Metodo que accede al repositorio para obtener las conversaciones de un usuario
+     *
      * @param pageable
      * @param user
      * @return
      */
     public Page<Conversation> getConversationOfUser(Pageable pageable, User user) {
-        return conversationRepository.findByUser(pageable,user);
+        return conversationRepository.findByUser(pageable, user);
     }
 
     /**
      * Metodo que accede al repositorio para eliminar una conversacion por id
+     *
      * @param id
      */
     public void deleteConversation(Long id) {
