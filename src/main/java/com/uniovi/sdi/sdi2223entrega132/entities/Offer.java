@@ -28,6 +28,8 @@ public class Offer {
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
     public Set<Conversation> conversations;
 
+    public boolean hasPicture;
+
     @Transient
     public MultipartFile picture;
 
@@ -121,6 +123,14 @@ public class Offer {
 
     public void setFeatured(boolean featured) {
         this.featured = featured;
+    }
+
+    public boolean isHasPicture() {
+        return hasPicture;
+    }
+
+    public void setHasPicture(boolean hasPicture) {
+        this.hasPicture = hasPicture;
     }
 
     public MultipartFile getPicture() {

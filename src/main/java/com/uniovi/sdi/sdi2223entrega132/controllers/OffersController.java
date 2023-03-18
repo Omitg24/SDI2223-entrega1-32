@@ -157,6 +157,7 @@ public class OffersController {
         offer.setUploadDate(new Date());
         offersService.addOffer(offer);
         if (!offer.getPicture().isEmpty()) {
+            offer.setHasPicture(true);
             try {
                 InputStream is = offer.getPicture().getInputStream();
                 Files.copy(is, Paths.get("src/main/resources/static/pictures/" + offer.getId() + ".png"), StandardCopyOption.REPLACE_EXISTING);
