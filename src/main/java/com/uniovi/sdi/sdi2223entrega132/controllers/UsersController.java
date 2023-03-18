@@ -129,14 +129,14 @@ public class UsersController {
      * @return vista de home
      */
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model, Pageable pageable) {
+    public String home(Model model,Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
-        User activeUser = usersService.getUserByEmail(email);
-        Page<Offer> offers = offersService.getOffersOfUser(pageable, activeUser);
-        List<Offer> featured = offersService.getOffersFeatured();
-        model.addAttribute("featuredList", featured);
-        model.addAttribute("offersList", offers.getContent());
+        User user = usersService.getUserByEmail(email);
+        Page<Offer> offers = offersService.getOffersOfUser(pageable,user);
+        model.addAttribute("offersList",offers.getContent());
+        model.addAttribute("featuredList", offersService.getOffersFeatured());
+        model.addAttribute("amount",user.getAmount());
         model.addAttribute("page", offers);
         return "home";
     }

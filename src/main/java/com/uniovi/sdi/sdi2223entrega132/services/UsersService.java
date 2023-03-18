@@ -15,7 +15,7 @@ import java.util.LinkedList;
 /**
  * Servicio que contiene capa de negocio de los usuarios
  *
- * @author Omar Teixeira González
+ * @author Omar Teixeira González y Álvaro Davila Sampedro
  * @version 10/03/2023
  */
 @Service
@@ -60,6 +60,10 @@ public class UsersService {
      */
     public User getUserByEmail(String email) {
         return usersRepository.findByEmail(email);
+    }
+
+    public void updateAmount(Long id,Double amount) {
+        usersRepository.updateAmount(amount, id);
     }
 
     /**

@@ -13,9 +13,7 @@
         <b th:inline="text" sec:authentication="principal.username"></b>
     </div>
     <div sec:authorize="hasRole('ROLE_USER')">
-        <div id="tableOwnedOffers" style="text-align: left" th:fragment="tableOwnedOffers"
-             th:replace="fragments/ownedOffers">
-        </div>
+        <div class="container" th:fragment="tableOwnedOffers" id="ownedOffers" th:replace="fragments/ownedOffers">
         <div th:replace="fragments/pagination"/>
     </div>
 </div>
