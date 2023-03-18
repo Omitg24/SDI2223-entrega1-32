@@ -995,8 +995,13 @@ class Sdi2223Entrega132ApplicationTests {
         // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
         // del usuario
         PO_PrivateView.checkElement(driver, "PruebaTitulo");
+        //Intentamos obtener el elemento que contendria a la imagen
+        List<WebElement> image = driver.findElements(By.xpath("//div[contains(@class, 'card-img-top')]"));
         PO_PrivateView.checkElement(driver, "PruebaDescripcion");
         PO_PrivateView.checkElement(driver, "0.21 EUR");
+
+        //Comprobamos que no tiene imagen
+        Assertions.assertTrue(image.isEmpty());
 
         // Hacemos logout
         PO_PrivateView.logout(driver);
