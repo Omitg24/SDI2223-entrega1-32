@@ -15,7 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
 import java.util.Date;
@@ -38,17 +41,17 @@ public class ConversationController {
     private SendMessageValidator sendMessageValidator;
 
     @RequestMapping(value = "/conversation/{offerId}/{interestedId}", method = RequestMethod.GET)
-    public String getConversation(@PathVariable Long offerId,@PathVariable Long interestedId, Model model) {
-        prepareConversation(offerId,interestedId,model);
+    public String getConversation(@PathVariable Long offerId, @PathVariable Long interestedId, Model model) {
+        prepareConversation(offerId, interestedId, model);
         model.addAttribute("message", new Message());
         return "conversation/conversation";
     }
 
     @RequestMapping(value = "/conversation/{offerId}/{interestedId}", method = RequestMethod.POST)
-    public String updateConversation(@PathVariable Long offerId,@PathVariable Long interestedId,@ModelAttribute @Validated Message message, Model model, Principal principal, BindingResult result) {
-        sendMessageValidator.validate(message,result);
+    public String updateConversation(@PathVariable Long offerId, @PathVariable Long interestedId, @ModelAttribute @Validated Message message, Model model, Principal principal, BindingResult result) {
+        sendMessageValidator.validate(message, result);
         if (result.hasErrors()) {
-            prepareConversation(offerId,interestedId, model);
+            prepareConversation(offerId, interestedId, model);
             return "conversation/conversation";
         }
         // Obtenemos el usuario a partir del correo
@@ -60,27 +63,27 @@ public class ConversationController {
         //Obtenemos o creamos la conversación en función de si existe o no
         Offer offerOfConversation = offersService.getOfferById(offerId);
         User interestedUser = usersService.getUser(interestedId);
-        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser,offerOfConversation);
-        Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,interestedUser,new HashSet<>()):optionalConversation.get();
+        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser, offerOfConversation);
+        Conversation c = optionalConversation.isEmpty() ? new Conversation(offerOfConversation, interestedUser, new HashSet<>()) : optionalConversation.get();
         conversationService.addConversationForOffer(c);
         message.setConversation(c);
         conversationService.addMessage(message);
         //Añadimos el mensaje enviado en el post a la conversación
         c.getMessages().add(message);
 
-        model.addAttribute("conversation",c);
-        model.addAttribute("offer",offerOfConversation);
-        return "redirect:/conversation/"+offerId+"/"+interestedId;
+        model.addAttribute("conversation", c);
+        model.addAttribute("offer", offerOfConversation);
+        return "redirect:/conversation/" + offerId + "/" + interestedId;
     }
 
     /*
         Actualiza lista de conversaciones
      */
     @RequestMapping("/conversation/list/update")
-    public String updateList(Pageable pageable, Model model,Principal principal) {
+    public String updateList(Pageable pageable, Model model, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Conversation> conversations = conversationService.getConversationOfUser(pageable,user);
+        Page<Conversation> conversations = conversationService.getConversationOfUser(pageable, user);
         model.addAttribute("conversationList", conversations.getContent());
         model.addAttribute("page", conversations);
         return "fragments/tableConversations";
@@ -93,7 +96,7 @@ public class ConversationController {
     public String getList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Conversation> conversations = conversationService.getConversationOfUser(pageable,user);
+        Page<Conversation> conversations = conversationService.getConversationOfUser(pageable, user);
         model.addAttribute("conversationList", conversations.getContent());
         model.addAttribute("page", conversations);
         return "conversation/list";
@@ -109,13 +112,13 @@ public class ConversationController {
         al modelo dicha conversación y la oferta
      */
 
-    private void prepareConversation(Long offerId,Long interestedId, Model model) {
+    private void prepareConversation(Long offerId, Long interestedId, Model model) {
         User interestedUser = usersService.getUser(interestedId);
         Offer offerOfConversation = offersService.getOfferById(offerId);
-        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser,offerOfConversation);
-        Conversation c = optionalConversation.isEmpty()?null:optionalConversation.get();
-        model.addAttribute("conversation",c);
-        model.addAttribute("offer",offerOfConversation);
-        model.addAttribute("interestedUser",interestedUser);
+        Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser, offerOfConversation);
+        Conversation c = optionalConversation.isEmpty() ? null : optionalConversation.get();
+        model.addAttribute("conversation", c);
+        model.addAttribute("offer", offerOfConversation);
+        model.addAttribute("interestedUser", interestedUser);
     }
 }

@@ -1,9 +1,8 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
+import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
-import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
-import jdk.jfr.Timespan;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -12,30 +11,39 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Sdi2223Entrega132ApplicationTests {
+    static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
+    static String Geckodriver = "geckodriver-v0.30.0-win64.exe";
+    static String URL = "http://localhost:8090";
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
-    private InsertSampleDataService insertSampleDataService;
-    static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    static String Geckodriver = "geckodriver-v0.30.0-win64.exe";
-    static WebDriver driver = getDriver(PathFirefox, Geckodriver);
-    static String URL = "http://localhost:8090";
+    private InsertSampleDataService insertSampleDataService;    static WebDriver driver = getDriver(PathFirefox, Geckodriver);
 
     public static WebDriver getDriver(String PathFirefox, String Geckodriver) {
         System.setProperty("webdriver.firefox.bin", PathFirefox);
         System.setProperty("webdriver.gecko.driver", Geckodriver);
         driver = new FirefoxDriver();
         return driver;
+    }
+
+    //Antes de la primera prueba
+    @BeforeAll
+    static public void begin() {
+    }
+
+    //Al finalizar la última prueba
+    @AfterAll
+    static public void end() {
+        //Cerramos el navegador al finalizar las pruebas
+        driver.quit();
     }
 
     @BeforeEach
@@ -53,20 +61,6 @@ class Sdi2223Entrega132ApplicationTests {
         driver.manage().deleteAllCookies();
     }
 
-    //Antes de la primera prueba
-    @BeforeAll
-    static public void begin() {
-    }
-
-    //Al finalizar la última prueba
-    @AfterAll
-    static public void end() {
-        //Cerramos el navegador al finalizar las pruebas
-        driver.quit();
-    }
-
-    // 1. Público: Registrarse como usuario
-
     /**
      * PR01. Registro de Usuario con datos válidos.
      * Realizada por: Omar
@@ -83,6 +77,8 @@ class Sdi2223Entrega132ApplicationTests {
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
+
+    // 1. Público: Registrarse como usuario
 
     /**
      * PR02. Registro de Usuario con datos inválidos (email vacío, nombre vacío, apellidos vacíos).
@@ -148,8 +144,6 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
 
-    // 2. Usuario Registrado: Iniciar sesión
-
     /**
      * PR05. Inicio de sesión con datos válidos (administrador).
      * Realizada por: Omar
@@ -166,6 +160,8 @@ class Sdi2223Entrega132ApplicationTests {
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
+
+    // 2. Usuario Registrado: Iniciar sesión
 
     /**
      * PR06. Inicio de sesión con datos válidos (usuario estándar).
@@ -294,19 +290,19 @@ class Sdi2223Entrega132ApplicationTests {
 
     @Test
     @Order(12)
-    public void PR12(){
+    public void PR12() {
         // Iniciamos sesión como administrador
         PO_PrivateView.login(driver, "admin@email.com", "admin");
         //Contamos el número de filas de usuarios
-        List<WebElement> userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
+        List<WebElement> userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
         Assertions.assertEquals(4, userList.size());
         WebElement firstCheckbox = driver.findElement(By.xpath("//input[@type='checkbox'][1]"));
         firstCheckbox.click();
-        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
+        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
         Assertions.assertEquals(4, userList.size());
         List<WebElement> submitButtons = driver.findElements(By.xpath("//button[@type='submit']"));
         submitButtons.get(1).click();
-        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
+        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr", PO_View.getTimeout());
         Assertions.assertEquals(3, userList.size());
         PO_PrivateView.logout(driver);
     }
@@ -414,7 +410,7 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/ownedList')]", 0);
         //Borramos la primera oferta de la pagina
         PO_PrivateView.checkViewAndClick(driver, "free",
-                "//h6[contains(text(), 'Producto 3')]/following-sibling::*/a[contains(@href, 'offer/delete')]",0);
+                "//h6[contains(text(), 'Producto 3')]/following-sibling::*/a[contains(@href, 'offer/delete')]", 0);
         //Comprobamos que ha desaparecido la oferta 'Producto 3'
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 3", PO_View.getTimeout());
         // Hacemos logout
@@ -438,7 +434,7 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'page-link')]", 3);
         //Borramos la primera oferta de la pagina
         PO_PrivateView.checkViewAndClick(driver, "free",
-                "//h6[contains(text(), 'Producto 138')]/following-sibling::*/a[contains(@href, 'offer/delete')]",0);
+                "//h6[contains(text(), 'Producto 138')]/following-sibling::*/a[contains(@href, 'offer/delete')]", 0);
         //Comprobamos que ha desaparecido la oferta 'Producto 138'
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 138", PO_View.getTimeout());
         // Hacemos logout
@@ -459,7 +455,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Dejamos el campo de busqueda vacio y buscamos
-        PO_PrivateView.makeSearch(driver,"");
+        PO_PrivateView.makeSearch(driver, "");
         //Guardamos los elemento de la primera pagina
         List<WebElement> offerList = SeleniumUtils.waitLoadElementsBy(driver, "free",
                 "//div[contains(@class, 'card border-dark mb-3')]", PO_View.getTimeout());
@@ -493,7 +489,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
         //Dejamos el campo de busqueda vacio y buscamos
-        PO_PrivateView.makeSearch(driver,"SistemasDistribuidos");
+        PO_PrivateView.makeSearch(driver, "SistemasDistribuidos");
         //Guardamos los elemento de la primera pagina
         List<WebElement> offerList = driver.findElements(By.xpath("//div[contains(@class, 'card border-dark mb-3')]"));
         // Comprobamos que se encuentren todas las ofertas
@@ -501,6 +497,8 @@ class Sdi2223Entrega132ApplicationTests {
         // Hacemos logout
         PO_PrivateView.logout(driver);
     }
+
+
 
 }
 

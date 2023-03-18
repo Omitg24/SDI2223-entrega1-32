@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark"
      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
     <a class="navbar-brand" href="/">
-        <img alt="logo" src="/images/Logo.png" height="48"/>
+        <img alt="logo" height="48" src="/images/Logo.png"/>
     </a>
     <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
             data-target="#my-navbarColor02" data-toggle="collapse" type="button">
@@ -16,7 +16,8 @@
             <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN')">
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
                    href="#"
-                   id="userDropdown" role="button" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{msg.nav.user.title}">
+                   id="userDropdown" role="button" sec:authorize="hasRole('ROLE_ADMIN')"
+                   th:text="#{msg.nav.user.title}">
                 </a>
                 <div aria-labelledby="navbarDropdown" class="dropdown-menu">
                     <a class="dropdown-item" href="/user/list" th:text="#{msg.nav.user.list}"></a>
@@ -28,15 +29,19 @@
                    id="navbarDropdown" role="button" th:text="#{msg.nav.offer.title}">
                 </a>
                 <div aria-labelledby="navbarDropdown" class="dropdown-menu">
-                    <a class="dropdown-item" sec:authorize="hasRole('ROLE_USER')" href="/offer/add"
+                    <a class="dropdown-item" href="/offer/add" sec:authorize="hasRole('ROLE_USER')"
                        th:text="#{msg.nav.offer.add}"></a>
-                    <a class="dropdown-item" sec:authorize="hasRole('ROLE_USER')" href="/offer/ownedList" th:text="#{msg.nav.offer.ownnedList}"></a>
-                    <a class="dropdown-item" sec:authorize="hasRole('ROLE_USER')" href="/offer/purchasedList" th:text="#{msg.nav.offer.purchasedList}"></a>
-                    <a class="dropdown-item" sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" href="/offer/searchList" th:text="#{msg.nav.offer.searchList}"></a>
+                    <a class="dropdown-item" href="/offer/ownedList" sec:authorize="hasRole('ROLE_USER')"
+                       th:text="#{msg.nav.offer.ownnedList}"></a>
+                    <a class="dropdown-item" href="/offer/purchasedList" sec:authorize="hasRole('ROLE_USER')"
+                       th:text="#{msg.nav.offer.purchasedList}"></a>
+                    <a class="dropdown-item" href="/offer/searchList"
+                       sec:authorize="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" th:text="#{msg.nav.offer.searchList}"></a>
                 </div>
             </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="/conversation/list" th:text="#{msg.nav.conversation.title}"><span class="sr-only">(current)</span></a>
+            <li class="nav-item" sec:authorize="hasRole('ROLE_USER')">
+                <a class="nav-link" href="/conversation/list" th:text="#{msg.nav.conversation.title}"><span
+                        class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav justify-content-end">

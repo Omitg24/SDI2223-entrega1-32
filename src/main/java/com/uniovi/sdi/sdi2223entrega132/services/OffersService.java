@@ -1,11 +1,7 @@
 package com.uniovi.sdi.sdi2223entrega132.services;
 
-import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
-import com.uniovi.sdi.sdi2223entrega132.entities.Message;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
-import com.uniovi.sdi.sdi2223entrega132.repositories.ConversationRepository;
-import com.uniovi.sdi.sdi2223entrega132.repositories.MessageRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.OffersRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OffersService {
@@ -46,7 +41,7 @@ public class OffersService {
         offersRepository.save(offer);
     }
 
-    public Page<Offer> getOffersOfUser(Pageable pageable,User user) {
+    public Page<Offer> getOffersOfUser(Pageable pageable, User user) {
         return offersRepository.findAllByOwner(pageable, user);
     }
 
@@ -66,23 +61,23 @@ public class OffersService {
     }
 
 
-    public boolean validatePurchase(Long id){
+    public boolean validatePurchase(Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         Offer offer = offersRepository.findById(id).get();
-        User user =usersRepository.findByEmail(email);
-        if(user.getAmount() >= offer.getPrice()){
+        User user = usersRepository.findByEmail(email);
+        if (user.getAmount() >= offer.getPrice()) {
             return false;
         }
         return true;
     }
 
-    public boolean validateFeature(Long id){
+    public boolean validateFeature(Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         Offer offer = offersRepository.findById(id).get();
-        User user =usersRepository.findByEmail(email);
-        if(user.getAmount() >= 20){
+        User user = usersRepository.findByEmail(email);
+        if (user.getAmount() >= 20) {
             return false;
         }
         return true;
@@ -92,18 +87,18 @@ public class OffersService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         Offer offer = offersRepository.findById(id).get();
-        User user =usersRepository.findByEmail(email);
+        User user = usersRepository.findByEmail(email);
 
-        if(revised && !offer.isPurchase() && offer.getOwner().getEmail() != user.getEmail()) {
-            if(user.getAmount() >= offer.getPrice()){
+        if (revised && !offer.isPurchase() && offer.getOwner().getEmail() != user.getEmail()) {
+            if (user.getAmount() >= offer.getPrice()) {
                 //Se actualiza el comprador de la oferta
                 offer.setBuyer(user);
                 offer.setPurchase(true);
-                offersRepository.updateOffer(true,offer.getBuyer(),id);
+                offersRepository.updateOffer(true, offer.getBuyer(), id);
                 //Se le suma el dinero al vendedor
-                usersRepository.updateAmount(offer.buyer.getAmount()+ offer.getPrice(),offer.buyer.getId());
+                usersRepository.updateAmount(offer.buyer.getAmount() + offer.getPrice(), offer.buyer.getId());
                 //Se le resta el dinero al comprador
-                usersRepository.updateAmount(user.getAmount()- offer.getPrice(),user.getId());
+                usersRepository.updateAmount(user.getAmount() - offer.getPrice(), user.getId());
             }
         }
     }
@@ -112,14 +107,14 @@ public class OffersService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         Offer offer = offersRepository.findById(id).get();
-        User user =usersRepository.findByEmail(email);
+        User user = usersRepository.findByEmail(email);
 
-        if(revised && !offer.isFeatured() && offer.getOwner().getEmail() == user.getEmail()) {
-            if(user.getAmount() >= 20.0){
+        if (revised && !offer.isFeatured() && offer.getOwner().getEmail() == user.getEmail()) {
+            if (user.getAmount() >= 20.0) {
                 offer.setFeatured(true);
-                offersRepository.updateFeatured(true,id);
+                offersRepository.updateFeatured(true, id);
                 //Se le resta el dinero al propietario
-                usersRepository.updateAmount(user.getAmount()- 20.0,user.getId());
+                usersRepository.updateAmount(user.getAmount() - 20.0, user.getId());
             }
         }
     }

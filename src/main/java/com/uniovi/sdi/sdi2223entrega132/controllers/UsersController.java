@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.LinkedList;
-import java.util.List;
 
 @Controller
 public class UsersController {
@@ -84,13 +83,13 @@ public class UsersController {
     }
 
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
-    public String home(Model model,Pageable pageable) {
+    public String home(Model model, Pageable pageable) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        Page<Offer> offers = offersService.getOffersOfUser(pageable,activeUser);
+        Page<Offer> offers = offersService.getOffersOfUser(pageable, activeUser);
         model.addAttribute("offersList", offers.getContent());
-        model.addAttribute("page",offers);
+        model.addAttribute("page", offers);
         return "home";
     }
 
@@ -112,8 +111,8 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
-    public String deleteUsers(@RequestParam("users") Long[] users, HttpServletRequest request) {
-        for(Long id : users){
+    public String deleteUsers(@RequestParam("users") Long[] users) {
+        for (Long id : users) {
             usersService.deleteUser(id);
         }
         return "redirect:/user/list";

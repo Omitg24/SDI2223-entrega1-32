@@ -6,25 +6,22 @@ import java.util.Set;
 @Entity
 public class Conversation {
 
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
+    public Set<Message> messages;
     @Id
     @GeneratedValue
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "offer_id")
     private Offer offer;
-
     @ManyToOne
     @JoinColumn(name = "interested_id")
     private User interested;
 
-    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
-    public Set<Message> messages;
-
     public Conversation() {
     }
 
-    public Conversation(Offer offer,User interested, Set<Message> messages) {
+    public Conversation(Offer offer, User interested, Set<Message> messages) {
         this.offer = offer;
         this.interested = interested;
         this.messages = messages;

@@ -13,11 +13,12 @@
         <b th:inline="text" sec:authentication="principal.username"></b>
     </div>
     <div sec:authorize="hasRole('ROLE_USER')">
-        <div id="tableOwnedOffers" th:fragment="tableOwnedOffers" th:replace="fragments/ownedOffers"
-             style="text-align: left"></div>
+        <div id="tableOwnedOffers" style="text-align: left" th:fragment="tableOwnedOffers"
+             th:replace="fragments/ownedOffers">
+        </div>
+        <div th:replace="fragments/pagination"/>
     </div>
 </div>
-<div th:replace="fragments/pagination"/>
 <footer th:replace="fragments/footer"/>
 </body>
 </html>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -21,8 +22,8 @@ public class ConversationService {
     @Autowired
     private ConversationRepository conversationRepository;
 
-    public Optional<Conversation> getConversationOfUserAndOffer(User user, Offer offer){
-        return conversationRepository.findByUserAndOffer(user.getId(),offer.getId());
+    public Optional<Conversation> getConversationOfUserAndOffer(User user, Offer offer) {
+        return conversationRepository.findByUserAndOffer(user.getId(), offer.getId());
     }
 
     public void addConversationForOffer(Conversation c) {
@@ -34,7 +35,7 @@ public class ConversationService {
     }
 
     public Page<Conversation> getConversationOfUser(Pageable pageable, User user) {
-        return conversationRepository.findByUser(pageable,user);
+        return conversationRepository.findByUser(pageable, user);
     }
 
     public void deleteConversation(Long id) {

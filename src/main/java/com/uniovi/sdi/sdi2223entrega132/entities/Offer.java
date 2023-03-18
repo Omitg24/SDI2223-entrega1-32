@@ -1,5 +1,7 @@
 package com.uniovi.sdi.sdi2223entrega132.entities;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -15,7 +17,7 @@ public class Offer {
     public Date uploadDate;
     public double price;
     public boolean purchase;
-    public boolean featured=false;
+    public boolean featured = false;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     public User owner;
@@ -25,6 +27,9 @@ public class Offer {
 
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
     public Set<Conversation> conversations;
+
+    @Transient
+    public MultipartFile picture;
 
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
@@ -116,6 +121,14 @@ public class Offer {
 
     public void setFeatured(boolean featured) {
         this.featured = featured;
+    }
+
+    public MultipartFile getPicture() {
+        return picture;
+    }
+
+    public void setPicture(MultipartFile picture) {
+        this.picture = picture;
     }
 
     @Override

@@ -36,7 +36,6 @@ public interface OffersRepository extends CrudRepository<Offer, Long> {
     void updateFeatured(Boolean featured, Long id);
 
 
-
     @Query("SELECT o from Offer o WHERE o.buyer = ?1 ORDER BY o.uploadDate DESC")
     List<Offer> findAllByBuyer(User user);
 

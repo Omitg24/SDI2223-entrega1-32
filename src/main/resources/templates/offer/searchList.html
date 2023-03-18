@@ -10,7 +10,7 @@
         <div class="input-group">
             <div class="form-outline">
                 <input class="form-control" name="searchText" placeholder="Buscar por título de la oferta"
-                       type="text" size="20">
+                       size="20" type="text">
             </div>
             <button class="btn btn-secondary" type="submit">
                 <i class="fa fa-search"></i>
@@ -24,7 +24,7 @@
     <div class="card-deck" id="tableSearchedOffers" th:fragment="tableSearchedOffers">
         <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
              th:each="offer : ${offersList}">
-            <img th:src="@{/images/offer_image.png}" class="card-img-top"/>
+            <img class="card-img-top" th:if="${'!offer.picture.isEmpty'}" width="256" height="256" th:src="${'/pictures/' + offer.id + '.png'}"/>
             <div class="card-body">
                 <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
                 <h6 class="card-subtitle" th:text="${offer.title}"></h6>
@@ -56,9 +56,9 @@
                             /*]]>*/
                         </script>
                     </div>
-                    <a th:if="${offer.owner.email!=#authentication.principal.username}"
-                       th:href="${'/conversation/' + offer.id+'/'+ interestedUser.id}">
-                        <button class="btn btn-info" type="button" th:text="#{msg.conversation.start}"></button>
+                    <a th:href="${'/conversation/' + offer.id+'/'+ interestedUser.id}"
+                       th:if="${offer.owner.email!=#authentication.principal.username}">
+                        <button class="btn btn-info" th:text="#{msg.conversation.start}" type="button"></button>
                     </a>
                 </div>
             </div>

@@ -68,6 +68,10 @@ public class Message {
         return conversation;
     }
 
+    public void setConversation(Conversation conversation) {
+        this.conversation = conversation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,9 +83,5 @@ public class Message {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public void setConversation(Conversation conversation) {
-        this.conversation = conversation;
     }
 }

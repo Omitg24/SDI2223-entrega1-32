@@ -8,11 +8,12 @@
 <div class="container">
     <h2 th:text="#{msg.offer.add.header}"></h2>
     <form action="/offer/add" class="form-horizontal" method="post"
-          th:object="${offer}">
+          th:object="${offer}" enctype="multipart/form-data">
         <div class="form-group">
             <label class="control-label col-sm-2" for="title" th:text="#{msg.offer.title}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="title" name="title" th:value="${offer.title}" th:placeholder="#{msg.offer.add.title}"
+                <input class="form-control" id="title" name="title" th:placeholder="#{msg.offer.add.title}"
+                       th:value="${offer.title}"
                        type="text"/>
                 <span
                         class="text-danger" th:errors="*{title}"
@@ -20,10 +21,17 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="control-label col-sm-2" for="picture" th:text="#{msg.offer.picture}"></label>
+            <div class="col-sm-10">
+                <input accept=".png,.jpg,.jpeg,.gif" class="form-control-file" id="picture" name="picture" type="file"/>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-sm-2" for="description" th:text="#{msg.offer.desc}"></label>
             <div class="col-sm-10">
 					<textarea class="form-control" cols="50" id="description" name="description"
-                              rows="10" th:placeholder="#{msg.offer.add.desc}" th:value="${offer.description}"/></textarea>
+                              rows="10" th:placeholder="#{msg.offer.add.desc}"
+                              th:value="${offer.description}"/></textarea>
                 <span class="text-danger"
                       th:errors="*{description}"
                       th:if="${#fields.hasErrors('description')}"/>
@@ -32,7 +40,8 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="price" th:text="#{msg.offer.price}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="price" name="price" step="0.01" type="number" th:value="${offer.price}"/>
+                <input class="form-control" id="price" name="price" step="0.01" th:value="${offer.price}"
+                       type="number"/>
                 <span class="text-danger"
                       th:errors="*{price}" th:if="${#fields.hasErrors('price')}"/>
             </div>
@@ -40,7 +49,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="price" th:text="#{msg.offer.feature}"></label>
             <div class="col-sm-10">
-                <input class="form-control" id="featured" name="featured" type="checkbox"/>
+                <input class="form-control cb" id="featured" name="featured" type="checkbox"/>
                 <span class="text-danger"
                       th:errors="*{featured}" th:if="${#fields.hasErrors('featured')}"/>
             </div>

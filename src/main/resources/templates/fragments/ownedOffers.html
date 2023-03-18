@@ -3,8 +3,8 @@
     <p th:text="#{msg.offer.ownlist.text}"></p>
     <div class="card-deck">
         <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
-             th:each="offer : ${offersList}" >
-            <img th:src="@{/images/offer_image.png}" class="card-img-top"/>
+             th:each="offer : ${offersList}">
+            <img class="card-img-top" th:if="${'!offer.picture.isEmpty'}" width="256" height="256" th:src="${'/pictures/' + offer.id + '.png'}"/>
             <div class="card-body">
                 <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
                 <h6 class="card-subtitle" th:text="${offer.title}"></h6>

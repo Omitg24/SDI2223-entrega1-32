@@ -14,15 +14,17 @@
 |  David Leszek Warzynski Abril | UO278968@uniovi.es |
 
 ## Descripción del proyecto:
+
 <p align="justify">
 Este proyecto forma parte de la entrega 1 de la asignatura de Sistemas Distribuidos e Intenet (SDI), se basa en la app de compra-venta de Wallapop, dando una simulación de interacción entre usuarios a través de las ofertas que se suban o las conversaciones que se lleven a cabo entre usuarios.
 </p>
 
-## Asignación de tareas:	
+## Asignación de tareas:
+
 Los HTMLs se harán entre todos los miembros del equipo.
 
-  ### Requisitos obligatorios:  
-  
+### Requisitos obligatorios:
+
     - Puntos a realizar en común:
       14. Internacionalización de vistas. (0.5 puntos)				
       15. Vulnerabilidad de recursas y acciones. (1.0 puntos)
@@ -50,8 +52,8 @@ Los HTMLs se harán entre todos los miembros del equipo.
       8. Dar de baja una oferta propia (0.5 puntos).
       9. Buscar ofertas por diferentes campos. (0.5 puntos)
 
-  ### Requisitos opcionales:
-  
+### Requisitos opcionales:
+
     - Álvaro Davila Sampedro, UO284548: 
       18. Marcar una oferta como destacada (1.0 puntos).
       

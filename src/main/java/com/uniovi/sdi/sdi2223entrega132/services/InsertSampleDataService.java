@@ -119,11 +119,11 @@ public class InsertSampleDataService {
         usersService.addUser(user15);
         users.add(user15);
 
-        for(int i =0;i<140;i++) {
+        for (int i = 0; i < 140; i++) {
             int userIndex = i % 5;
             User user = users.get(userIndex);
-            offersService.addOffer(new Offer("Producto "+i,
-                    "Descripción del producto "+i,new Date(),69.69,user));
+            offersService.addOffer(new Offer("Producto " + i,
+                    "Descripción del producto " + i, new Date(), 69.69, user));
         }
     }
 }

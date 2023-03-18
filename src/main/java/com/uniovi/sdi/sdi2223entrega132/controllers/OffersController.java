@@ -1,7 +1,5 @@
 package com.uniovi.sdi.sdi2223entrega132.controllers;
 
-import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
-import com.uniovi.sdi.sdi2223entrega132.entities.Message;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import com.uniovi.sdi.sdi2223entrega132.services.OffersService;
@@ -11,17 +9,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Optional;
 
 @Controller
 public class OffersController {
@@ -40,14 +43,14 @@ public class OffersController {
 
     /**
      * Método para obtener la vista de las ofertas que pueden ser compradas
-     * @param model modelo
-     * @param pageable pagina
+     *
+     * @param model      modelo
+     * @param pageable   pagina
      * @param searchText texto de busqueda
      * @return vista de las ofertas
      */
     @RequestMapping(value = "/offer/searchList", method = RequestMethod.GET)
-    public String getSearchList(Model model, Pageable pageable,Principal principal,
-                               @RequestParam(value = "", required = false) String searchText) {
+    public String getSearchList(Model model, Pageable pageable, Principal principal, @RequestParam(value = "", required = false) String searchText) {
         String email = principal.getName();
         User interestedUser = usersService.getUserByEmail(email);
         Page<Offer> offers = new PageImpl<Offer>(new LinkedList<Offer>());
@@ -58,11 +61,11 @@ public class OffersController {
         } else {
             offers = offersService.getAvailableOffers(pageable);
         }
-        model.addAttribute("interestedUser",interestedUser);
+        model.addAttribute("interestedUser", interestedUser);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
-        model.addAttribute("buyError",invalidBuy);
-        invalidBuy=false;
+        model.addAttribute("buyError", invalidBuy);
+        invalidBuy = false;
         return "offer/searchList";
     }
 
@@ -75,36 +78,38 @@ public class OffersController {
         offers = offersService.getAvailableOffers(pageable);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
-        model.addAttribute("interestedUser",interestedUser);
-        model.addAttribute("buyError",invalidBuy);
-        invalidBuy=false;
+        model.addAttribute("interestedUser", interestedUser);
+        model.addAttribute("buyError", invalidBuy);
+        invalidBuy = false;
         return "offer/searchList :: tableSearchedOffers";
     }
 
     /**
      * Método para obtener la vista de las ofertas propias del usuario
-     * @param model modelo
-     * @param pageable pagina
+     *
+     * @param model     modelo
+     * @param pageable  pagina
      * @param principal objeto para obtener los datos del usuario autenticado
      * @return vista de las ofertas propias
      */
     @RequestMapping(value = "/offer/ownedList", method = RequestMethod.GET)
-    public String getOwnedList(Model model,Pageable pageable, Principal principal) {
+    public String getOwnedList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Offer> offers = offersService.getOffersOfUser(pageable,user);
-        model.addAttribute("offersList",offers.getContent());
+        Page<Offer> offers = offersService.getOffersOfUser(pageable, user);
+        model.addAttribute("offersList", offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
-        model.addAttribute("featureError",invalidFeature);
-        invalidFeature=false;
+        model.addAttribute("featureError", invalidFeature);
+        invalidFeature = false;
         model.addAttribute("page", offers);
         return "offer/ownedList";
     }
 
     /**
      * Método para actualizar la lista de ofertas propias
-     * @param model modelo
-     * @param pageable pagina
+     *
+     * @param model     modelo
+     * @param pageable  pagina
      * @param principal objeto para obtener los datos del usuario autenticado
      * @return fragmento de las ofertas propias actualizado
      */
@@ -112,16 +117,17 @@ public class OffersController {
     public String updateOwnedList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
-        Page<Offer> offers = offersService.getOffersOfUser(pageable,user);
+        Page<Offer> offers = offersService.getOffersOfUser(pageable, user);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
-        model.addAttribute("featureError",invalidFeature);
-        invalidFeature=false;
+        model.addAttribute("featureError", invalidFeature);
+        invalidFeature = false;
         return "offer/ownedList :: tableOwnedOffers";
     }
 
     /**
      * Método para obtener la vista de añadir ofertas
+     *
      * @param model modelo
      * @return vista del formulario de añadir ofertas
      */
@@ -133,23 +139,32 @@ public class OffersController {
 
     /**
      * Méetodo encargado de validar los datos de la oferta y crearla
-     * @param offer datos oferta
+     *
+     * @param offer     datos oferta
      * @param principal principal
-     * @param result result
+     * @param result    result
      * @return vista de las ofertas si se añade o del formulario en caso de error
      */
-    @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/offer/add", method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
+        String email = principal.getName();
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         addOfferFormValidator.validate(offer, result);
         if (result.hasErrors()) {
             return "offer/add";
         }
-        String email = principal.getName();
         offer.setUploadDate(new Date());
-        offer.setPurchase(true);
-        User owner = usersService.getUserByEmail(email);
-        offer.setOwner(owner);
         offersService.addOffer(offer);
+        if (!offer.getPicture().isEmpty()) {
+            try {
+                InputStream is = offer.getPicture().getInputStream();
+                Files.copy(is, Paths.get("src/main/resources/static/pictures/" + offer.getId() + ".png"), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            offersService.addOffer(offer);
+        }
         return "redirect:/offer/ownedList";
     }
 
@@ -160,9 +175,9 @@ public class OffersController {
     }
 
     @RequestMapping(value = "/offer/{id}/purchase", method = RequestMethod.GET)
-    public String setPurchaseTrue(@PathVariable Long id,Model model) {
-        invalidBuy=offersService.validatePurchase(id);
-        if(!invalidBuy){
+    public String setPurchaseTrue(@PathVariable Long id, Model model) {
+        invalidBuy = offersService.validatePurchase(id);
+        if (!invalidBuy) {
             offersService.setOfferPurchase(true, id);
         }
         return "offer/searchList :: tableSearchedOffers";
@@ -170,8 +185,8 @@ public class OffersController {
 
     @RequestMapping(value = "/offer/{id}/feature", method = RequestMethod.GET)
     public String setFeatureTrue(@PathVariable Long id) {
-        invalidFeature=offersService.validateFeature(id);
-        if(!invalidFeature){
+        invalidFeature = offersService.validateFeature(id);
+        if (!invalidFeature) {
             offersService.setOfferFeature(true, id);
         }
         return "offer/ownedList :: tableOwnedOffers";
@@ -184,5 +199,4 @@ public class OffersController {
         model.addAttribute("offersList", offersService.getOffersOfBuyer(user));
         return "offer/purchasedList";
     }
-
 }
