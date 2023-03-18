@@ -122,8 +122,16 @@ public class InsertSampleDataService {
         for(int i =0;i<140;i++) {
             int userIndex = i % 5;
             User user = users.get(userIndex);
-            offersService.addOffer(new Offer("Producto "+i,
-                    "Descripción del producto "+i,new Date(),69.69,user));
+            if(i==130) {
+                offersService.addOffer(new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), 100.00, user));
+            }if(i==25){
+                offersService.addOffer(new Offer("Producto "+i,
+                        "Descripción del producto "+i,new Date(),1000.00,user));
+            }else{
+                offersService.addOffer(new Offer("Producto "+i,
+                        "Descripción del producto "+i,new Date(),69.69,user));
+            }
         }
     }
 }

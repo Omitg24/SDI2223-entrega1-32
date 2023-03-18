@@ -58,6 +58,7 @@ public class OffersController {
         } else {
             offers = offersService.getAvailableOffers(pageable);
         }
+        model.addAttribute("amount",interestedUser.getAmount());
         model.addAttribute("interestedUser",interestedUser);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
@@ -76,6 +77,7 @@ public class OffersController {
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
         model.addAttribute("interestedUser",interestedUser);
+        model.addAttribute("amount",interestedUser.getAmount());
         model.addAttribute("buyError",invalidBuy);
         invalidBuy=false;
         return "offer/searchList :: tableSearchedOffers";

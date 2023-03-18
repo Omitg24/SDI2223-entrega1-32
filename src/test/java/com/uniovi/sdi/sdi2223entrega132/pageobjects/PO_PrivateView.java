@@ -95,4 +95,6 @@ public class PO_PrivateView extends PO_NavView {
         elements = PO_View.checkElementBy(driver, "free", "//*[@id=\"searchTextForm\"]/div/button");
         elements.get(0).click();
     }
+
+
 }

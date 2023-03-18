@@ -17,10 +17,10 @@
             </button>
         </div>
     </form>
-    <h4>Saldo:
-        <span class="badge badge-secondary" th:text="${interestedUser.amount}"></span>
-    </h4>
     <div class="container" id="tableSearchedOffers" th:fragment="tableSearchedOffers">
+        <h4>Saldo:
+            <span class="badge badge-secondary" th:text="${amount}"></span>
+        </h4>
     <div class="alert alert-danger" role="alert" th:if="${buyError}" th:text="#{error.amount}"></div>
     <div class="card-deck">
 
