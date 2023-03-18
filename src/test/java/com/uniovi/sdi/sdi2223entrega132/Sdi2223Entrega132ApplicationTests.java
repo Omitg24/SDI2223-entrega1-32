@@ -23,7 +23,7 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class Sdi2223Entrega132ApplicationTests {
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-    static String Geckodriver = "geckodriver-v0.30.0-win64.exe";
+    static String Geckodriver = "C:\\Users\\Usuario\\Desktop\\SDI\\geckodriver-v0.30.0-win64.exe";
     static String URL = "http://localhost:8090";
     @Autowired
     private UsersRepository usersRepository;
@@ -984,9 +984,9 @@ class Sdi2223Entrega132ApplicationTests {
 
         // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
         // del usuario
-        //PO_PrivateView.checkElement(driver, "Prueba37");
-        //PO_PrivateView.checkElement(driver, "PruebaDescripcion37");
-        //PO_PrivateView.checkElement(driver, "0.37 EUR");
+        PO_PrivateView.checkElement(driver, "Prueba37");
+        PO_PrivateView.checkElement(driver, "PruebaDescripcion37");
+        PO_PrivateView.checkElement(driver, "0.37 EUR");
 
         List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
         double result = Double.parseDouble(elements.get(0).getText());
@@ -1018,10 +1018,9 @@ class Sdi2223Entrega132ApplicationTests {
         elements.get(0).click();
 
         //Comprobamos que está en el listado de destacadas
-        //Destacamos la oferta
-        //elements=PO_View.checkElementBy(driver, "free", "//td[contains(text(), 'Producto 0')]");
-        //Assertions.assertEquals("Producto 0", elements.get(0).getText());
-
+        elements = PO_View.checkElementBy(driver, "free", "//h6[contains(@id, 'titleFeatured')]");
+        String aux=elements.get(0).getText();
+        Assertions.assertEquals(aux, "Producto 0");
         //Comprobamos si se actualizo el saldo
         elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
         double result = Double.parseDouble(elements.get(0).getText());

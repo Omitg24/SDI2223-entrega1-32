@@ -10,8 +10,8 @@
                 <img class="card-img-top" height="256" th:src="${'/pictures/' + offer.id + '.png'}" width="256"/>
             </div>
             <div class="card-body">
-                <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
-                <h6 class="card-subtitle" th:text="${offer.title}"></h6>
+                <h5 class="card-title"  th:text="${offer.price + ' EUR'}"></h5>
+                <h6 class="card-subtitle" id="titleFeatured" th:text="${offer.title}"></h6>
                 <p class="card-text" th:text="${offer.description}"></p>
             </div>
         </div>
