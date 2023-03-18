@@ -36,12 +36,16 @@ public class LogInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        extracted(request);
+    }
+
+    private void extracted(HttpServletRequest request) {
         String requestUrl = request.getRequestURI();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(requestUrl.contains("login")){
             if(requestUrl.contains("error")){
-                loggerService.log(LogMessage.Action.LOGIN_ERR, "Log in error for username: " + ((UsernamePasswordAuthenticationToken) auth).getPrincipal().toString());
+                loggerService.log(LogMessage.Action.LOGIN_ERR, "Log in error for username: " + auth.getName());
             }else{
                 loggerService.log(LogMessage.Action.LOGIN_EX, "User: " +  auth.getName() + " logged in");
             }

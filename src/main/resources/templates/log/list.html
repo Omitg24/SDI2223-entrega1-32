@@ -5,10 +5,10 @@
 <nav th:replace="fragments/nav"/>
 <div class="container">
     <h2 th:text="#{msg.log.title}"></h2>
-    <form action="/log/list" class="form-inline">
+    <form action="/log" class="form-inline">
         <div class="form-group">
             <input class="form-control" name="searchText"
-                   th:placeholder="#{msg.palceholder.log.search}" size="50" type="text">
+                   th:placeholder="#{msg.placeholder.log.search}" size="50" type="text">
         </div>
         <button class="btn btn-dark" type="submit" th:text="#{msg.searchbtn}"></button>
     </form>
@@ -18,6 +18,7 @@
             $("#tableLogs").load('/log/update');
         });
     </script>
+    <a th:href="${'/log/delete'}" ><button class="btn btn-dark" th:text="#{msg.log.delete}"></button></a>
     <div class="table-responsive">
         <table class="table table-hover" id="tableLogs" th:fragment="tableLogs">
             <thead>

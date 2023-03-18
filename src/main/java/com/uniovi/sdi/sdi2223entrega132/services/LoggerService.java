@@ -24,4 +24,11 @@ public class LoggerService {
         return loggerRepository.findAllOrdered();
     }
 
+    public List<LogMessage> searchLogsByType(String searchText) {
+        return loggerRepository.findAllByType(searchText);
+    }
+
+    public void deleteLogs() {
+        loggerRepository.deleteAll();
+    }
 }
