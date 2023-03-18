@@ -1,7 +1,7 @@
 package com.uniovi.sdi.sdi2223entrega132.entities;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Conversation {
@@ -19,12 +19,12 @@ public class Conversation {
     private User interested;
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
-    public Set<Message> messages;
+    public List<Message> messages;
 
     public Conversation() {
     }
 
-    public Conversation(Offer offer,User interested, Set<Message> messages) {
+    public Conversation(Offer offer,User interested, List<Message> messages) {
         this.offer = offer;
         this.interested = interested;
         this.messages = messages;
@@ -54,11 +54,11 @@ public class Conversation {
         this.offer = offer;
     }
 
-    public Set<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(Set<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 }

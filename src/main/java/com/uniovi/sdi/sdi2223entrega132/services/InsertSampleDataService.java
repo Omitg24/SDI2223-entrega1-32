@@ -14,10 +14,14 @@ import java.util.List;
 public class InsertSampleDataService {
     @Autowired
     private UsersService usersService;
+
     @Autowired
     private OffersService offersService;
     @Autowired
     private RolesService rolesService;
+
+    @Autowired
+    private ConversationService conversationService;
 
     @PostConstruct
     public void init() {

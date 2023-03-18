@@ -4,24 +4,16 @@
         <span class="badge badge-secondary" th:text="${amount}"></span>
     </h3>
     <h3 th:text="#{msg.offer.ownlist.featured}"></h3>
-    <div class="table-responsive">
-        <table class="table table-hover" id="tableFeaturedOffers">
-            <thead>
-            <tr>
-                <th th:text="#{msg.offer.ownlist.title}"></th>
-                <th th:text="#{msg.offer.ownlist.desc}"></th>
-                <th th:text="#{msg.offer.ownlist.price}"></th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="offer : ${featuredList}">
-                <td th:text="${offer.title}"></td>
-                <td th:text="${offer.description}"></td>
-                <td th:text="${offer.price}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="card-deck">
+        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
+             th:each="offer : ${featuredList}" >
+            <img th:src="@{/images/offer_image.png}" class="card-img-top"/>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
+                <h6 class="card-subtitle" th:text="${offer.title}"></h6>
+                <p class="card-text" th:text="${offer.description}"></p>
+            </div>
+        </div>
     </div>
     <div th:if="${#lists.isEmpty(featuredList)}" th:text="#{msg.offer.ownlist.nofeatured}"></div>
 

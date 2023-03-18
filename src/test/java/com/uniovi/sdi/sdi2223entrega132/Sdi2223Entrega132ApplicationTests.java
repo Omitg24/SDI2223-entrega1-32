@@ -1,22 +1,21 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
+import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
+import com.uniovi.sdi.sdi2223entrega132.repositories.OffersRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
-import jdk.jfr.Timespan;
-import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest
@@ -24,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 class Sdi2223Entrega132ApplicationTests {
     @Autowired
     private UsersRepository usersRepository;
+    @Autowired
+    private OffersRepository offersRepository;
     @Autowired
     private InsertSampleDataService insertSampleDataService;
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
@@ -42,8 +43,11 @@ class Sdi2223Entrega132ApplicationTests {
     @BeforeEach
     public void setUp() {
         driver.navigate().to(URL);
-        usersRepository.deleteAll();
+    }
 
+    private void reiniciarDatos(){
+        usersRepository.deleteAll();
+        offersRepository.deleteAll();
         // Metemos otra vez los datos iniciales de prueba
         insertSampleDataService.init();
     }
@@ -80,9 +84,10 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_SignUpView.fillForm(driver, "uo123456@uniovi.es", "Adrián", "García Fernández", "123456", "123456");
         //Comprobamos que entramos en la sección privada y nos nuestra el texto a buscar
-        String checkText = "Listado de ofertas propias";
+        String checkText = "¡Bienvenido a UrWalletPop!";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
+        reiniciarDatos();
     }
 
     /**
@@ -175,7 +180,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
         //Comprobamos que entramos en la sección de listado de ofertas propias
-        String checkText = "Listado de ofertas propias";
+        String checkText = "¡Bienvenido a UrWalletPop!";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
@@ -295,18 +300,17 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.login(driver, "admin@email.com", "admin");
         //Contamos el número de filas de usuarios
         List<WebElement> userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
-        Assertions.assertEquals(4, userList.size());
+        Assertions.assertEquals(5, userList.size());
         WebElement firstCheckbox = driver.findElement(By.xpath("//input[@type='checkbox'][1]"));
         firstCheckbox.click();
         userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
-        Assertions.assertEquals(4, userList.size());
+        Assertions.assertEquals(5, userList.size());
         List<WebElement> submitButtons = driver.findElements(By.xpath("//button[@type='submit']"));
         submitButtons.get(1).click();
         userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
-        Assertions.assertEquals(3, userList.size());
+        Assertions.assertEquals(4, userList.size());
         PO_PrivateView.logout(driver);
     }
-
     /**
      * PR15. Añadir una nueva oferta y comprobar que se muestra en la vista.
      * Realizada por: David
@@ -333,6 +337,7 @@ class Sdi2223Entrega132ApplicationTests {
 
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
@@ -415,6 +420,7 @@ class Sdi2223Entrega132ApplicationTests {
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 3", PO_View.getTimeout());
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
@@ -439,6 +445,7 @@ class Sdi2223Entrega132ApplicationTests {
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 138", PO_View.getTimeout());
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
@@ -614,6 +621,107 @@ class Sdi2223Entrega132ApplicationTests {
         //Cierro sesion
         PO_PrivateView.logout(driver);
     }
+    
+    @Test
+    @Order(26)
+    public void PR26(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "jincho@email.com", "jincho");
+        //Obtenemos el numero de dropdowns
+        List<WebElement> dropdownButtons = driver.findElements(By.xpath("//li[@class='nav-item dropdown']"));
+        Assertions.assertEquals(2, dropdownButtons.size());
+        dropdownButtons.get(0).click();
+        PO_PrivateView.checkViewAndClick(driver,"class","dropdown-item",3);
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getSPANISH()));
+        WebElement searchText = driver.findElement(By.xpath("//input[@class='form-control']"));
+        searchText.click();
+        searchText.clear();
+        searchText.sendKeys("Playeros");
+        searchText.sendKeys(Keys.ENTER);
+
+        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "class", "card-body",6);
+        Assertions.assertEquals(1, cards.size());
+
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",1);
+
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
+
+        WebElement messageInput = driver.findElement(By.xpath("//input[@class='form-control']"));
+
+        messageInput.click();
+        messageInput.clear();
+        messageInput.sendKeys("Hola");
+
+        WebElement sendButton = driver.findElement(By.xpath("//button[@type='submit']"));
+
+        sendButton.click();
+
+        List<WebElement> messages = driver.findElements(By.xpath("//p[@class='small p-2 me-3 mb-3 text-white rounded-3 bg-dark']"));
+
+        Assertions.assertEquals(1,messages.size());
+
+        PO_PrivateView.logout(driver);
+    }
+
+    @Test
+    @Order(27)
+    public void PR27(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "pepe@email.com", "pepe");
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+
+        List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
+
+        conversationLinks.get(0).click();
+
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+
+        PO_PrivateView.checkElement(driver,"Cartera");
+
+        conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
+
+        conversationLinks.get(1).click();
+
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
+
+        WebElement messageInput = driver.findElement(By.xpath("//input[@class='form-control']"));
+
+        messageInput.click();
+        messageInput.clear();
+        messageInput.sendKeys("Hola");
+
+        WebElement sendButton = driver.findElement(By.xpath("//button[@type='submit']"));
+
+        sendButton.click();
+
+        List<WebElement> messages = driver.findElements(By.xpath("//p[@class='small p-2 me-3 mb-3 text-white rounded-3 bg-dark']"));
+
+        Assertions.assertEquals(messages.get(0).getText(),"Hola");
+
+        Assertions.assertEquals(1,messages.size());
+
+        PO_PrivateView.logout(driver);
+    }
+
+    @Test
+    @Order(28)
+    public void PR28(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "pepe@email.com", "pepe");
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
+
+        List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
+
+        conversationLinks.get(0).click();
+
+        PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
+
+        PO_PrivateView.checkElement(driver,"Cartera");
+
+        List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
+
+        Assertions.assertEquals(1,tableRows.size());
+    }
 
     /**
      * PR37. Al crear una oferta, marcar dicha oferta como destacada y a continuación comprobar:
@@ -712,7 +820,6 @@ class Sdi2223Entrega132ApplicationTests {
         // Hacemos logout
         PO_PrivateView.logout(driver);
     }
-
     
 }
 
