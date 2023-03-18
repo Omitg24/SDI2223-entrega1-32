@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -612,7 +613,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(22)
-    public void PR022() {
+    public void PR22() {
         //Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user13@email.com", "user13");
         //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
@@ -641,7 +642,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(23)
-    public void PR023() {
+    public void PR23() {
         //Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user11@email.com", "user11");
         //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
@@ -670,7 +671,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(24)
-    public void PR024() {
+    public void PR24() {
         //Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user13@email.com", "user13");
         //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
@@ -698,7 +699,7 @@ class Sdi2223Entrega132ApplicationTests {
      */
     @Test
     @Order(25)
-    public void PR025() {
+    public void PR25() {
         //Iniciamos sesión como usuario estandar
         PO_PrivateView.login(driver, "user12@email.com", "user12");
         //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
@@ -869,6 +870,7 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(result,80.00);
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
@@ -933,6 +935,72 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(checkText, result.get(0).getText());
         // Hacemos logout
         PO_PrivateView.logout(driver);
+    }
+
+    /**
+     * PR40. Desde el formulario de dar de alta ofertas, crear una oferta con datos válidos y una imagen
+     * adjunta. Comprobar que en el listado de ofertas propias aparece la imagen adjunta junto al resto de datos
+     * de la oferta.
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(40)
+    public void PR40(){
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user15@email.com", "user15");
+
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/add')]", 0);
+
+        // Rellenamos el formulario de alta de oferta con datos validos, en este adjuntamos una imagen
+        String absolutePath = FileSystems.getDefault().getPath("src\\test\\java\\rtx4080.png").normalize().toAbsolutePath().toString();;
+        PO_PrivateView.fillFormAddOffer(driver, "PruebaTitulo", absolutePath, "PruebaDescripcion", "0.21");
+
+        // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
+        // del usuario
+        PO_PrivateView.checkElement(driver, "PruebaTitulo");
+        // Obtenemos el elemento que contiene la imagen
+        List<WebElement> image = driver.findElements(By.xpath("//div[contains(@class, 'card-img-top')]"));
+        PO_PrivateView.checkElement(driver, "PruebaDescripcion");
+        PO_PrivateView.checkElement(driver, "0.21 EUR");
+
+        // Comprobamos que no está vacío
+        Assertions.assertFalse(image.isEmpty());
+        // Hacemos logout
+        PO_PrivateView.logout(driver);
+        reiniciarDatos();
+    }
+
+    /**
+     * PR41. Crear una oferta con datos válidos y sin una imagen adjunta. Comprobar que la oferta se ha
+     * creado con éxito, ya que la imagen no es obligatoria
+     * Realizada por: Omar
+     */
+    @Test
+    @Order(41)
+    public void PR41(){
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user15@email.com", "user15");
+
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/add')]", 0);
+
+        // Rellenamos el formulario de alta de oferta con datos validos
+        PO_PrivateView.fillFormAddOffer(driver, "PruebaTitulo", "PruebaDescripcion", "0.21");
+
+        // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
+        // del usuario
+        PO_PrivateView.checkElement(driver, "PruebaTitulo");
+        PO_PrivateView.checkElement(driver, "PruebaDescripcion");
+        PO_PrivateView.checkElement(driver, "0.21 EUR");
+
+        // Hacemos logout
+        PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
 }
