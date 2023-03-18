@@ -1,11 +1,13 @@
 package com.uniovi.sdi.sdi2223entrega132.services;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -128,6 +130,12 @@ public class InsertSampleDataService {
         for(int i =0;i<140;i++) {
             int userIndex = i % 5;
             User user = users.get(userIndex);
+            if(i==139 || i==120){
+                Offer offer = new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), 100.00, user);
+                offersService.addOffer(offer);
+                conversationService.addConversationForOffer(new Conversation(offer,user05,new ArrayList<>()));
+            }
             if(i==130) {
                 offersService.addOffer(new Offer("Producto " + i,
                         "Descripción del producto " + i, new Date(), 100.00, user));
