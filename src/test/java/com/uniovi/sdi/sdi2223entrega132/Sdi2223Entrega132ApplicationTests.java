@@ -751,7 +751,8 @@ class Sdi2223Entrega132ApplicationTests {
         //Confirmamos la busqueda
         searchText.sendKeys(Keys.ENTER);
         //Obtenemos los resultados de la busqueda (esperamos ya que a veces puede continuar la ejecucion antes de que se actualice)
-        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "class", "card-body", 10);
+        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "free",
+                "//div[contains(@class, 'card border-dark mb-3')]", PO_View.getTimeout());
         //Comprobamos que solo hay un producto
         Assertions.assertEquals(1, cards.size());
         //Seleccionamos la opcion para establecer una conversacion
