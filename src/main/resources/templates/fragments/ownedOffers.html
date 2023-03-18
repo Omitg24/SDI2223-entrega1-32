@@ -1,4 +1,8 @@
 <div class="container" th:fragment="tableOwnedOffers" id="ownedOffers">
+    <h2 th:text="#{msg.offer.ownlist.headtitle}"></h2>
+    <h3>Saldo:
+        <span class="badge badge-secondary" th:text="${amount}"></span>
+    </h3>
     <h3 th:text="#{msg.offer.ownlist.featured}"></h3>
     <div class="card-deck">
         <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "

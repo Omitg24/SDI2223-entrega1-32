@@ -5,6 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class PO_LoginView extends PO_NavView {
+    /**
+     * Método que rellena el formulario de logging
+     *
+     * @param driver    driver
+     * @param usernamep usuario
+     * @param passwordp contraseña del usuario
+     */
     static public void fillLoginForm(WebDriver driver, String usernamep, String passwordp) {
         WebElement username = driver.findElement(By.name("username"));
         username.click();

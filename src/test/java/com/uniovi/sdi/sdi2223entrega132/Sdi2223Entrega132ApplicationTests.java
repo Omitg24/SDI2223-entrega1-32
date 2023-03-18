@@ -1,12 +1,9 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
-import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
-import com.uniovi.sdi.sdi2223entrega132.repositories.ConversationRepository;
+import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 import com.uniovi.sdi.sdi2223entrega132.repositories.OffersRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
-import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
-import jdk.jfr.Timespan;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -16,11 +13,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest
@@ -610,6 +605,122 @@ class Sdi2223Entrega132ApplicationTests {
     }
 
     /**
+     * PR22. Sobre una búsqueda determinada (a elección del desarrollador),
+     * comprar una oferta que deja un saldo positivo en el contador del comprador.
+     * Comprobar que el contador se actualiza correctamente en la vista del comprador.
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(22)
+    public void PR022() {
+        //Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user13@email.com", "user13");
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
+        //Hacemos una busqueda
+        PO_PrivateView.makeSearch(driver,"117");
+        //Compramos la oferta
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
+        elements.get(0).click();
+        //Lo comparamos con el precio restado
+        elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
+        double result= Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result,30.31);
+
+        //Cierro sesion
+        PO_PrivateView.logout(driver);
+    }
+
+    /**
+     * PR23. Sobre una búsqueda determinada (a elección del desarrollador),
+     * comprar una oferta que deja un saldo 0 en el contador del comprador.
+     * Comprobar que el contador se actualiza correctamente en la vista del comprador.
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(23)
+    public void PR023() {
+        //Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user11@email.com", "user11");
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
+        //Hacemos una busqueda
+        PO_PrivateView.makeSearch(driver,"130");
+        //Compramos la oferta
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
+        elements.get(0).click();
+        //Lo comparamos con el precio restado
+        elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
+        double result= Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result,0.00);
+
+        //Cierro sesion
+        PO_PrivateView.logout(driver);
+    }
+
+    /**
+     * PR24. Sobre una búsqueda determinada (a elección del desarrollador),
+     * intentar comprar una oferta que esté por encima de saldo disponible del comprador.
+     * Y comprobar que se muestra el mensaje de saldo no suficiente
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(24)
+    public void PR024() {
+        //Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user13@email.com", "user13");
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
+        //Hacemos una busqueda
+        PO_PrivateView.makeSearch(driver,"25");
+        //Compramos la oferta
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
+        elements.get(0).click();
+        //Se muestra el mensaje de error
+        List<WebElement> result = PO_View.checkElementByKey(driver, "error.amount",
+                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("error.amount",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        //Cierro sesion
+        PO_PrivateView.logout(driver);
+    }
+    /**
+     * PR25. Ir a la opción de ofertas compradas del usuario y mostrar la lista.
+     * Comprobar que aparecen las ofertas que deben aparecer
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(25)
+    public void PR025() {
+        //Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user12@email.com", "user12");
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de mostrar oferta: //a[contains(@href, 'offer/searchList')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
+        //Hacemos una busqueda
+        PO_PrivateView.makeSearch(driver,"20");
+        //Compramos la oferta
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Comprar')]");
+        elements.get(0).click();
+        //Vamos a la pestaña de ofertas compradas
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de ofertas compradas: //a[contains(@href, 'offer/searchList')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/purchasedList')]", 0);
+        List<WebElement> offerList = driver.findElements(By.xpath("//div[contains(@class, 'card border-dark mb-3')]"));
+        // Comprobamos que se encuentren todas las ofertas
+        Assertions.assertEquals(1, offerList.size());
+        //Cierro sesion
+        PO_PrivateView.logout(driver);
+    }
+    /**
      * PR26. Sobre una búsqueda determinada de ofertas (a elección de desarrollador), enviar un mensaje
      * a una oferta concreta. Se abriría dicha conversación por primera vez. Comprobar que el mensaje aparece
      * en la conversación.
@@ -724,6 +835,104 @@ class Sdi2223Entrega132ApplicationTests {
         List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
         //Comprobamos que el numero es el correcto
         Assertions.assertEquals(1,tableRows.size());
+    }
+
+    /**
+     * PR37. Al crear una oferta, marcar dicha oferta como destacada y a continuación comprobar:
+     * Comprobar que aparecen las ofertas que deben aparecer
+     * que aparece en el listado de ofertas destacadas para los usuarios
+     * y que el saldo del usuario se actualiza adecuadamente en la vista del ofertante
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(37)
+    public void PR37() {
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user08@email.com", "user08");
+
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/add')]", 0);
+
+        // Rellenamos el formulario de alta de oferta con datos validos
+        PO_PrivateView.fillFormAddOfferFeatured(driver, "Prueba37", "PruebaDescripcion37", "0.37");
+
+        // Comprobamos que la oferta recien añadida sale en la lista de ofertas propias
+        // del usuario
+        //PO_PrivateView.checkElement(driver, "Prueba37");
+        //PO_PrivateView.checkElement(driver, "PruebaDescripcion37");
+        //PO_PrivateView.checkElement(driver, "0.37 EUR");
+
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
+        double result= Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result,80.00);
+        // Hacemos logout
+        PO_PrivateView.logout(driver);
+    }
+
+    /**
+     * PR38.Sobre el listado de ofertas de un usuario con 20 euros (o más) de saldo, pinchar en el enlace
+     * Destacada y a continuación comprobar: que aparece en el listado de ofertas destacadas para los usuarios
+     * y que el saldo del usuario se actualiza adecuadamente en la vista del ofertante (-20).
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(38)
+    public void PR38() {
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user01@email.com", "user01");
+
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/ownedList')]", 0);
+
+        //Destacamos la oferta
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Destacar')]");
+        elements.get(0).click();
+
+        //Comprobamos que está en el listado de destacadas
+        //Destacamos la oferta
+        //elements=PO_View.checkElementBy(driver, "free", "//td[contains(text(), 'Producto 0')]");
+        //Assertions.assertEquals("Producto 0", elements.get(0).getText());
+
+        //Comprobamos si se actualizo el saldo
+        elements = PO_View.checkElementBy(driver, "free", "//span[contains(@class, 'badge badge-secondary')]");
+        double result= Double.parseDouble(elements.get(0).getText());
+        Assertions.assertEquals(result,80.00);
+        // Hacemos logout
+        PO_PrivateView.logout(driver);
+    }
+
+    /**
+     * PR39. Sobre el listado de ofertas de un usuario con menos de 20 euros de saldo, pinchar en el
+     * enlace Destacada  y a continuación comprobar que se muestra el mensaje de saldo insuficiente.
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(39)
+    public void PR39() {
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user04@email.com", "user04");
+
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/ownedList')]", 0);
+
+        //Destacamos la oferta
+        List<WebElement> elements = PO_View.checkElementBy(driver, "free", "//button[contains(text(), 'Destacar')]");
+        elements.get(0).click();
+
+        //Comprobamos que salta un error
+        List<WebElement> result = PO_View.checkElementByKey(driver, "error.amount",
+                PO_Properties.getSPANISH());
+        String checkText = PO_HomeView.getP().getString("error.amount",
+                PO_Properties.getSPANISH());
+        Assertions.assertEquals(checkText, result.get(0).getText());
+        // Hacemos logout
+        PO_PrivateView.logout(driver);
     }
 
 }

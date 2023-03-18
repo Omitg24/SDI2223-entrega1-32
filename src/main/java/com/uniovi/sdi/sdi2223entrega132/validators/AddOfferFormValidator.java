@@ -13,6 +13,12 @@ public class AddOfferFormValidator implements Validator {
         return Offer.class.equals(aClass);
     }
 
+    /**
+     * Método que comprueba la validez de los campos del formulario para añadir ofertas
+     *
+     * @param target oferta a comprobar
+     * @param errors errores
+     */
     @Override
     public void validate(Object target, Errors errors) {
 
@@ -33,7 +39,5 @@ public class AddOfferFormValidator implements Validator {
         if (offer.isFeatured() && offer.getOwner().getAmount() <= 20) {
             errors.rejectValue("featured", "error.offer.featured");
         }
-
-
     }
 }

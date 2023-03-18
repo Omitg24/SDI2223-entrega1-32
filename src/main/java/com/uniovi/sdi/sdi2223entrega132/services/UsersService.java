@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
-import java.util.List;
 
 
 @Service
@@ -41,6 +40,10 @@ public class UsersService {
 
     public void deleteUser(Long id) {
         usersRepository.deleteById(id);
+    }
+
+    public void updateAmount(Long id,Double amount) {
+        usersRepository.updateAmount(amount, id);
     }
 
     public Page<User> searchByNameAndLastName(Pageable pageable, String searchText, User user) {

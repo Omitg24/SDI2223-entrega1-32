@@ -3,7 +3,6 @@ package com.uniovi.sdi.sdi2223entrega132.entities;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "offer")
