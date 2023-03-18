@@ -31,6 +31,6 @@ public class SuccessLoginHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         loggerService.log(LogMessage.Action.LOGIN_EX,messageSource.getMessage("msg.log.login.user.success",null,request.getLocale()) + authentication.getName());
-        response.sendRedirect("/home");
+        response.sendRedirect("/default");
     }
 }
