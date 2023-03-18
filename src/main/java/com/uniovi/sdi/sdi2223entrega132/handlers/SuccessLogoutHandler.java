@@ -13,6 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Manejador de la desconexión del usuario
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Component
 public class SuccessLogoutHandler implements LogoutSuccessHandler {
 
@@ -26,6 +32,7 @@ public class SuccessLogoutHandler implements LogoutSuccessHandler {
 
     /**
      * Metodo que se ejecutara cuando un usuario se desconecte de forma exitosa y se registrara en la base de datos
+     *
      * @param request
      * @param response
      * @param authentication
@@ -34,7 +41,7 @@ public class SuccessLogoutHandler implements LogoutSuccessHandler {
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        loggerService.log(LogMessage.Action.LOGOUT,messageSource.getMessage("msg.log.logout.user.success",null,request.getLocale()) + authentication.getName());
+        loggerService.log(LogMessage.Action.LOGOUT, messageSource.getMessage("msg.log.logout.user.success", null, request.getLocale()) + authentication.getName());
         response.sendRedirect("/login");
     }
 }

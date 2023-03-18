@@ -1,9 +1,17 @@
 package com.uniovi.sdi.sdi2223entrega132.entities;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Entidad de la oferta
+ *
+ * @author David Leszek Warzynski Abril, Israel Solís Iglesias, Álvaro Davila Sampedro y Omar Teixeira
+ * @version 17/03/2023
+ */
 @Entity
 @Table(name = "offer")
 public class Offer {
@@ -15,7 +23,7 @@ public class Offer {
     public Date uploadDate;
     public double price;
     public boolean purchase;
-    public boolean featured=false;
+    public boolean featured = false;
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     public User owner;
@@ -26,16 +34,20 @@ public class Offer {
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
     public List<Conversation> conversations;
 
+    public boolean hasPicture;
+
+    @Transient
+    public MultipartFile picture;
+
+    public Offer() {
+    }
+
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
         this.description = description;
         this.uploadDate = uploadDate;
         this.price = price;
         this.owner = owner;
-    }
-
-    public Offer() {
-
     }
 
     public String getTitle() {
@@ -116,6 +128,22 @@ public class Offer {
 
     public void setFeatured(boolean featured) {
         this.featured = featured;
+    }
+
+    public boolean isHasPicture() {
+        return hasPicture;
+    }
+
+    public void setHasPicture(boolean hasPicture) {
+        this.hasPicture = hasPicture;
+    }
+
+    public MultipartFile getPicture() {
+        return picture;
+    }
+
+    public void setPicture(MultipartFile picture) {
+        this.picture = picture;
     }
 
     @Override

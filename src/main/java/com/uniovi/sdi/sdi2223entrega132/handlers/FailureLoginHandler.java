@@ -13,6 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Manejador de Fallo al logear
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Component
 public class FailureLoginHandler implements AuthenticationFailureHandler {
 
@@ -26,6 +32,7 @@ public class FailureLoginHandler implements AuthenticationFailureHandler {
 
     /**
      * Metodo que se ejecutara cuando un usuario no haya iniciado sesion correctamente, quedara registrado en la base de datos
+     *
      * @param request
      * @param response
      * @param exception
@@ -34,7 +41,7 @@ public class FailureLoginHandler implements AuthenticationFailureHandler {
      */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        loggerService.log(LogMessage.Action.LOGIN_ERR,messageSource.getMessage("msg.log.login.user.failure",null,request.getLocale()) + exception.getMessage());
+        loggerService.log(LogMessage.Action.LOGIN_ERR, messageSource.getMessage("msg.log.login.user.failure", null, request.getLocale()) + exception.getMessage());
         response.sendRedirect("/login/error");
     }
 }

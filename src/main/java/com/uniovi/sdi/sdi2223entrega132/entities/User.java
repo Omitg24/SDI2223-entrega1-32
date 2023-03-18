@@ -4,10 +4,20 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entidad del Usuario
+ *
+ * @author Omar Teixeira González y David Leszek Warzynski Abril
+ * @version 12/03/2023
+ */
 @Entity
 @Table(name = "user")
 public class User {
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private final Set<Offer> ownOffers = new HashSet<Offer>();
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private final Set<Offer> purchasedOffers = new HashSet<Offer>();
     @Id
     @GeneratedValue
     private Long id;
@@ -20,13 +30,6 @@ public class User {
     private String role;
     @Transient
     private String passwordConfirm;
-
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private final Set<Offer> ownOffers = new HashSet<Offer>();
-
-    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
-    private final Set<Offer> purchasedOffers = new HashSet<Offer>();
-
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private Set<Message> messages = new HashSet<Message>();
 

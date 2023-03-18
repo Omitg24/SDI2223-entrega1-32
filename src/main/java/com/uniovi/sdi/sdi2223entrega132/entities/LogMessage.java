@@ -6,23 +6,16 @@ import java.util.Date;
 @Entity
 public class LogMessage {
 
-    public enum Action {
-        PET, ALTA, LOGIN_EX, LOGIN_ERR,LOGOUT
-    }
-
     @Id
     @GeneratedValue
     private Long id;
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-
     @Enumerated(EnumType.STRING)
     private Action action;
-
     private String message;
 
-    public LogMessage(){
+    public LogMessage() {
 
     }
 
@@ -62,5 +55,9 @@ public class LogMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public enum Action {
+        PET, ALTA, LOGIN_EX, LOGIN_ERR, LOGOUT
     }
 }

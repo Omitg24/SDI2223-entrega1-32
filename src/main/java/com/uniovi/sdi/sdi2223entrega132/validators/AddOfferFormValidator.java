@@ -6,6 +6,12 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Validador de añadir una nueva oferta
+ *
+ * @author David Leszek Warzynski Abril y Álvaro Davila Sampedro
+ * @version 11/03/2023
+ */
 @Component
 public class AddOfferFormValidator implements Validator {
     @Override

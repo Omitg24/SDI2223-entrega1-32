@@ -10,11 +10,13 @@
         <h2 th:text="#{msg.home.welcome}"></h2>
         <h3 th:text="#{msg.home.info}"></h3>
         <p th:text="#{msg.home.user.info}"></p>
-        <b th:inline="text" sec:authentication="principal.username"></b>
+        <b sec:authentication="principal.username" th:inline="text"></b>
     </div>
-</div>
-<div class="container" th:fragment="tableOwnedOffers" id="ownedOffers" th:replace="fragments/ownedOffers">
-</div>
-<footer th:replace="fragments/footer"/>
+    <div sec:authorize="hasRole('ROLE_USER')">
+        <div class="container" id="ownedOffers" th:fragment="tableOwnedOffers" th:replace="fragments/ownedOffers">
+            <div th:replace="fragments/pagination"/>
+        </div>
+    </div>
+    <footer th:replace="fragments/footer"/>
 </body>
 </html>

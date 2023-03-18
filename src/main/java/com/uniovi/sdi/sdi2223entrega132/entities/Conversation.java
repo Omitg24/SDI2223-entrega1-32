@@ -3,30 +3,33 @@ package com.uniovi.sdi.sdi2223entrega132.entities;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Entidad de las Conversación
+ *
+ * @author Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Entity
 public class Conversation {
 
+    //Una conversacion tiene varios mensajes
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
+    public List<Message> messages;
     @Id
     @GeneratedValue
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "offer_id")
     private Offer offer;
-
     //Una conversacion tiene un interesado, forma parte de la clave primaria natural junto con offer
     @ManyToOne
     @JoinColumn(name = "interested_id")
     private User interested;
 
-    //Una conversacion tiene varios mensajes
-    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
-    public List<Message> messages;
-
     public Conversation() {
     }
 
-    public Conversation(Offer offer,User interested, List<Message> messages) {
+    public Conversation(Offer offer, User interested, List<Message> messages) {
         this.offer = offer;
         this.interested = interested;
         this.messages = messages;

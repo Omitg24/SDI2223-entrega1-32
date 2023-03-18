@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +59,39 @@ public class PO_PrivateView extends PO_NavView {
         price.sendKeys(pricep);
         WebElement featured = driver.findElement(By.name("featured"));
         featured.click();
+        // Pulsamos el botón para enviar el formulario.
+        By boton = By.className("btn");
+        driver.findElement(boton).click();
+    }
+
+    /**
+     * Método para rellenar el formulario de añadir ofertas
+     *
+     * @param driver       driver
+     * @param titlep       titulo de la oferta
+     * @param picturep     imagen de la oferta
+     * @param descriptionp descripcion de la oferta
+     * @param pricep       precio de la oferta
+     */
+    static public void fillFormAddOffer(WebDriver driver, String titlep, String picturep, String descriptionp, String pricep) {
+        //Esperamos 5 segundo a que carge el DOM porque en algunos equipos falla
+        SeleniumUtils.waitSeconds(driver, 5);
+        // Rellenamos el formulario con los datos recibidos como paramteros.
+        WebElement title = driver.findElement(By.name("title"));
+        title.click();
+        title.clear();
+        title.sendKeys(titlep);
+        WebElement picture = driver.findElement(By.name("picture"));
+        picture.sendKeys(picturep);
+        WebElement description = driver.findElement(By.name("description"));
+        description.click();
+        description.clear();
+        description.sendKeys(descriptionp);
+        WebElement price = driver.findElement(By.name("price"));
+        price.click();
+        price.clear();
+        price.sendKeys(pricep);
+
         // Pulsamos el botón para enviar el formulario.
         By boton = By.className("btn");
         driver.findElement(boton).click();
@@ -128,6 +160,7 @@ public class PO_PrivateView extends PO_NavView {
 
     /**
      * Metodo que accede a la ultima pagina de una tabla y devuelve la ultima fila
+     *
      * @param driver
      * @return la ultima tabla
      */
@@ -143,15 +176,16 @@ public class PO_PrivateView extends PO_NavView {
 
     /**
      * Metodo que obtiene el texto de la primera celda de las n primeras filas (que contengan un checkbox) pasadas por parametro
+     *
      * @param driver
-     * @param n las filas de las que queremos obtener la primera celda
+     * @param n      las filas de las que queremos obtener la primera celda
      * @return las primeras celdas de las n primeras filas
      */
-    public static List<String> clickAndGetFirstCellsOfTable(WebDriver driver,int n) {
+    public static List<String> clickAndGetFirstCellsOfTable(WebDriver driver, int n) {
         List<WebElement> rows = driver.findElements(By.xpath("//table//tr[td/input[@type='checkbox']]"));
 
         List<String> textsBeforeDelete = new ArrayList<String>();
-        for(int i=0;i<n;i++){
+        for (int i = 0; i < n; i++) {
             //Obtenemos la celda del checkbox
             WebElement checkBoxCell = rows.get(i).findElement(By.xpath(".//input[@type='checkbox']"));
             //Clickamos el checkbox

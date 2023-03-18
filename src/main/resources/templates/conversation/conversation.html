@@ -28,7 +28,7 @@
                                         <div class="d-flex flex-row justify-content-end mb-4 pt-1">
                                             <div>
                                                 <p class="small p-2 me-3 mb-3 text-white rounded-3 bg-dark"
-                                                   th:text="${message.text}" style="background-color: #f5f6f7;"></p>
+                                                   style="background-color: #f5f6f7;" th:text="${message.text}"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -40,8 +40,9 @@
                                         </div>
                                         <div class="d-flex flex-row justify-content-start">
                                             <div>
-                                                <p class="small p-2 ms-3 mb-3 rounded-3" th:text="${message.text}"
-                                                   style="background-color: #f5f6f7;"></p>
+                                                <p class="small p-2 ms-3 mb-3 rounded-3"
+                                                   style="background-color: #f5f6f7;"
+                                                   th:text="${message.text}"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -51,17 +52,20 @@
 
                         <div class="card-footer text-muted d-flex justify-content-start align-items-center p-3">
                             <div class="input-group mb-0">
-                                <form th:action="@{/conversation/{offerId}/{interestedUserId}(offerId=${offer.id}, interestedUserId=${interestedUser.id})}"
-                                      class="form-horizontal"
-                                      method="post" th:object="${message}">
-                                    <input type="text" id="text" name="text" class="form-control"
-                                           placeholder="Type message"
-                                           aria-label="Recipient's username" aria-describedby="button-addon2"/>
+                                <form class="form-horizontal"
+                                      method="post"
+                                      th:action="@{/conversation/{offerId}/{interestedUserId}(offerId=${offer.id}, interestedUserId=${interestedUser.id})}"
+                                      th:object="${message}">
+                                    <input aria-describedby="button-addon2" aria-label="Recipient's username"
+                                           class="form-control" id="text"
+                                           name="text"
+                                           placeholder="Type message" type="text"/>
                                     <span
                                             class="text-danger" th:errors="*{text}"
                                             th:if="${#fields.hasErrors('text')}"></span>
-                                    <button class="btn bg-dark text-white" type="submit" id="button-addon2"
-                                            style="padding-top: .55rem;" th:text="#{msg.conversation.send}">
+                                    <button class="btn bg-dark text-white" id="button-addon2"
+                                            style="padding-top: .55rem;"
+                                            th:text="#{msg.conversation.send}" type="submit">
                                         Button
                                     </button>
 

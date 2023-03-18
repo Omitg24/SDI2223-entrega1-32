@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+/**
+ * Servicio que añade datos de ejemplo a la base de datos
+ *
+ * @author Álvaro Davila Sampedro, Israel Solís Iglesias, Omar Teixeira González y David Leszek Warzynski Abril
+ * @version 18/03/2023
+ */
 @Service
 public class InsertSampleDataService {
     @Autowired
@@ -127,24 +130,31 @@ public class InsertSampleDataService {
         usersService.addUser(user15);
         users.add(user15);
 
-        for(int i =0;i<140;i++) {
+
+        Random r = new Random();
+        for (int i = 0; i < 140; i++) {
             int userIndex = i % 5;
             User user = users.get(userIndex);
-            if(i==139 || i==120){
+            if (i == 20) {
+                offersService.addOffer(new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), 50.00, user));
+            } else if (i == 25) {
+                offersService.addOffer(new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), 1000.00, user));
+            } else if (i == 117) {
+                offersService.addOffer(new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), 69.69, user));
+            } else if (i == 139 || i == 120) {
                 Offer offer = new Offer("Producto " + i,
                         "Descripción del producto " + i, new Date(), 100.00, user);
                 offersService.addOffer(offer);
-                conversationService.addConversationForOffer(new Conversation(offer,user05,new ArrayList<>()));
-            }
-            if(i==130) {
+                conversationService.addConversationForOffer(new Conversation(offer, user05, new ArrayList<>()));
+            } else if (i == 130) {
                 offersService.addOffer(new Offer("Producto " + i,
                         "Descripción del producto " + i, new Date(), 100.00, user));
-            }if(i==25){
-                offersService.addOffer(new Offer("Producto "+i,
-                        "Descripción del producto "+i,new Date(),1000.00,user));
-            }else{
-                offersService.addOffer(new Offer("Producto "+i,
-                        "Descripción del producto "+i,new Date(),69.69,user));
+            } else {
+                offersService.addOffer(new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), Math.round(1 + (200 - 1) * r.nextDouble() * 100.0) / 100.0, user));
             }
         }
     }

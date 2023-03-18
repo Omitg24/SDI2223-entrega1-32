@@ -8,12 +8,12 @@
     <form action="/user/list" class="form-inline">
         <div class="form-group">
             <input class="form-control" name="searchText"
-                   th:placeholder="#{msg.palceholder.user.search}" size="50" type="text">
+                   size="50" th:placeholder="#{msg.palceholder.user.search}" type="text">
         </div>
-        <button class="btn btn-dark" type="submit" th:text="#{msg.searchbtn}"></button>
+        <button class="btn btn-dark" th:text="#{msg.searchbtn}" type="submit"></button>
     </form>
     <p th:text="#{msg.user.list.info}"></p>
-    <button class="btn btn-dark" id="updateButton" type="button" th:text="#{msg.updateBtn}"></button>
+    <button class="btn btn-dark" id="updateButton" th:text="#{msg.updateBtn}" type="button"></button>
     <script>
         $("#updateButton").click(function () {
             $("#tableUsers").load('/user/list/update');
@@ -39,15 +39,17 @@
                     <td scope="row" th:text="${user.lastName}">Apellidos</td>
                     <td scope="row"></td>
                     <td scope="row"></td>
-                    <td scope="row"><input type="checkbox" name="users" class="cb" th:value="${user.id}"
-                                           th:if="${user.email != #authentication.principal.username}"></td>
+                    <td scope="row"><input class="cb" name="users"
+                                           th:if="${user.email != #authentication.principal.username}"
+                                           th:value="${user.id}"
+                                           type="checkbox"></td>
                 </tr>
                 </tbody>
             </table>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button id="delete-users" class="btn btn-dark" th:text="#{msg.delete}" type="submit"></button>
+                    <button class="btn btn-dark" id="delete-users" th:text="#{msg.delete}" type="submit"></button>
                 </div>
             </div>
         </div>

@@ -19,6 +19,12 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Configuración de la aplicación, contempla la internacionalización, la paginación y el logging
+ *
+ * @author David Leszek Warzynski Abril e Israel Solís Iglesias
+ * @version 18/03/2023
+ */
 @Configuration
 public class CustomConfiguration implements WebMvcConfigurer {
     @Value("${spring.data.web.pageable.page-parameter}")
