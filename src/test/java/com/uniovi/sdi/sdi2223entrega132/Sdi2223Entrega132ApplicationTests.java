@@ -756,6 +756,7 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(result,80.00);
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
