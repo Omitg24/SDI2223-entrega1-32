@@ -98,6 +98,7 @@ public class OffersController {
         model.addAttribute("offersList",offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
         model.addAttribute("featureError",invalidFeature);
+        model.addAttribute("amount",user.getAmount());
         invalidFeature=false;
         model.addAttribute("page", offers);
         return "offer/ownedList";
@@ -118,6 +119,7 @@ public class OffersController {
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
         model.addAttribute("featureError",invalidFeature);
+        model.addAttribute("amount",user.getAmount());
         invalidFeature=false;
         return "offer/ownedList :: tableOwnedOffers";
     }
@@ -142,15 +144,17 @@ public class OffersController {
      */
     @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
+        String email = principal.getName();
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         addOfferFormValidator.validate(offer, result);
         if (result.hasErrors()) {
             return "offer/add";
         }
-        String email = principal.getName();
+        if(offer.isFeatured()){
+           usersService.updateAmount(owner.getId(),owner.getAmount()-20);
+        }
         offer.setUploadDate(new Date());
-        offer.setPurchase(true);
-        User owner = usersService.getUserByEmail(email);
-        offer.setOwner(owner);
         offersService.addOffer(offer);
         return "redirect:/offer/ownedList";
     }
