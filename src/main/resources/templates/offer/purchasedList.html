@@ -5,28 +5,20 @@
 
 <nav th:replace="fragments/nav"/>
 
-<div class="container" id="tableSearchedOffers" th:fragment="tableSearchedOffers">
+<div class="container" id="tablePurchasedOffers" th:fragment="tablePurchasedOffers">
     <h2 th:text="#{msg.offer.purchasedlist.headtitle}"></h2>
     <p th:text="#{msg.offer.ownlist.text}"></p>
-    <div class="table-responsive">
-        <table class="table table-hover" id="offersTable">
-            <thead>
-            <tr>
-                <th th:text="#{msg.offer.title}"></th>
-                <th th:text="#{msg.offer.desc}"></th>
-                <th th:text="#{msg.offer.price}"></th>
-                <th th:text="#{msg.offer.seller}"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="offer : ${offersList}">
-                <td th:text="${offer.title}"></td>
-                <td th:text="${offer.description}"></td>
-                <td th:text="${offer.price}"></td>
-                <td th:text="${offer.owner.email}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="card-deck">
+        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
+             th:each="offer : ${offersList}">
+            <img class="card-img-top" th:if="${'!offer.picture.isEmpty'}" width="256" height="256" th:src="${'/pictures/' + offer.id + '.png'}"/>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
+                <h6 class="card-subtitle" th:text="${offer.title}"></h6>
+                <p class="card-text" th:text="${offer.description}"></p>
+                <p class="card-text" th:text="${offer.owner.email}"></p>
+            </div>
+        </div>
     </div>
 </div>
 <footer th:replace="fragments/footer"/>

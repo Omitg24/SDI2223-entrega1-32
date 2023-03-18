@@ -42,6 +42,10 @@ public class UsersService {
         usersRepository.deleteById(id);
     }
 
+    public void updateAmount(Long id,Double amount) {
+        usersRepository.updateAmount(amount, id);
+    }
+
     public Page<User> searchByNameAndLastName(Pageable pageable, String searchText, User user) {
         Page<User> users = new PageImpl<>(new LinkedList<User>());
         searchText = "%" + searchText + "%";

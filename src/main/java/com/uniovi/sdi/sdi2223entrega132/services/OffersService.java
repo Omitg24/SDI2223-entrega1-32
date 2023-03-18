@@ -142,9 +142,9 @@ public class OffersService {
                 offer.setPurchase(true);
                 offersRepository.updateOffer(true, offer.getBuyer(), id);
                 //Se le suma el dinero al vendedor
-                usersRepository.updateAmount(offer.buyer.getAmount() + offer.getPrice(), offer.buyer.getId());
+                usersRepository.updateAmount(Math.round((offer.buyer.getAmount()+ offer.getPrice()) * 100.0) / 100.0,offer.buyer.getId());
                 //Se le resta el dinero al comprador
-                usersRepository.updateAmount(user.getAmount() - offer.getPrice(), user.getId());
+                usersRepository.updateAmount(Math.round((user.getAmount()- offer.getPrice())* 100.0) / 100.0,user.getId());
             }
         }
     }
@@ -166,7 +166,7 @@ public class OffersService {
                 offer.setFeatured(true);
                 offersRepository.updateFeatured(true, id);
                 //Se le resta el dinero al propietario
-                usersRepository.updateAmount(user.getAmount() - 20.0, user.getId());
+                usersRepository.updateAmount(Math.round((user.getAmount()- 20.0) * 100.0) / 100.0,user.getId());
             }
         }
     }

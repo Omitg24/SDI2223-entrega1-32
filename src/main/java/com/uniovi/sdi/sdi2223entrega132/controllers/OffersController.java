@@ -51,7 +51,8 @@ public class OffersController {
         } else {
             offers = offersService.getAvailableOffers(pageable);
         }
-        model.addAttribute("interestedUser", interestedUser);
+        model.addAttribute("amount",interestedUser.getAmount());
+        model.addAttribute("interestedUser",interestedUser);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
         model.addAttribute("buyError", invalidBuy);
@@ -76,9 +77,10 @@ public class OffersController {
         offers = offersService.getAvailableOffers(pageable);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page", offers);
-        model.addAttribute("interestedUser", interestedUser);
-        model.addAttribute("buyError", invalidBuy);
-        invalidBuy = false;
+        model.addAttribute("interestedUser",interestedUser);
+        model.addAttribute("amount",interestedUser.getAmount());
+        model.addAttribute("buyError",invalidBuy);
+        invalidBuy=false;
         return "offer/searchList :: tableSearchedOffers";
     }
 
@@ -97,8 +99,9 @@ public class OffersController {
         Page<Offer> offers = offersService.getOffersOfUser(pageable, user);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
-        model.addAttribute("featureError", invalidFeature);
-        invalidFeature = false;
+        model.addAttribute("featureError",invalidFeature);
+        model.addAttribute("amount",user.getAmount());
+        invalidFeature=false;
         model.addAttribute("page", offers);
         return "offer/ownedList";
     }
@@ -118,8 +121,9 @@ public class OffersController {
         Page<Offer> offers = offersService.getOffersOfUser(pageable, user);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("featuredList", offersService.getOffersFeatured());
-        model.addAttribute("featureError", invalidFeature);
-        invalidFeature = false;
+        model.addAttribute("featureError",invalidFeature);
+        model.addAttribute("amount",user.getAmount());
+        invalidFeature=false;
         return "offer/ownedList :: tableOwnedOffers";
     }
 
@@ -145,15 +149,17 @@ public class OffersController {
      */
     @RequestMapping(value = "/offer/add", method = RequestMethod.POST)
     public String setOffer(@ModelAttribute @Validated Offer offer, Principal principal, BindingResult result) {
+        String email = principal.getName();
+        User owner = usersService.getUserByEmail(email);
+        offer.setOwner(owner);
         addOfferFormValidator.validate(offer, result);
         if (result.hasErrors()) {
             return "offer/add";
         }
-        String email = principal.getName();
+        if(offer.isFeatured()){
+           usersService.updateAmount(owner.getId(),owner.getAmount()-20);
+        }
         offer.setUploadDate(new Date());
-        offer.setPurchase(true);
-        User owner = usersService.getUserByEmail(email);
-        offer.setOwner(owner);
         offersService.addOffer(offer);
         return "redirect:/offer/ownedList";
     }

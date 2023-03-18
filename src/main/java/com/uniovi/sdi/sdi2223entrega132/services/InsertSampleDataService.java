@@ -44,6 +44,7 @@ public class InsertSampleDataService {
         User user04 = new User("user04@email.com", "", "");
         user04.setPassword("user04");
         user04.setRole(rolesService.getRoles()[0]);
+        user04.setAmount(0.00);
 
         User user05 = new User("user05@email.com", "", "");
         user05.setPassword("user05");
@@ -56,6 +57,7 @@ public class InsertSampleDataService {
         User user07 = new User("user07@email.com", "", "");
         user07.setPassword("user07");
         user07.setRole(rolesService.getRoles()[0]);
+
 
         User user08 = new User("user08@email.com", "", "");
         user08.setPassword("user08");
@@ -126,8 +128,16 @@ public class InsertSampleDataService {
         for(int i =0;i<140;i++) {
             int userIndex = i % 5;
             User user = users.get(userIndex);
-            offersService.addOffer(new Offer("Producto "+i,
-                    "Descripción del producto "+i,new Date(),69.69,user));
+            if(i==130) {
+                offersService.addOffer(new Offer("Producto " + i,
+                        "Descripción del producto " + i, new Date(), 100.00, user));
+            }if(i==25){
+                offersService.addOffer(new Offer("Producto "+i,
+                        "Descripción del producto "+i,new Date(),1000.00,user));
+            }else{
+                offersService.addOffer(new Offer("Producto "+i,
+                        "Descripción del producto "+i,new Date(),69.69,user));
+            }
         }
     }
 }
