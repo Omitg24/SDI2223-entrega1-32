@@ -842,6 +842,87 @@ class Sdi2223Entrega132ApplicationTests {
     }
 
     /**
+     * PR29. Visualizar al menos cuatro páginas en español/inglés/español (comprobando que algunas de
+     * las etiquetas cambian al idioma correspondiente)
+     * Realizada por: Álvaro
+     */
+    @Test
+    @Order(29)
+    public void PR29() {
+
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+
+        //Primera Prueba
+        //Comprobar home
+        PO_HomeView.getP().getString("msg.home.welcome", PO_Properties.getSPANISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnEnglish");
+        //Comprobar home
+        PO_HomeView.getP().getString("msg.home.welcome", PO_Properties.getENGLISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnSpanish");
+        //Comprobar home
+        PO_HomeView.getP().getString("msg.home.welcome", PO_Properties.getSPANISH());
+
+
+        //Segunda Prueba
+        //Vista añadir ofertas
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/add')]", 0);
+        //Comprobar añadir oferta
+        PO_HomeView.getP().getString("msg.offer.add.header", PO_Properties.getSPANISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnEnglish");
+        //Comprobar añadir oferta
+        PO_HomeView.getP().getString("msg.offer.add.header", PO_Properties.getENGLISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnSpanish");
+        //Comprobar añadir oferta
+        PO_HomeView.getP().getString("msg.offer.add.header", PO_Properties.getSPANISH());
+
+
+        //Tercera Prueba
+        //Vista ofertas publicadas
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/searchList')]", 0);
+        //Comprobar ofertas publicadas
+        PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getSPANISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnEnglish");
+        //Comprobar ofertas publicadas
+        PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getENGLISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnSpanish");
+        //Comprobar ofertas publicadas
+        PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getSPANISH());
+
+
+        //Cuarta Prueba
+        //Vista ofertas propias
+        //Pinchamos en la opción de menú de ofertas: //li[contains(@id, 'offers-menu')]/a
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]/a", 0);
+        //Esperamos a que aparezca la opción de añadir oferta: //a[contains(@href, 'offer/add')]
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'offer/ownedList')]", 0);
+        //Comprobar ofertas propias
+        PO_HomeView.getP().getString("msg.offer.ownlist.headtitle", PO_Properties.getSPANISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnEnglish");
+        //Comprobar ofertas propias
+        PO_HomeView.getP().getString("msg.offer.ownlist.headtitle", PO_Properties.getENGLISH());
+        //Cambiamos idioma
+        PO_HomeView.changeLanguage(driver, "btnSpanish");
+        //Comprobar ofertas propias
+        PO_HomeView.getP().getString("msg.offer.ownlist.headtitle", PO_Properties.getSPANISH());
+
+        PO_PrivateView.logout(driver);
+    }
+
+    /**
      * PR35. Sobre el listado de conversaciones ya abiertas. Pinchar el enlace Eliminar de la primera y
      * comprobar que el listado se actualiza correctamente
      * Realizada por: Israel
