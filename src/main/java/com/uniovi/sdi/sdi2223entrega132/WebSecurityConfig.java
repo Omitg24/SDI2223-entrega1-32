@@ -1,5 +1,9 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
+import com.uniovi.sdi.sdi2223entrega132.handlers.FailureLoginHandler;
+import com.uniovi.sdi.sdi2223entrega132.handlers.SuccessLoginHandler;
+import com.uniovi.sdi.sdi2223entrega132.handlers.SuccessLogoutHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +16,16 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+    @Autowired
+    private SuccessLoginHandler successHandler;
+
+    @Autowired
+    private SuccessLogoutHandler successLogoutHandler;
+
+    @Autowired
+    private FailureLoginHandler failureLoginHandler;
 
     @Bean
     @Override
@@ -36,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/css/**", "/images/**", "/script/**", "/", "/signup", "/login/**").permitAll()
                 .antMatchers("/user/**").hasRole("ADMIN")
+                .antMatchers("/log/**").hasRole("ADMIN")
                 .antMatchers("/offer/add").hasRole("USER")
                 .antMatchers("/offer/purchasedList").hasRole("USER")
                 .antMatchers("/offer/searchList").hasAnyRole("USER", "ADMIN")
@@ -44,10 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
-                .defaultSuccessUrl("/default")
-                .failureUrl("/login/error")
+                .successHandler(successHandler)
+                .failureHandler(failureLoginHandler)
                 .and()
                 .logout()
+                .logoutSuccessHandler(successLogoutHandler)
                 .permitAll();
     }
 }

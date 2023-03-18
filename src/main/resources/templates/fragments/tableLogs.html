@@ -1,0 +1,16 @@
+<table class="table table-hover" id="tableLogs" th:fragment="tableLogs">
+  <thead>
+  <tr>
+    <th scope="col" th:text="#{msg.log.date}"></th>
+    <th scope="col" th:text="#{msg.log.action}"></th>
+    <th scope="col" th:text="#{msg.conversation.start}"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="log : ${logMessages}">
+    <td scope="row" th:text="${log.date}"></td>
+    <td scope="row" th:text="${log.action}"></td>
+    <td scope="row" th:text="${log.message}"></td>
+  </tr>
+  </tbody>
+</table>

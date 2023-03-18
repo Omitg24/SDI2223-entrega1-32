@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -61,7 +62,7 @@ public class ConversationController {
         Offer offerOfConversation = offersService.getOfferById(offerId);
         User interestedUser = usersService.getUser(interestedId);
         Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser,offerOfConversation);
-        Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,interestedUser,new HashSet<>()):optionalConversation.get();
+        Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,interestedUser,new ArrayList<>()):optionalConversation.get();
         conversationService.addConversationForOffer(c);
         message.setConversation(c);
         conversationService.addMessage(message);

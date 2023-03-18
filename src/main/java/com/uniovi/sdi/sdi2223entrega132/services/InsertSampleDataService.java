@@ -1,5 +1,6 @@
 package com.uniovi.sdi.sdi2223entrega132.services;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,14 @@ import java.util.List;
 public class InsertSampleDataService {
     @Autowired
     private UsersService usersService;
+
     @Autowired
     private OffersService offersService;
     @Autowired
     private RolesService rolesService;
+
+    @Autowired
+    private ConversationService conversationService;
 
     @PostConstruct
     public void init() {
