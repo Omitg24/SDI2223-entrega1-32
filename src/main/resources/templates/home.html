@@ -14,9 +14,10 @@
     </div>
     <div sec:authorize="hasRole('ROLE_USER')">
         <div class="container" id="ownedOffers" th:fragment="tableOwnedOffers" th:replace="fragments/ownedOffers">
-            <div th:replace="fragments/pagination"/>
         </div>
+        <div th:replace="fragments/pagination"/>
     </div>
     <footer th:replace="fragments/footer"/>
+</div>
 </body>
 </html>
