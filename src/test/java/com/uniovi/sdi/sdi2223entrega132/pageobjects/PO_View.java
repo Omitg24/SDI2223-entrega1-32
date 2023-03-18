@@ -37,8 +37,6 @@ public class PO_View {
      */
     static public List<WebElement> checkElementByKey(WebDriver driver, String key, int locale) {
         return SeleniumUtils.waitLoadElementsBy(driver, "text", p.getString(key, locale), getTimeout());
-
-
     }
 
     /**

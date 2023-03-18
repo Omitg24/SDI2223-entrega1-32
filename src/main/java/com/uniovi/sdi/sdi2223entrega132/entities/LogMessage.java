@@ -7,7 +7,7 @@ import java.util.Date;
 public class LogMessage {
 
     public enum Action {
-        PET, ALTA, LOGIN_EX, LOGIN_ERR,LOGOUT;
+        PET, ALTA, LOGIN_EX, LOGIN_ERR,LOGOUT
     }
 
     @Id

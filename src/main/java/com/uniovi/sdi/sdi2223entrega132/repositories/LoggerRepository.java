@@ -1,9 +1,6 @@
 package com.uniovi.sdi.sdi2223entrega132.repositories;
 
 import com.uniovi.sdi.sdi2223entrega132.entities.LogMessage;
-import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

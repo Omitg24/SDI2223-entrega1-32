@@ -5,6 +5,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class PO_SignUpView extends PO_NavView {
+
+    /**
+     * Método que rellena el formulario para registrar un usuario
+     *
+     * @param driver        driver
+     * @param emailP        email del usuario
+     * @param nameP         nombre del usuario
+     * @param lastNameP     apellidos del usuario
+     * @param passwordP     contraseña del usuario
+     * @param passwordConfP confirmación de la contraseña del usuario
+     */
     static public void fillForm(WebDriver driver, String emailP, String nameP, String lastNameP, String
             passwordP, String passwordConfP) {
         WebElement dni = driver.findElement(By.name("email"));

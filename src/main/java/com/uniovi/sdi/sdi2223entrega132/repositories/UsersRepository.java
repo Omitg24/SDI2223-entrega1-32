@@ -9,12 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Repositorio para la persitencia de los usuarios
- *
- * @author Omar Teixeira González, Álvaro Davila Sampedro
- * @version 17/03/2023
- */
 @Repository
 public interface UsersRepository extends CrudRepository<User, Long> {
     User findByEmail(String email);

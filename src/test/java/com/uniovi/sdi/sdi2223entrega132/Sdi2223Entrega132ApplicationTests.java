@@ -1,12 +1,9 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
-import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
-import com.uniovi.sdi.sdi2223entrega132.repositories.ConversationRepository;
+import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 import com.uniovi.sdi.sdi2223entrega132.repositories.OffersRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
-import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
-import jdk.jfr.Timespan;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -16,12 +13,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.uniovi.sdi.sdi2223entrega132.pageobjects.*;
 
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 @SpringBootTest

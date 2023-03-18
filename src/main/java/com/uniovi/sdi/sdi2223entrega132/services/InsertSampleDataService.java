@@ -1,6 +1,5 @@
 package com.uniovi.sdi.sdi2223entrega132.services;
 
-import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
 import com.uniovi.sdi.sdi2223entrega132.entities.Offer;
 import com.uniovi.sdi.sdi2223entrega132.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
