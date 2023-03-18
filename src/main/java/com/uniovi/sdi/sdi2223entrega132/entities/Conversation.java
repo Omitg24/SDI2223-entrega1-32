@@ -14,10 +14,12 @@ public class Conversation {
     @JoinColumn(name = "offer_id")
     private Offer offer;
 
+    //Una conversacion tiene un interesado, forma parte de la clave primaria natural junto con offer
     @ManyToOne
     @JoinColumn(name = "interested_id")
     private User interested;
 
+    //Una conversacion tiene varios mensajes
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL)
     public List<Message> messages;
 
