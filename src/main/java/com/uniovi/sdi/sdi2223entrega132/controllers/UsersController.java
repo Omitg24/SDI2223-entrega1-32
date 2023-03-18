@@ -89,6 +89,8 @@ public class UsersController {
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
         Page<Offer> offers = offersService.getOffersOfUser(pageable,activeUser);
+        List<Offer> featured= offersService.getOffersFeatured();
+        model.addAttribute("featuredList",featured);
         model.addAttribute("offersList", offers.getContent());
         model.addAttribute("page",offers);
         return "home";

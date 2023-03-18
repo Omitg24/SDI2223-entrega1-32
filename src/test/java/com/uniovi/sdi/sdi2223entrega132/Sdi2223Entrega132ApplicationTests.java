@@ -1,5 +1,8 @@
 package com.uniovi.sdi.sdi2223entrega132;
 
+import com.uniovi.sdi.sdi2223entrega132.entities.Conversation;
+import com.uniovi.sdi.sdi2223entrega132.repositories.ConversationRepository;
+import com.uniovi.sdi.sdi2223entrega132.repositories.OffersRepository;
 import com.uniovi.sdi.sdi2223entrega132.repositories.UsersRepository;
 import com.uniovi.sdi.sdi2223entrega132.services.InsertSampleDataService;
 import com.uniovi.sdi.sdi2223entrega132.util.SeleniumUtils;
@@ -26,6 +29,8 @@ class Sdi2223Entrega132ApplicationTests {
     @Autowired
     private UsersRepository usersRepository;
     @Autowired
+    private OffersRepository offersRepository;
+    @Autowired
     private InsertSampleDataService insertSampleDataService;
     static String PathFirefox = "C:\\Program Files\\Mozilla Firefox\\firefox.exe";
     static String Geckodriver = "geckodriver-v0.30.0-win64.exe";
@@ -42,8 +47,11 @@ class Sdi2223Entrega132ApplicationTests {
     @BeforeEach
     public void setUp() {
         driver.navigate().to(URL);
-        usersRepository.deleteAll();
+    }
 
+    private void reiniciarDatos(){
+        usersRepository.deleteAll();
+        offersRepository.deleteAll();
         // Metemos otra vez los datos iniciales de prueba
         insertSampleDataService.init();
     }
@@ -80,9 +88,10 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_SignUpView.fillForm(driver, "uo123456@uniovi.es", "Adrián", "García Fernández", "123456", "123456");
         //Comprobamos que entramos en la sección privada y nos nuestra el texto a buscar
-        String checkText = "Listado de ofertas propias";
+        String checkText = "¡Bienvenido a UrWalletPop!";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
+        reiniciarDatos();
     }
 
     /**
@@ -175,7 +184,7 @@ class Sdi2223Entrega132ApplicationTests {
         //Rellenamos el formulario.
         PO_LoginView.fillLoginForm(driver, "user01@email.com", "user01");
         //Comprobamos que entramos en la sección de listado de ofertas propias
-        String checkText = "Listado de ofertas propias";
+        String checkText = "¡Bienvenido a UrWalletPop!";
         List<WebElement> result = PO_View.checkElementBy(driver, "text", checkText);
         Assertions.assertEquals(checkText, result.get(0).getText());
     }
@@ -332,6 +341,7 @@ class Sdi2223Entrega132ApplicationTests {
 
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
@@ -414,6 +424,7 @@ class Sdi2223Entrega132ApplicationTests {
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 3", PO_View.getTimeout());
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**
@@ -438,6 +449,7 @@ class Sdi2223Entrega132ApplicationTests {
         SeleniumUtils.waitTextIsNotPresentOnPage(driver, "Producto 138", PO_View.getTimeout());
         // Hacemos logout
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
     /**

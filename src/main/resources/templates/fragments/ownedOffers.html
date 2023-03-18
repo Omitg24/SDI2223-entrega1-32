@@ -1,6 +1,20 @@
-<div class="container" id="tableOwnedOffers" th:fragment="tableOwnedOffers">
-    <h2 th:text="#{msg.offer.ownlist.headtitle}"></h2>
-    <p th:text="#{msg.offer.ownlist.text}"></p>
+<div class="container" th:fragment="tableOwnedOffers" id="ownedOffers">
+    <h3 th:text="#{msg.offer.ownlist.featured}"></h3>
+    <div class="card-deck">
+        <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
+             th:each="offer : ${featuredList}" >
+            <img th:src="@{/images/offer_image.png}" class="card-img-top"/>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${offer.price + ' EUR'}"></h5>
+                <h6 class="card-subtitle" th:text="${offer.title}"></h6>
+                <p class="card-text" th:text="${offer.description}"></p>
+            </div>
+        </div>
+    </div>
+    <div th:if="${#lists.isEmpty(featuredList)}" th:text="#{msg.offer.ownlist.nofeatured}"></div>
+
+    <h3 th:text="#{msg.offer.ownlist.text}"></h3>
+    <div class="alert alert-danger" role="alert" th:if="${featureError}" th:text="#{error.amount}"></div>
     <div class="card-deck">
         <div class="card border-dark mb-3" style="max-width: 18rem;min-width: 18rem; "
              th:each="offer : ${offersList}" >
@@ -16,7 +30,36 @@
                         </button>
                     </a>
                 </div>
+                <div>
+                    <div th:unless="${offer.featured}">
+                        <button class="btn btn-success" th:id="${'featureButton' + offer.id}"
+                                th:text="#{msg.offer.feature}"
+                                type="button">
+                        </button>
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            $("#featureButton"+ "[[${offer.id}]]").click(function() {
+                                $.get( "/offer/[[${offer.id}]]/feature", function( data ) {
+                                    let numberPage = [[${param.page}]];
+                                    let urlUpdate = '/offer/ownedList/update';
+                                    if (numberPage != null) {
+                                        urlUpdate += "?page=" + numberPage[0];
+                                    }
+                                    $("#ownedOffers").load(urlUpdate);
+                                });
+                            });
+                            /*]]>*/
+                        </script>
+                    </div>
+                    <div th:if="${offer.featured}">
+                        <button class="btn btn-info" th:id="${'featureButton' + offer.id}"
+                                th:text="#{msg.offer.featured}"
+                                type="button"><span></span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>

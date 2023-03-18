@@ -3,7 +3,8 @@
 <head th:replace="fragments/head"/>
 <body>
 <nav th:replace="fragments/nav"/>
-<div id="tableOwnedOffers" th:fragment="tableOwnedOffers" th:replace="fragments/ownedOffers"></div>
+<div class="container" th:fragment="tableOwnedOffers" id="ownedOffers" th:replace="fragments/ownedOffers">
+</div>
 <div th:replace="fragments/pagination"/>
 <footer th:replace="fragments/footer"/>
 </body>
