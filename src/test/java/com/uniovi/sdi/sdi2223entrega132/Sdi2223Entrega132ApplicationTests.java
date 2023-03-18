@@ -841,66 +841,6 @@ class Sdi2223Entrega132ApplicationTests {
     }
 
     /**
-     * PR30. Intentar acceder sin estar autenticado a la opción de listado de usuarios. Se devuelve al login
-     * Realizada por: David
-     */
-    @Test
-    @Order(30)
-    public void PR30() {
-        // Accedemos a la lista de usuarios
-        driver.navigate().to("http://localhost:8090/user/list");
-        // Comprobamos que nos redirige al login
-        Assertions.assertEquals("http://localhost:8090/login", driver.getCurrentUrl());
-    }
-
-    /**
-     * PR31. Intentar acceder sin estar autenticado a la opción de listado de conversaciones. Se devuelve al login
-     * Realizada por: David
-     */
-    @Test
-    @Order(31)
-    public void PR31() {
-        // Accedemos a la lista de usuarios
-        driver.navigate().to("http://localhost:8090/conversation/list");
-        // Comprobamos que nos redirige al login
-        Assertions.assertEquals("http://localhost:8090/login", driver.getCurrentUrl());
-    }
-
-    /**
-     * PR32. Autenticado como usuario estandar, intentamos acceder a un enlace solo para administradores
-     * Realizada por: David
-     */
-    @Test
-    @Order(32)
-    public void PR32() {
-        // Iniciamos sesión como usuario estandar
-        PO_PrivateView.login(driver, "user05@email.com", "user05");
-        // Accedemos a la lista de usuarios solo disponible para administradores
-        driver.navigate().to("http://localhost:8090/user/list");
-        // Comprobamos que nos redirige al login
-        Assertions.assertEquals("http://localhost:8090/login", driver.getCurrentUrl());
-    }
-
-    /**
-     * PR34. Autenticado como administrador, vamos a la vista de logs y borramos los registros.
-     * Realizada por: David
-     */
-    @Test
-    @Order(34)
-    public void PR34() {
-        // Iniciamos sesión como usuario estandar
-        PO_PrivateView.login(driver, "admin@email.com", "admin");
-        //Accedemos a la pestaña de conversaciones
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'log')]", 0);
-        // Seleccionamos el boton de eliminar y hacemos click
-        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'log/delete')]", 0);
-        // Comprobamos que se han borrado todos los registros
-        List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableLogs']/tbody/tr"));
-        //Comprobamos que el numero es el correcto
-        Assertions.assertEquals(0, tableRows.size());
-    }
-
-    /**
      * PR29. Visualizar al menos cuatro páginas en español/inglés/español (comprobando que algunas de
      * las etiquetas cambian al idioma correspondiente)
      * Realizada por: Álvaro
@@ -979,6 +919,124 @@ class Sdi2223Entrega132ApplicationTests {
         PO_HomeView.getP().getString("msg.offer.ownlist.headtitle", PO_Properties.getSPANISH());
 
         PO_PrivateView.logout(driver);
+    }
+
+    /**
+     * PR30. Intentar acceder sin estar autenticado a la opción de listado de usuarios. Se devuelve al login
+     * Realizada por: David
+     */
+    @Test
+    @Order(30)
+    public void PR30() {
+        // Accedemos a la lista de usuarios
+        driver.navigate().to("http://localhost:8090/user/list");
+        // Comprobamos que nos redirige al login
+        Assertions.assertEquals("http://localhost:8090/login", driver.getCurrentUrl());
+    }
+
+    /**
+     * PR31. Intentar acceder sin estar autenticado a la opción de listado de conversaciones. Se devuelve al login
+     * Realizada por: David
+     */
+    @Test
+    @Order(31)
+    public void PR31() {
+        // Accedemos a la lista de usuarios
+        driver.navigate().to("http://localhost:8090/conversation/list");
+        // Comprobamos que nos redirige al login
+        Assertions.assertEquals("http://localhost:8090/login", driver.getCurrentUrl());
+    }
+
+    /**
+     * PR32. Autenticado como usuario estandar, intentamos acceder a un enlace solo para administradores
+     * Realizada por: David
+     */
+    @Test
+    @Order(32)
+    public void PR32() {
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        // Accedemos a la lista de usuarios solo disponible para administradores
+        driver.navigate().to("http://localhost:8090/user/list");
+        // Comprobamos que nos redirige al login
+        Assertions.assertEquals("http://localhost:8090/login", driver.getCurrentUrl());
+    }
+
+    /**
+     * PR33. Estando autenticado como usuario administrador visualizar todos los logs generados en una
+     * serie de interacciones. Esta prueba deberá generar al menos dos interacciones de cada tipo y comprobar
+     * que el listado incluye los logs correspondientes.
+     * Realizada por: Israel
+     */
+    @Test
+    @Order(33)
+    public void PR33() {
+        //Nos logeamos para que quede constancia en el registro
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        PO_PrivateView.logout(driver);
+
+        //Vamos a la opcion de registro
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-dark");
+        //Rellenamos el formulario.
+        PO_SignUpView.fillForm(driver, "uo123456@uniovi.es", "Adrián", "García Fernández", "123456", "123456");
+        //Desconectamos al usuario
+        PO_PrivateView.logout(driver);
+
+        //Repetimos lo mismo con otro usuario
+        PO_HomeView.clickOption(driver, "signup", "class", "btn btn-dark");
+        PO_SignUpView.fillForm(driver, "uo1234567@uniovi.es", "Adrián", "García Fernández", "1234567", "1234567");
+        PO_PrivateView.logout(driver);
+
+        //Nos logeamos incorrectamente
+        PO_LoginView.fillLoginForm(driver, "user055@email.com", "user055");
+
+        //Nos logeamos incorrectamente otra vez
+        PO_LoginView.fillLoginForm(driver, "user0556@email.com", "user0556");
+
+        PO_PrivateView.login(driver, "admin@email.com", "admin");
+        //Accedemos a la pestaña de logging
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, '/log')]", 0);
+        //Obtenemos las filas de la tabla de logging
+        List<WebElement> rows = driver.findElements(By.xpath("//table//tbody//tr"));
+        //Creamos un diccionario para luego comprobar el numero de acciones
+        HashMap<String,Integer> actions = new HashMap<>();
+        WebElement aux;
+        //Recorremos las filas y vamos añadiendo para cada tipo un contador para luego comprobar que funciona correctamente
+        for(WebElement row:rows){
+            aux = row.findElement(By.xpath(".//td[2]"));
+            if(!actions.containsKey(aux.getText())){
+                actions.put(aux.getText(), 1);
+            }else{
+                actions.put(aux.getText(),actions.get(aux.getText())+1);
+            }
+        }
+
+        Assertions.assertTrue(actions.get("PET")>=2);
+        Assertions.assertTrue(actions.get("LOGIN_EX")>=2);
+        Assertions.assertTrue(actions.get("LOGIN_ERR")>=2);
+        Assertions.assertTrue(actions.get("LOGOUT")>=2);
+        Assertions.assertTrue(actions.get("ALTA")>=2);
+
+        reiniciarDatos();
+    }
+
+    /**
+     * PR34. Autenticado como administrador, vamos a la vista de logs y borramos los registros.
+     * Realizada por: David
+     */
+    @Test
+    @Order(34)
+    public void PR34() {
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "admin@email.com", "admin");
+        //Accedemos a la pestaña de conversaciones
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'log')]", 0);
+        // Seleccionamos el boton de eliminar y hacemos click
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'log/delete')]", 0);
+        // Comprobamos que se han borrado todos los registros
+        List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableLogs']/tbody/tr"));
+        //Comprobamos que el numero es el correcto
+        Assertions.assertEquals(0, tableRows.size());
     }
 
     /**
