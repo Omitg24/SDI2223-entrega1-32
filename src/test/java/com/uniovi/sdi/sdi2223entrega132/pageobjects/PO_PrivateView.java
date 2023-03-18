@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PO_PrivateView extends PO_NavView {
@@ -94,5 +95,43 @@ public class PO_PrivateView extends PO_NavView {
         elements.get(0).sendKeys(searchText);
         elements = PO_View.checkElementBy(driver, "free", "//*[@id=\"searchTextForm\"]/div/button");
         elements.get(0).click();
+    }
+
+    /**
+     * Metodo que accede a la ultima pagina de una tabla y devuelve la ultima fila
+     * @param driver
+     * @return la ultima tabla
+     */
+    public static WebElement goLastPageGetElement(WebDriver driver) {
+        //Obtenemos el enlace de la ultima pagina
+        WebElement lastPageLink = driver.findElement(By.xpath("(//li[@class='page-item'])[last()]"));
+        //Vamos a la ultima pagina
+        lastPageLink.click();
+        //Obtenemos la última fila de la tabla
+        WebElement lastRow = driver.findElement(By.xpath("//table//tbody//tr[last()]"));
+        return lastRow;
+    }
+
+    /**
+     * Metodo que obtiene el texto de la primera celda de las n primeras filas (que contengan un checkbox) pasadas por parametro
+     * @param driver
+     * @param n las filas de las que queremos obtener la primera celda
+     * @return las primeras celdas de las n primeras filas
+     */
+    public static List<String> clickAndGetFirstCellsOfTable(WebDriver driver,int n) {
+        List<WebElement> rows = driver.findElements(By.xpath("//table//tr[td/input[@type='checkbox']]"));
+
+        List<String> textsBeforeDelete = new ArrayList<String>();
+        for(int i=0;i<n;i++){
+            //Obtenemos la celda del checkbox
+            WebElement checkBoxCell = rows.get(i).findElement(By.xpath(".//input[@type='checkbox']"));
+            //Clickamos el checkbox
+            checkBoxCell.click();
+            //Obtenemos la primera celda de la tabla
+            WebElement email = rows.get(i).findElement(By.xpath(".//td[1]"));
+            //Lo añadimos a la lista para comprobar que se han borrado correctamente
+            textsBeforeDelete.add(email.getText());
+        }
+        return textsBeforeDelete;
     }
 }

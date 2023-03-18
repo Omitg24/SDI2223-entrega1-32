@@ -16,12 +16,22 @@ import java.io.IOException;
 @Component
 public class FailureLoginHandler implements AuthenticationFailureHandler {
 
+    //Inyectamos el servicio de loggin para logear las peticiones
     @Autowired
     private LoggerService loggerService;
 
+    //Inyectamos un servicio para poder obtener mensajes en funcion del idioma
     @Autowired
     private MessageSource messageSource;
 
+    /**
+     * Metodo que se ejecutara cuando un usuario no haya iniciado sesion correctamente, quedara registrado en la base de datos
+     * @param request
+     * @param response
+     * @param exception
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         loggerService.log(LogMessage.Action.LOGIN_ERR,messageSource.getMessage("msg.log.login.user.failure",null,request.getLocale()) + exception.getMessage());

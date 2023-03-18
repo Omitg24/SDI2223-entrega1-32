@@ -38,6 +38,13 @@ public class ConversationController {
     @Autowired
     private SendMessageValidator sendMessageValidator;
 
+    /**
+     * Metodo que obtiene la conversacion dada la oferta y el interesado por la oferta
+     * @param offerId el identificador de la oferta
+     * @param interestedId el identificador del interesado
+     * @param model
+     * @return la vista de la conversacion
+     */
     @RequestMapping(value = "/conversation/{offerId}/{interestedId}", method = RequestMethod.GET)
     public String getConversation(@PathVariable Long offerId,@PathVariable Long interestedId, Model model) {
         prepareConversation(offerId,interestedId,model);
@@ -45,8 +52,19 @@ public class ConversationController {
         return "conversation/conversation";
     }
 
+    /**
+     * Metodo que gestiona el envio de mensajes y persiste todas las entidades relacionadas.
+     * @param offerId el identificador de la oferta de la conversacion
+     * @param interestedId el identificador del interesado
+     * @param message el mensaje enviado en la vista conversation/conversation
+     * @param model
+     * @param principal
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/conversation/{offerId}/{interestedId}", method = RequestMethod.POST)
     public String updateConversation(@PathVariable Long offerId,@PathVariable Long interestedId,@ModelAttribute @Validated Message message, Model model, Principal principal, BindingResult result) {
+        //Validamos que el mensaje no este vacio
         sendMessageValidator.validate(message,result);
         if (result.hasErrors()) {
             prepareConversation(offerId,interestedId, model);
@@ -63,6 +81,7 @@ public class ConversationController {
         User interestedUser = usersService.getUser(interestedId);
         Optional<Conversation> optionalConversation = conversationService.getConversationOfUserAndOffer(interestedUser,offerOfConversation);
         Conversation c = optionalConversation.isEmpty()?new Conversation(offerOfConversation,interestedUser,new ArrayList<>()):optionalConversation.get();
+        //Añadimos/actualizamos los datos en la base de datos
         conversationService.addConversationForOffer(c);
         message.setConversation(c);
         conversationService.addMessage(message);
@@ -74,8 +93,12 @@ public class ConversationController {
         return "redirect:/conversation/"+offerId+"/"+interestedId;
     }
 
-    /*
-        Actualiza lista de conversaciones
+    /**
+     * Metodo que actualiza la lista de conversaciones
+     * @param pageable
+     * @param model
+     * @param principal
+     * @return
      */
     @RequestMapping("/conversation/list/update")
     public String updateList(Pageable pageable, Model model,Principal principal) {
@@ -87,27 +110,41 @@ public class ConversationController {
         return "fragments/tableConversations";
     }
 
-    /*
-        Obtener lista de conversaciones del usuario autenticado
+    /**
+     * Metodo que obtiene la lista de conversaciones del usuario autenticado
+     * @param model
+     * @param pageable
+     * @param principal
+     * @return
      */
     @RequestMapping("/conversation/list")
     public String getList(Model model, Pageable pageable, Principal principal) {
         String email = principal.getName();
         User user = usersService.getUserByEmail(email);
+        //Obtenemos las conversaciones del usuario
         Page<Conversation> conversations = conversationService.getConversationOfUser(pageable,user);
         model.addAttribute("conversationList", conversations.getContent());
         model.addAttribute("page", conversations);
         return "conversation/list";
     }
 
+    /**
+     * Metodo que elimina una oferta dado un identificador y devuelve la vista de la lista de conversaciones
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/conversation/delete/{id}", method = RequestMethod.GET)
     public String deleteOffer(@PathVariable Long id) {
         conversationService.deleteConversation(id);
         return "redirect:/conversation/list";
     }
-    /*
-        Metodo que obtiene la conversación del usuario actual para el id de la oferta pasado por parametro y añade
-        al modelo dicha conversación y la oferta
+
+    /**
+     * Metodo que obtiene la conversación del usuario actual para el id de la oferta pasado por parametro y añade
+     * al modelo dicha conversación y la oferta
+     * @param offerId
+     * @param interestedId
+     * @param model
      */
 
     private void prepareConversation(Long offerId,Long interestedId, Model model) {

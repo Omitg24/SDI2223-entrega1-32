@@ -297,24 +297,124 @@ class Sdi2223Entrega132ApplicationTests {
         Assertions.assertEquals(16, result.size());
     }
 
+    /**
+     * PR12. Ir a la lista de usuarios, borrar el primer usuario de la lista, comprobar que la lista se actualiza
+     * y dicho usuario desaparece.
+     * Realizada por: Israel
+     */
     @Test
     @Order(12)
     public void PR12(){
         // Iniciamos sesión como administrador
         PO_PrivateView.login(driver, "admin@email.com", "admin");
-        //Contamos el número de filas de usuarios
-        List<WebElement> userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
-        Assertions.assertEquals(5, userList.size());
-        WebElement firstCheckbox = driver.findElement(By.xpath("//input[@type='checkbox'][1]"));
-        firstCheckbox.click();
-        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
-        Assertions.assertEquals(5, userList.size());
-        List<WebElement> submitButtons = driver.findElements(By.xpath("//button[@type='submit']"));
-        submitButtons.get(1).click();
-        userList = SeleniumUtils.waitLoadElementsBy(driver, "free", "//tbody/tr",PO_View.getTimeout());
-        Assertions.assertEquals(4, userList.size());
+        //Seleccionamos el dropdown de gestion de usuarios
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]", 0);
+        //Seleccionamos el enlace de gestión de usuarios
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 0);
+        //Obtenemos el texto que debería aparecer en la vista de gestión de usuarios
+        String checkText = PO_HomeView.getP().getString("msg.user.list.info",PO_Properties.getSPANISH());
+        //Comprobamos que el texto aparece
+        PO_PrivateView.checkElement(driver, checkText);
+        //Obtenemos la primera fila que contenga un checkBox (ya que el admin no se puede eliminar)
+        WebElement firstRowWithCheckbox = driver.findElement(By.xpath("//table//tr[td/input[@type='checkbox']][1]"));
+        //Obtenemos la celda del checkbox
+        WebElement checkBoxCell = firstRowWithCheckbox.findElement(By.xpath(".//input[@type='checkbox']"));
+        //Clickamos el checkbox
+        checkBoxCell.click();
+        WebElement emailOfFirstRow = firstRowWithCheckbox.findElement(By.xpath(".//td[1]"));
+        //Guardamos el texto para confirmar que se ha eliminado correctamente
+        String checkTextAfterDelete = emailOfFirstRow.getText();
+        //Obtenemos el botón que elimina los usuarios seleccionados
+        WebElement deleteSubmitButton = driver.findElement(By.id("delete-users"));
+        //Hacemos click sobre el boton de eliminar
+        deleteSubmitButton.click();
+        //Volvemos a obtener la primera fila de la tabla para comprobar que se ha eliminado correctamente
+        firstRowWithCheckbox = driver.findElement(By.xpath("//table//tr[td/input[@type='checkbox']][1]"));
+        //Obtenemos la primera celda
+        emailOfFirstRow = firstRowWithCheckbox.findElement(By.xpath(".//td[1]"));
+        //Guardamos el texto para confirmar que se ha eliminado correctamente
+        String actualText = emailOfFirstRow.getText();
+        //Comprobamos que los textos son diferentes
+        Assertions.assertNotEquals(checkTextAfterDelete,actualText);
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
+
+    /**
+     * PR13. Ir a la lista de usuarios, borrar el último usuario de la lista, comprobar que la lista se actualiza
+     * y dicho usuario desaparece.
+     * Realizada por: Israel
+     */
+    @Test
+    @Order(13)
+    public void PR13(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "admin@email.com", "admin");
+        //Seleccionamos el dropdown de gestion de usuarios
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]", 0);
+        //Seleccionamos el enlace de gestión de usuarios
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 0);
+        //Obtenemos el ultimo elemento de la tabla
+        WebElement lastRow = PO_PrivateView.goLastPageGetElement(driver);
+
+        //Obtenemos la celda del checkbox
+        WebElement checkBoxCell = lastRow.findElement(By.xpath(".//input[@type='checkbox']"));
+        //Clickamos el checkbox
+        checkBoxCell.click();
+        //Obtenemos la primera celda de la tabla
+        WebElement email = lastRow.findElement(By.xpath(".//td[1]"));
+        //Guardamos el texto para confirmar que se ha eliminado correctamente
+        String checkTextBeforeDelete = email.getText();
+
+        //Obtenemos el botón que elimina los usuarios seleccionados
+        WebElement deleteSubmitButton = driver.findElement(By.id("delete-users"));
+        //Hacemos click sobre el boton de eliminar
+        deleteSubmitButton.click();
+        //Obtenemos la ultima fila
+        lastRow = PO_PrivateView.goLastPageGetElement(driver);
+        //Obtenemos el correo de la ultima fila
+        email = lastRow.findElement(By.xpath(".//td[1]"));
+        //Guardamos el texto para confirmar que se ha eliminado correctamente
+        String checkTextAfterDelete = email.getText();
+
+        Assertions.assertNotEquals(checkTextBeforeDelete,checkTextAfterDelete);
+        PO_PrivateView.logout(driver);
+        reiniciarDatos();
+    }
+
+    /**
+     * PR14. Ir a la lista de usuarios, borrar 3 usuarios, comprobar que la lista se actualiza y dichos
+     * usuarios desaparecen.
+     * Realizada por: Israel
+     */
+    @Test
+    @Order(14)
+    public void PR14(){
+        // Iniciamos sesión como administrador
+        PO_PrivateView.login(driver, "admin@email.com", "admin");
+        //Seleccionamos el dropdown de gestion de usuarios
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]", 0);
+        //Seleccionamos el enlace de gestión de usuarios
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 0);
+
+        //Obtenemos las 3 primeras filas de la tabla que contengan checkbox (menos la del admin)
+        List<String> textsBeforeDelete = PO_PrivateView.clickAndGetFirstCellsOfTable(driver,3);
+
+        //Obtenemos el botón que elimina los usuarios seleccionados
+        WebElement deleteSubmitButton = driver.findElement(By.id("delete-users"));
+        //Hacemos click sobre el boton de eliminar
+        deleteSubmitButton.click();
+
+        //Obtenemos las 3 primeras filas de la tabla que contengan checkbox (menos la del admin)
+        List<String> textsAfterDelete = PO_PrivateView.clickAndGetFirstCellsOfTable(driver,3);
+        //Comprobamos que se han eliminado correctamente
+        for(int i=0;i<3;i++){
+            Assertions.assertNotEquals(textsBeforeDelete.get(i),textsAfterDelete.get(i));
+        }
+        PO_PrivateView.logout(driver);
+        reiniciarDatos();
+    }
+
     /**
      * PR15. Añadir una nueva oferta y comprobar que se muestra en la vista.
      * Realizada por: David
@@ -509,108 +609,122 @@ class Sdi2223Entrega132ApplicationTests {
         PO_PrivateView.logout(driver);
     }
 
+    /**
+     * PR26. Sobre una búsqueda determinada de ofertas (a elección de desarrollador), enviar un mensaje
+     * a una oferta concreta. Se abriría dicha conversación por primera vez. Comprobar que el mensaje aparece
+     * en la conversación.
+     * Realizada por: Israel
+     */
     @Test
     @Order(26)
     public void PR26(){
-        // Iniciamos sesión como administrador
-        PO_PrivateView.login(driver, "jincho@email.com", "jincho");
-        //Obtenemos el numero de dropdowns
-        List<WebElement> dropdownButtons = driver.findElements(By.xpath("//li[@class='nav-item dropdown']"));
-        Assertions.assertEquals(2, dropdownButtons.size());
-        dropdownButtons.get(0).click();
-        PO_PrivateView.checkViewAndClick(driver,"class","dropdown-item",3);
+        // Iniciamos sesión como un usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        //Seleccionamos el dropdown de ofertas
+        PO_PrivateView.checkViewAndClick(driver, "free", "//li[contains(@class, 'nav-item dropdown')]", 0);
+        //Seleccionamos el enlace de ver todas las ofertas
+        PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@class, 'dropdown-item')]", 3);
+        //Comprobamos que esta el mensaje de buscar ofertas
         PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.nav.search", PO_Properties.getSPANISH()));
+        //Obtenemos el input de busqueda
         WebElement searchText = driver.findElement(By.xpath("//input[@class='form-control']"));
+        //Lo seleccionamos
         searchText.click();
+        //Borramos su contenido
         searchText.clear();
-        searchText.sendKeys("Playeros");
+        //Escribimos el producto que queremos buscar
+        searchText.sendKeys("Producto 100");
+        //Confirmamos la busqueda
         searchText.sendKeys(Keys.ENTER);
-
-        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "class", "card-body",6);
+        //Obtenemos los resultados de la busqueda (esperamos ya que a veces puede continuar la ejecucion antes de que se actualice)
+        List<WebElement> cards = SeleniumUtils.waitLoadElementsBy(driver, "class", "card-body",10);
+        //Comprobamos que solo hay un producto
         Assertions.assertEquals(1, cards.size());
-
+        //Seleccionamos la opcion para establecer una conversacion
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",1);
-
+        //Comprobamos que estamos en el chat
         PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
-
+        //Obtenemos el input para escribir un mensaje
         WebElement messageInput = driver.findElement(By.xpath("//input[@class='form-control']"));
-
+        //Escribimos el mensaje
         messageInput.click();
         messageInput.clear();
         messageInput.sendKeys("Hola");
-
+        //Obtenemos el boton para enviar el mensaje
         WebElement sendButton = driver.findElement(By.xpath("//button[@type='submit']"));
-
+        //Enviamos el mensaje
         sendButton.click();
-
+        //Obtenemos los mensajes de la conversacion
         List<WebElement> messages = driver.findElements(By.xpath("//p[@class='small p-2 me-3 mb-3 text-white rounded-3 bg-dark']"));
-
+        //Comprobamos que el mensaje se ha enviado
         Assertions.assertEquals(1,messages.size());
 
         PO_PrivateView.logout(driver);
-    }
 
+        reiniciarDatos();
+    }
+    /**
+     * PR27. Enviar un mensaje a una conversación ya existente accediendo desde el botón/enlace
+     * “Conversación”. Comprobar que el mensaje aparece en la conversación
+     * Realizada por: Israel
+     */
     @Test
     @Order(27)
     public void PR27(){
-        // Iniciamos sesión como administrador
-        PO_PrivateView.login(driver, "pepe@email.com", "pepe");
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        //Accedemos a la pestaña de conversaciones
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
-
-        List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
-
-        conversationLinks.get(0).click();
-
+        //Comprobamos que hemos accedido correctamente
         PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
-
-        PO_PrivateView.checkElement(driver,"Cartera");
-
-        conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
-
+        //Comprobamos que el titulo de la oferta es el correcto
+        PO_PrivateView.checkElement(driver,"Producto 139");
+        //Obtenemos los enlaces a las conversaciones
+        List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
+        //Seleccionamos la primera que aparece en la tabla
         conversationLinks.get(1).click();
-
+        //Comprobamos que hemos accedido a la conversacion
         PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.header", PO_Properties.getSPANISH()));
-
+        //Obtenemos el input para enviar un mensaje
         WebElement messageInput = driver.findElement(By.xpath("//input[@class='form-control']"));
-
+        //Lo seleccionamos y escribimos un mensaje
         messageInput.click();
         messageInput.clear();
         messageInput.sendKeys("Hola");
-
+        //Obtenemos el boton para enviar el mensaje
         WebElement sendButton = driver.findElement(By.xpath("//button[@type='submit']"));
-
+        //Lo enviamos
         sendButton.click();
-
+        //Obtenemos los mensajes actuales
         List<WebElement> messages = driver.findElements(By.xpath("//p[@class='small p-2 me-3 mb-3 text-white rounded-3 bg-dark']"));
-
+        //Comprobamos que el texto del mensaje es el correcto
         Assertions.assertEquals(messages.get(0).getText(),"Hola");
-
+        //Comprobamos que el numero de mensajes es el correcto
         Assertions.assertEquals(1,messages.size());
 
         PO_PrivateView.logout(driver);
+        reiniciarDatos();
     }
 
+    /**
+     * PR28. Mostrar el listado de conversaciones ya abiertas. Comprobar que el listado contiene la
+     * cantidad correcta de conversaciones.
+     * Realizada por: Israel
+     */
     @Test
     @Order(28)
     public void PR28(){
-        // Iniciamos sesión como administrador
-        PO_PrivateView.login(driver, "pepe@email.com", "pepe");
+        // Iniciamos sesión como usuario estandar
+        PO_PrivateView.login(driver, "user05@email.com", "user05");
+        //Accedemos a la pestaña de conversaciones
         PO_PrivateView.checkViewAndClick(driver, "free", "//a[contains(@href, 'conversation/')]",0);
-
-        List<WebElement> conversationLinks = driver.findElements(By.xpath("//a[contains(@href, 'conversation/')]"));
-
-        conversationLinks.get(0).click();
-
+        //Comprobamos que hemos accedido correctamente
         PO_PrivateView.checkElement(driver,PO_HomeView.getP().getString("msg.conversation.list.info", PO_Properties.getSPANISH()));
-
-        PO_PrivateView.checkElement(driver,"Cartera");
-
+        //Obtenemos el numero de conversaciones del usuario
         List<WebElement> tableRows = driver.findElements(By.xpath("//table[@id='tableConversations']/tbody/tr"));
-
+        //Comprobamos que el numero es el correcto
         Assertions.assertEquals(1,tableRows.size());
     }
-
-
 
 }
 
