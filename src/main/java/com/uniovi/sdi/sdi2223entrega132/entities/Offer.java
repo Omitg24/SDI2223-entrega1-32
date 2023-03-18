@@ -2,6 +2,7 @@ package com.uniovi.sdi.sdi2223entrega132.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +25,7 @@ public class Offer {
     public User buyer;
 
     @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
-    public Set<Conversation> conversations;
+    public List<Conversation> conversations;
 
     public Offer(String title, String description, Date uploadDate, double price, User owner) {
         this.title = title;
@@ -94,11 +95,11 @@ public class Offer {
         this.purchase = purchase;
     }
 
-    public Set<Conversation> getConversations() {
+    public List<Conversation> getConversations() {
         return conversations;
     }
 
-    public void setConversations(Set<Conversation> conversations) {
+    public void setConversations(List<Conversation> conversations) {
         this.conversations = conversations;
     }
 
