@@ -26,14 +26,17 @@ Los HTMLs se harán entre todos los miembros del equipo.
 ### Requisitos obligatorios:
 
 - Puntos a realizar en común:
+
   14. Internacionalización de vistas. (0.5 puntos)				
   15. Vulnerabilidad de recursas y acciones. (1.0 puntos)
   
-- Álvaro Davila Sampedro, UO284548: 
+- Álvaro Davila Sampedro, UO284548:
+
   10. Comprar una oferta. (0.5 puntos)
   11. Consultar el listado de ofertas compradas. (0.5 puntos)				
   
 - Israel Solís Iglesias, UO282162:
+
   5. Borrar múltiples usuarios del sistema. (0.5 puntos)
   12. Establecer una conversación por una oferta. (0.75 puntos)
   13. Ver el listado de conversaciones. (0.5 puntos)
@@ -46,7 +49,8 @@ Los HTMLs se harán entre todos los miembros del equipo.
   4. Consultar el listado de los usuarios del sistema. (0.25 puntos)				
   16. Escribir un informe obligatorio del proyecto. (1.0 puntos)
   
-- David Leszek Warzynski Abril, UO278968:			
+- David Leszek Warzynski Abril, UO278968:
+   
   6. Dar de alta una nueva oferta (0.5 puntos).
   7. Consultar el listado de ofertas propias (0.25 puntos).
   8. Dar de baja una oferta propia (0.5 puntos).
